@@ -25,13 +25,15 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 /* TOP BAR */
 .top-bar { background: var(--bg); padding: 52px 20px 10px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
 .edition-btn { display: flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent; }
-.edition-btn h1 { font-size: 24px; font-weight: 600; color: var(--text-primary); font-family: var(--sans); }
+.edition-btn h1 { font-size: 24px; font-weight: 600; color: var(--text-primary); font-family: var(--sans); display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.edition-btn h1 .ed-years { font-size: 13px; font-weight: 400; color: var(--text-muted); letter-spacing: 0; }
 .edition-btn .chev { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
 .menu-btn { background: none; border: none; cursor: pointer; padding: 4px; display: flex; -webkit-tap-highlight-color: transparent; }
 .menu-btn svg { width: 22px; height: 22px; stroke: var(--text-secondary); fill: none; stroke-width: 1.8; }
 
 .count-bar { padding: 0 16px 8px; flex-shrink: 0; }
-.count-bar-row { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+.count-bar-row { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 5px; gap: 4px; }
+.count-bar-num { color: var(--text-primary); font-size: 13px; letter-spacing: 0; }
 .count-tried-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; }
 .progress-wrap { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
 .progress-bar { height: 100%; background: #34c759; border-radius: 2px; width: 0%; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
@@ -80,7 +82,8 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .fav-option:active { background: var(--bg); }
 .fav-option svg { width: 18px; height: 18px; flex-shrink: 0; }
 .fav-option.active { font-weight: 600; }
-.fav-option.active svg { stroke: #ff385c; fill: #ff385c; }
+.fav-option.active svg { stroke: currentColor; fill: none; }
+.fav-option[data-level='2'].active svg { stroke: #ff385c; fill: #ff385c; }
 .fav-dropdown-overlay { position: fixed; inset: 0; z-index: 499; }
 
 /* Tried animation */
@@ -116,16 +119,62 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
 .icon-btn { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .icon-btn svg { width: 17px; height: 17px; }
-.heart-btn { display: flex; min-width: 20px; }
-.heart-btn:empty, .heart-btn svg { display: block; }
-.card:not(.favourited) .heart-btn { opacity: 0; pointer-events: none; }
-.card.favourited .heart-btn { opacity: 1; display: flex; }
+.heart-btn { display: none !important; }
 .glass-svg { stroke: #ccc; fill: none; stroke-width: 1.6; }
 .card.tried .glass-svg { stroke: #34c759; fill: rgba(52,199,89,0.18); }
 .glass-btn { position: relative; }
 .card.tried .glass-btn::after { content: "✓"; position: absolute; top: -5px; right: -5px; width: 12px; height: 12px; background: #34c759; color: #fff; font-size: 8px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; }
 .no-results { text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 14px; display: none; }
 .no-results.visible { display: block; }
+
+/* ── LEFT ICON: checkmark or heart replaces glassware when tried ── */
+.glass-thumb { display: flex; align-items: center; justify-content: center; }
+.card.tried .glass-thumb svg { display: none; }
+.tried-check-icon, .tried-heart-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; line-height: 1; flex-shrink: 0;
+}
+.tried-check-icon { background: #fff; color: #34c759; box-shadow: 0 0 0 1.5px rgba(52,199,89,0.35); }
+.tried-heart-icon { background: #fff; color: #ff385c; box-shadow: 0 0 0 1.5px rgba(255,56,92,0.25); font-size: 16px; }
+
+/* Taste profile label tag (replaces dot) */
+.taste-tag {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.03em;
+  padding: 2px 7px; border-radius: 10px;
+  white-space: nowrap; flex-shrink: 0;
+  font-family: var(--sans);
+}
+
+/* ── FAVOURITES GRID ── */
+.favs-grid { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 12px 120px; }
+.favs-grid::-webkit-scrollbar { display: none; }
+.favs-filter-bar { display: flex; gap: 0; border-bottom: 0.5px solid var(--border); margin: 0 -12px 0; padding: 0 12px; flex-shrink: 0; }
+.favs-filter-tab { font-size: 13px; font-weight: 500; color: var(--text-muted); padding: 10px 14px 9px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; font-family: var(--sans); -webkit-tap-highlight-color: transparent; white-space: nowrap; }
+.favs-filter-tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); }
+.favs-title-row { padding: 16px 0 12px; display: flex; align-items: baseline; gap: 6px; }
+.favs-title { font-size: 26px; font-weight: 700; color: var(--text-primary); font-family: var(--sans); line-height: 1.1; }
+.favs-title-italic { font-style: italic; color: var(--text-secondary); }
+.favs-title-btn { font-size: 11px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 2px; margin-left: 4px; }
+.favs-photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding-top: 4px; }
+.favs-photo-item { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 2/3; background: #e0e0dc; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.favs-photo-item:active { opacity: 0.85; }
+.favs-photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.favs-photo-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; color: rgba(255,255,255,0.7); }
+.favs-photo-label { position: absolute; bottom: 6px; left: 6px; right: 6px; }
+.favs-photo-label span { background: #fff; color: #111; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; font-family: var(--sans); display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.favs-empty { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 14px; }
+
+/* iPad favs grid */
+@media (min-width: 900px) {
+  .favs-photo-grid { grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .ipad-favs-grid { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 8px 40px; }
+  .ipad-favs-grid::-webkit-scrollbar { display: none; }
+  .ipad-favs-photo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; padding-top: 4px; }
+  .ipad-favs-filter-bar { display: flex; gap: 0; border-bottom: 0.5px solid var(--border); margin: 0 -8px 0; padding: 0 8px; flex-shrink: 0; }
+  .ipad-favs-title-row { padding: 16px 0 12px; display: flex; align-items: baseline; gap: 6px; }
+  .ipad-favs-title { font-size: 22px; font-weight: 700; color: var(--text-primary); font-family: var(--sans); line-height: 1.1; }
+}
 
 /* BOTTOM NAV */
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 0.5px solid var(--border); padding-bottom: env(safe-area-inset-bottom, 0px); z-index: 100; }
@@ -153,18 +202,18 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 
 /* WHEEL */
 .wheel-wrap { position: relative; height: 220px; overflow: hidden; margin-top: 8px; }
-.wheel-highlight { position: absolute; left: 16px; right: 16px; top: 50%; transform: translateY(-50%); height: 44px; background: #f0f0ee; border-radius: 10px; pointer-events: none; }
-.wheel-fade-top, .wheel-fade-bottom { position: absolute; left: 0; right: 0; height: 75px; pointer-events: none; z-index: 2; }
-.wheel-fade-top { display: none; }
-.wheel-fade-bottom { display: none; }
-.wheel-scroll { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: y mandatory; padding: 88px 0; }
+.wheel-highlight { position: absolute; left: 16px; right: 16px; top: 50%; transform: translateY(-50%); height: 44px; background: var(--border); border-radius: 10px; pointer-events: none; z-index: 0; }
+.wheel-fade-top, .wheel-fade-bottom { position: absolute; left: 0; right: 0; height: 80px; pointer-events: none; z-index: 2; }
+.wheel-fade-top { top: 0; background: linear-gradient(to bottom, #ffffff 30%, transparent 100%); }
+.wheel-fade-bottom { bottom: 0; background: linear-gradient(to top, #ffffff 30%, transparent 100%); }
+.wheel-scroll { position: relative; z-index: 1; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: y mandatory; padding: 88px 0; }
 .wheel-scroll::-webkit-scrollbar { display: none; }
-.wheel-item { height: 44px; display: flex; align-items: center; padding: 0 32px; scroll-snap-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; gap: 12px; opacity: 0.35; transition: opacity 0.15s; }
+.wheel-item { height: 44px; display: flex; align-items: center; padding: 0 32px; scroll-snap-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; gap: 12px; opacity: 0.45; transition: opacity 0.15s; }
 .wheel-item.selected { opacity: 1; }
-.wheel-item-name { font-size: 16px; font-weight: 500; color: var(--text-primary); font-family: var(--sans); flex: 1; }
-.wheel-item-years { font-size: 13px; color: var(--text-secondary); font-family: var(--sans); margin-right: 8px; }
-.wheel-item-count { font-size: 13px; color: var(--text-muted); font-family: var(--sans); display: flex; align-items: center; gap: 4px; }
-.wheel-item-count svg { width: 13px; height: 13px; stroke: var(--text-muted); fill: none; stroke-width: 1.6; }
+.wheel-item-name { font-size: 17px; font-weight: 600; color: var(--text-primary); font-family: var(--sans); flex: 1; }
+.wheel-item-years { font-size: 13px; font-weight: 400; color: var(--text-secondary); font-family: var(--sans); }
+.wheel-item-count { font-size: 13px; color: var(--text-secondary); font-family: var(--sans); display: flex; align-items: center; gap: 4px; }
+.wheel-item-count svg { width: 13px; height: 13px; stroke: var(--text-secondary); fill: none; stroke-width: 1.6; }
 
 /* FILTER DRAWER */
 .drawer { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: var(--card); border-radius: 18px 18px 0 0; padding: 20px 20px calc(28px + env(safe-area-inset-bottom, 0px)); z-index: 201; transform: translateY(100%); transition: transform 0.28s cubic-bezier(0.4,0,0.2,1); max-height: 88vh; overflow-y: auto; }
@@ -176,8 +225,10 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 
 /* Chips */
 .chip { font-size: 13px; font-family: var(--sans); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; gap: 6px; }
-.chip.plain.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+.chip.plain.active { background: rgba(0,0,0,0.12); color: var(--text-primary); border-color: rgba(0,0,0,0.2); font-weight: 600; }
 .chip.colored { border-width: 1.5px; }
+.chip.colored.active { background: rgba(0,0,0,0.10); color: var(--text-primary); border-color: rgba(0,0,0,0.2); font-weight: 600; }
+.chip.colored.active .chip-dot { box-shadow: none; }
 .chip-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
 /* ── DETAIL PANEL ── */
@@ -206,9 +257,9 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .detail-section-title { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 8px; }
 
 /* Tags / Meta */
-.detail-meta-block { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
-.detail-meta-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.detail-spirit-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; flex-shrink: 0; min-width: 100px; text-align: right; }
+.detail-meta-block { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.detail-meta-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-start; }
+.detail-spirit-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; flex-shrink: 0; width: 100%; }
 .detail-tag { font-size: 12px; font-family: var(--sans); padding: 4px 11px; border-radius: 20px; background: var(--card); color: var(--text-secondary); border: 0.5px solid var(--border); font-weight: 500; display: inline-flex; align-items: center; justify-content: center; }
 .detail-tag-spirit { font-weight: 600; letter-spacing: 0.01em; }
 .detail-tag-aka { font-style: italic; font-size: 11px; color: var(--text-muted); }
@@ -219,10 +270,16 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .detail-action-row { display: flex; gap: 8px; margin-bottom: 20px; }
 .detail-love-btn, .detail-tried-btn { flex: 1; padding: 13px 10px; background: var(--card); border-radius: 14px; border: 0.5px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: var(--text-secondary); cursor: pointer; -webkit-tap-highlight-color: transparent; font-family: var(--sans); }
 .detail-love-btn svg, .detail-tried-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+/* Tried active */
+.detail-tried-btn.active { color: #34c759; background: rgba(52,199,89,0.07); border-color: rgba(52,199,89,0.25); }
+.detail-tried-btn.active svg { stroke: #34c759; }
+/* Review: Loved = red heart, Liked = green thumbs-up, Didn't like = orange thumbs-down */
 .detail-love-btn.active { color: #e91e63; background: rgba(233,30,99,0.06); border-color: rgba(233,30,99,0.2); }
-.detail-love-btn.active svg { fill: rgba(233,30,99,0.15); }
-.detail-tried-btn.active { color: #c4392b; background: rgba(192,57,43,0.06); border-color: rgba(192,57,43,0.2); }
-.detail-tried-btn.active svg { fill: rgba(192,57,43,0.15); }
+.detail-love-btn.active svg { fill: rgba(233,30,99,0.12); }
+.detail-love-btn.active.liked { color: #34c759; background: rgba(52,199,89,0.07); border-color: rgba(52,199,89,0.25); }
+.detail-love-btn.active.liked svg { fill: none; }
+.detail-love-btn.active.disliked { color: #ff8c00; background: rgba(255,140,0,0.07); border-color: rgba(255,140,0,0.25); }
+.detail-love-btn.active.disliked svg { fill: none; }
 
 /* Ingredients */
 .ingredients-list { display: flex; flex-direction: column; gap: 1px; overflow: hidden; border-radius: 14px; border: 0.5px solid var(--border); }
@@ -255,6 +312,24 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .origin-disputed { font-size: 11px; color: #c4884a; }
 .detail-map { width: 100%; height: 180px; border-radius: 12px; border: 0.5px solid var(--border); overflow: hidden; margin-top: 12px; }
 .detail-map iframe { width: 100%; height: 100%; border: none; }
+
+/* ── EDITION TIMELINE ── */
+/* ── EDITIONS TIMELINE LEGEND ── */
+.ed-tl-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.ed-tl-legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text-secondary); font-family: var(--sans); }
+.ed-tl-legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+.editions-timeline { padding: 8px 4px 4px; }
+.ed-tl-header { display: flex; margin-bottom: 6px; }
+.ed-tl-col-label { flex: 1; font-size: 10px; font-weight: 700; color: var(--text-secondary); letter-spacing: 0.05em; text-align: center; text-transform: uppercase; }
+.ed-tl-bar-row { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--border); margin-bottom: 6px; }
+.ed-tl-seg { flex: 1; background: var(--border); }
+.ed-tl-seg.active { background: #4a3fa0; }
+.ed-tl-seg:first-child { border-radius: 6px 0 0 6px; }
+.ed-tl-seg:last-child { border-radius: 0 6px 6px 0; }
+.ed-tl-years { display: flex; position: relative; }
+.ed-tl-year-label { flex: 1; font-size: 10px; color: var(--text-secondary); text-align: left; font-weight: 500; }
+.ed-tl-year-label-end { font-size: 10px; color: var(--text-secondary); position: absolute; right: 0; font-weight: 500; }
 
 /* Collapsible */
 .collapsible { background: var(--card); border-radius: 14px; border: 0.5px solid var(--border); overflow: hidden; margin-bottom: 20px; }
@@ -297,8 +372,9 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .detail-tinted .collapsible,
 .detail-tinted .detail-love-btn,
 .detail-tinted .detail-tried-btn,
-.detail-tinted .detail-link { background: var(--detail-card); border-color: color-mix(in srgb, var(--detail-card) 60%, var(--border)); }
-.detail-tinted .ingredient-row { background: var(--detail-card); }
+.detail-tinted .detail-link { background: #ffffff; border-color: var(--border); }
+.detail-tinted .ingredient-row { background: #ffffff; }
+.detail-tinted .ingredients-glass-row .glassware-card-new { background: #ffffff; }
 .detail-tinted .similar-card { background: var(--detail-bg); }
 .detail-panel.detail-tinted { background: var(--detail-bg); }
 
@@ -343,6 +419,24 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   }
   .ipad-left::-webkit-scrollbar { display: none; }
 
+  .ipad-edition-btn-top {
+    display: flex; align-items: center; gap: 6px;
+    padding: 52px 20px 16px;
+    cursor: pointer; background: none; border: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 100%; text-align: left;
+  }
+  .ipad-edition-btn-label {
+    font-size: 22px; font-weight: 700; color: var(--text-primary);
+    font-family: var(--sans); flex: 1;
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  }
+  .ipad-edition-btn-label .ed-years {
+    font-size: 13px; font-weight: 400; color: var(--text-muted); letter-spacing: 0;
+  }
+  .ipad-edition-btn-chev {
+    font-size: 14px; color: var(--text-muted); margin-top: 2px;
+  }
   .ipad-app-title {
     font-size: 22px; font-weight: 700;
     color: var(--text-primary);
@@ -393,11 +487,11 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   }
   .ipad-edition-chev { font-size: 11px; color: var(--text-muted); }
 
-  /* ── MIDDLE PANE (25%) — list ── */
+  /* ── MIDDLE PANE (32%) — list ── */
   .ipad-middle {
-    width: 25%;
-    min-width: 240px;
-    max-width: 320px;
+    width: 32%;
+    min-width: 300px;
+    max-width: 420px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -501,7 +595,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   /* Multi-select items */
   .ipad-multi-item {
     display: flex; align-items: center; gap: 8px;
-    padding: 7px 16px; margin: 0 8px;
+    padding: 7px 16px; margin: 1px 8px;
     border-radius: 8px; cursor: pointer;
     font-size: 13px; font-weight: 400; color: var(--text-secondary);
     font-family: var(--sans); -webkit-tap-highlight-color: transparent;
@@ -509,7 +603,10 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   }
   .ipad-multi-item:hover { background: rgba(0,0,0,0.04); }
   .ipad-multi-item.active {
-    background: var(--card); color: var(--text-primary); font-weight: 500;
+    background: rgba(0,0,0,0.12); color: var(--text-primary); font-weight: 600;
+  }
+  .ipad-multi-item.active .ipad-spirit-dot {
+    box-shadow: none;
   }
   .ipad-spirit-dot {
     width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block;
@@ -542,7 +639,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   <!-- MOBILE: count bar + list -->
   <div class="count-bar">
     <div class="count-bar-row">
-      <span id="countLabel">102</span> cocktails
+      <span><span class="count-bar-num" id="countLabel">102</span> <span>cocktails</span></span>
       <span class="count-tried-label" id="triedProgressLabel"></span>
     </div>
     <div class="progress-wrap" id="progressWrap">
@@ -556,7 +653,10 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 
   <!-- ── IPAD LEFT PANE ── -->
   <div class="ipad-left" id="ipadLeft">
-    <div class="ipad-app-title">IBA Cocktails</div>
+    <button class="ipad-edition-btn-top" id="ipadEditionBtn">
+      <span class="ipad-edition-btn-label" id="ipadEditionLabel">7th Edition</span>
+      <span class="ipad-edition-btn-chev">⌄</span>
+    </button>
 
     <div class="ipad-nav-section">View</div>
     <div class="ipad-nav-item active" data-tab="all">
@@ -584,7 +684,8 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         <div class="ipad-nav-item active" data-sort="popular">Popular</div>
         <div class="ipad-nav-item" data-sort="az">A – Z</div>
         <div class="ipad-nav-item" data-sort="za">Z – A</div>
-        <div class="ipad-nav-item" data-sort="untried">Untried first</div>
+        <div class="ipad-nav-item" data-sort="untried">To try</div>
+        <div class="ipad-nav-item" data-sort="tried">Already tried</div>
       </div>
     </div>
 
@@ -632,11 +733,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
     </div>
 
     <div class="ipad-nav-divider"></div>
-    <div class="ipad-edition-row" id="ipadEditionBtn">
-      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span class="ipad-edition-label" id="ipadEditionLabel">7th Edition</span>
-      <span class="ipad-edition-chev">⌄</span>
-    </div>
+    
   </div>
 
   <!-- ── IPAD MIDDLE PANE ── -->
@@ -650,7 +747,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         </button>
       </div>
       <div class="ipad-count">
-        <div class="count-bar-row"><span id="ipadCountLabel">102</span> cocktails<span class="count-tried-label" id="ipadTriedProgressLabel"></span></div>
+        <div class="count-bar-row"><span><span class="count-bar-num" id="ipadCountLabel">102</span> <span>cocktails</span></span><span class="count-tried-label" id="ipadTriedProgressLabel"></span></div>
         <div class="progress-wrap" id="ipadProgressWrap"><div class="progress-bar" id="ipadProgressBar"></div></div>
       </div>
     </div>
@@ -723,7 +820,8 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
     <div class="chip plain active" data-sort="popular">Popular</div>
     <div class="chip plain" data-sort="az">A – Z</div>
     <div class="chip plain" data-sort="za">Z – A</div>
-    <div class="chip plain" data-sort="untried">Untried first</div>
+    <div class="chip plain" data-sort="untried">To try</div>
+        <div class="chip plain" data-sort="tried">Already tried</div>
   </div>
   <h3>Category</h3>
   <div class="filter-chips" id="categoryChips">
@@ -804,9 +902,9 @@ function buildWheel() {
     const div = document.createElement('div');
     div.className = 'wheel-item' + (i===6 ? ' selected' : '');
     div.dataset.idx = i;
-    div.innerHTML = `<span class="wheel-item-name">${ed.name}</span><span class="wheel-item-years">${ed.years}</span><span class="wheel-item-count">${ed.count}<svg viewBox="0 0 24 24"><path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/></svg></span>`;
+    div.innerHTML = `<span class="wheel-item-name">${ed.name} <span class="wheel-item-years">(${ed.years})</span></span><span class="wheel-item-count">${ed.count}<svg viewBox="0 0 24 24"><path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/></svg></span>`;
     div.addEventListener('click', () => {
-      document.getElementById('editionTitle').textContent = ed.name;
+      setEditionTitle(ed.name, ed.years);
       ws.scrollTo({top: i*44, behavior:'smooth'});
       updateSelected(i);
       switchEdition(i);
@@ -814,7 +912,7 @@ function buildWheel() {
     });
     ws.appendChild(div);
   });
-  setTimeout(() => ws.scrollTo({top: 6*44, behavior:'instant'}), 30);
+  setTimeout(() => { ws.scrollTo({top: 6*44, behavior:'instant'}); setEditionTitle(EDITIONS[6].name, EDITIONS[6].years); }, 30);
   let t;
   ws.addEventListener('scroll', () => {
     clearTimeout(t);
@@ -826,12 +924,18 @@ function buildWheel() {
   });
 }
 
+function setEditionTitle(name, years) {
+  const nameHtml = name + (years ? ' <span class="ed-years">(' + years + ')</span>' : '');
+  const h1 = document.getElementById('editionTitle');
+  if (h1) h1.innerHTML = nameHtml;
+  const ipadLbl = document.getElementById('ipadEditionLabel');
+  if (ipadLbl) ipadLbl.innerHTML = nameHtml;
+}
+
 function switchEdition(idx) {
   state.editionIdx = idx;
-  const edLabel = EDITIONS[idx].name;
-  document.getElementById('editionTitle').textContent = edLabel;
-  const ipadLbl = document.getElementById('ipadEditionLabel');
-  if (ipadLbl) ipadLbl.textContent = edLabel;
+  const ed = EDITIONS[idx];
+  setEditionTitle(ed.name, ed.years);
   // Hide edition list views (no longer needed)
   showEditionList(false);
   applyFilters();
@@ -901,8 +1005,8 @@ function renderEditionList(cocktails, idx) {
         const lv = favLevel(id);
         let ratingHtml = '';
         if (lv === 2) ratingHtml = '<svg class="ed-rating" viewBox="0 0 24 24" stroke="#ff385c" fill="#ff385c" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-        else if (lv === 1) ratingHtml = '<svg class="ed-rating" viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
-        else if (lv === 0) ratingHtml = '<svg class="ed-rating" viewBox="0 0 24 24" stroke="#aaa" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s.5-1 1.5-1.5S12 12 12 12s1 .5 2.5.5S16 14 16 14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>';
+        else if (lv === 1) ratingHtml = '<svg class="ed-rating" viewBox="0 0 24 24" stroke="#34c759" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+        else if (lv === 0) ratingHtml = '<svg class="ed-rating" viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
 
         const thumbHTML = img
           ? `<div class="ed-thumb"><img src="${img}" loading="lazy" onerror="this.parentNode.innerHTML=''" ></div>`
@@ -992,11 +1096,11 @@ function buildCards() {
     card.dataset.current = c.current === false ? '0' : '1';
     if (state.tried.has(c.id)) card.classList.add('tried');
     if (state.favs.has(c.id))  card.classList.add('favourited');
-    const fc = FAMILY_COLORS[c.family]||'#999';
     const sc = SUBTYPE_COLORS[c.subtype]||'#aaa';
     const glassware = (META_DATA[c.id]||{}).glassware || '';
     const glassPaths = GLASS_SVGS[glassware] || '<path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/>';
     const lv = favLevel(c.id);
+    const subLabel = c.subtype ? (SUBTYPE_LABELS[c.subtype] || capitalize(c.subtype)) : '';
     card.innerHTML = `
       <div class="monogram glass-thumb">
         <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${glassPaths}</svg>
@@ -1006,16 +1110,39 @@ function buildCards() {
         <div class="item-cat">${CAT_SHORT[c.category]||c.category}</div>
       </div>
       <div class="item-right">
-        <div class="dot" style="background:${sc}"></div>
+        ${subLabel ? `<span class="taste-tag" style="background:${sc}22;color:${sc};border:1px solid ${sc}55">${subLabel}</span>` : ''}
         <div class="icon-btn heart-btn" data-id="${c.id}">${favHeartIcon(lv, true)}</div>
-        <div class="icon-btn glass-btn" data-id="${c.id}">
-          <svg class="glass-svg" viewBox="0 0 24 24"><path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/></svg>
-        </div>
       </div>`;
+    updateCardLeftIcon(card, c.id);
     frag.appendChild(card);
   });
   scroll.insertBefore(frag, document.getElementById('noResults'));
   applyFilters();
+}
+
+function updateCardLeftIcon(card, id) {
+  const thumb = card.querySelector('.glass-thumb');
+  if (!thumb) return;
+  const isTried = state.tried.has(id);
+  const lv = favLevel(id);
+  // Remove any existing icons
+  thumb.querySelectorAll('.tried-check-icon,.tried-heart-icon').forEach(e=>e.remove());
+  const svgEl = thumb.querySelector('svg');
+  if (isTried) {
+    if (svgEl) svgEl.style.display = 'none';
+    const icon = document.createElement('span');
+    // Only Loved (lv===2) shows heart; everything else (tried, liked, disliked, no rating) = green check
+    if (lv === 2) {
+      icon.className = 'tried-heart-icon';
+      icon.textContent = '♥';
+    } else {
+      icon.className = 'tried-check-icon';
+      icon.textContent = '✓';
+    }
+    thumb.appendChild(icon);
+  } else {
+    if (svgEl) svgEl.style.display = '';
+  }
 }
 
 // ── FILTERS ──
@@ -1033,8 +1160,8 @@ function applyFilters() {
       (state.filterCats.size===0 || state.filterCats.has(card.dataset.cat)) &&
       (state.filterSubs.size===0 || state.filterSubs.has(card.dataset.sub)) &&
       (!q || card.dataset.name.includes(q) || card.dataset.aka.includes(q)) &&
-      (state.tab!=='favs'  || (state.favs.has(card.dataset.id) && state.favs.get(card.dataset.id) > 0)) &&
-      (state.tab!=='tried' || state.tried.has(card.dataset.id));
+      state.tab !== 'favs' &&
+      state.tab !== 'tried';
     card.classList.toggle('hidden',!ok);
     if (ok) visible.push(card);
   });
@@ -1046,7 +1173,13 @@ function applyFilters() {
       const aT = state.tried.has(a.dataset.id) ? 1 : 0;
       const bT = state.tried.has(b.dataset.id) ? 1 : 0;
       if (aT !== bT) return aT - bT; // untried first
-      return (VIEWS[b.dataset.id]||0) - (VIEWS[a.dataset.id]||0); // then by popularity
+      return a.dataset.name.localeCompare(b.dataset.name); // then a-z
+    }
+    if (state.sort==='tried') {
+      const aT = state.tried.has(a.dataset.id) ? 0 : 1;
+      const bT = state.tried.has(b.dataset.id) ? 0 : 1;
+      if (aT !== bT) return aT - bT; // tried first
+      return a.dataset.name.localeCompare(b.dataset.name); // then a-z
     }
     return 0;
   });
@@ -1056,15 +1189,16 @@ function applyFilters() {
 
   // Diary view for tried tab
   const isTried = state.tab === 'tried';
+  const isFavs = state.tab === 'favs';
   showDiary(isTried, 'listScroll', openDetail);
+  showFavsGrid(isFavs, 'listScroll', openDetail, false);
 
   // Tab class on .app for CSS tab-based rules
   const appEl = document.querySelector('.app');
   appEl.className = 'app tab-' + state.tab;
 
-  document.getElementById('countLabel').textContent = isTried ? state.tried.size : visible.length;
+  document.getElementById('countLabel').textContent = isTried ? state.tried.size : isFavs ? [...state.favs.values()].filter(v=>v===favsFilterLevel).length : visible.length;
 
-  // Progress bar — hide on favs/tried tabs, show on all/search
   const showProgress = state.tab === 'all';
   const triedVisible = showProgress ? visible.filter(c => state.tried.has(c.dataset.id)).length : 0;
   const pct = showProgress && visible.length ? Math.round(triedVisible / visible.length * 100) : 0;
@@ -1107,9 +1241,10 @@ function applyFilters() {
     nr.classList.toggle('visible', visible.length===0 && !isTried);
     // Update count
     const lbl = document.getElementById('ipadCountLabel');
-    if (lbl) lbl.textContent = isTried ? state.tried.size : visible.length;
+    if (lbl) lbl.textContent = isTried ? state.tried.size : isFavs ? [...state.favs.values()].filter(v=>v===favsFilterLevel).length : visible.length;
     // Diary for iPad
     showDiary(isTried, 'ipadListScroll', ipadOpenDetail);
+    showFavsGrid(isFavs, 'ipadListScroll', ipadOpenDetail, true);
   }
 }
 
@@ -1117,9 +1252,9 @@ function applyFilters() {
 function ratingHTML(id) {
   const lv = favLevel(id);
   if (lv === 2) return '<svg viewBox="0 0 24 24" stroke="#ff385c" fill="#ff385c" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-  if (lv === 1) return '<svg viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
-  if (lv === 0 && state.favs.has(id) === false && state.tried.has(id)) return ''; // tried but no rating
-  return '<svg viewBox="0 0 24 24" stroke="#aaa" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s.5-1 1.5-1.5S12 12 12 12s1 .5 2.5.5S16 14 16 14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>';
+  if (lv === 1) return '<svg viewBox="0 0 24 24" stroke="#34c759" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+  if (lv === 0) return '<svg viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
+  return '';
 }
 
 function buildDiaryHTML(triedIds, openFn) {
@@ -1159,8 +1294,8 @@ function buildDiaryHTML(triedIds, openFn) {
         const lv = favLevel(id);
         let ratingIcon = '';
         if (lv === 2) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#ff385c" fill="#ff385c" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-        else if (lv === 1) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
-        else if (lv === 0) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#aaa" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s.5-1 1.5-1.5S12 12 12 12s1 .5 2.5.5S16 14 16 14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>';
+        else if (lv === 1) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#34c759" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+        else if (lv === 0) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
 
         // Date shown only on first item of each day
         const dateHTML = idx === 0
@@ -1205,8 +1340,10 @@ function renderDiary(containerId, openFn) {
 function showDiary(show, containerId, openFn) {
   const container = document.getElementById(containerId);
   if (!container) return;
-  // Toggle cards visibility
-  container.querySelectorAll('.card, .no-results').forEach(el => el.style.display = show ? 'none' : '');
+  // Toggle cards visibility (only restore if not on favs either)
+  if (!show) {
+    container.querySelectorAll('.card, .no-results').forEach(el => el.style.display = '');
+  }
   // Toggle diary
   let diary = container.querySelector('.diary-list, .ipad-diary-list');
   if (show) {
@@ -1216,18 +1353,139 @@ function showDiary(show, containerId, openFn) {
     if (diary) diary.style.display = 'none';
   }
 }
+// ── FAVS GRID ──
+let favsFilterLevel = 2; // default: Loved
 function favLevel(id) { return state.favs.has(id) ? state.favs.get(id) : null; }
-function favHeartIcon(level, forCard = true) {
-  if (forCard) {
-    if (level === 2) return '<svg viewBox="0 0 24 24" stroke="#ff385c" fill="#ff385c" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-    if (level === 1) return '<svg viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
-    return ''; // level 0 or null: nothing on card
+function favLevelLabel(lv) {
+  if (lv === 2) return 'Loved';
+  if (lv === 1) return 'Liked';
+  return "Didn't like";
+}
+
+function buildFavsGrid(containerId, openFn, isIpad) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let existing = container.querySelector('.favs-grid, .ipad-favs-grid');
+  if (existing) existing.remove();
+
+  const wrapper = document.createElement('div');
+  wrapper.className = isIpad ? 'ipad-favs-grid' : 'favs-grid';
+
+  // Title row
+  const titleRow = document.createElement('div');
+  titleRow.className = isIpad ? 'ipad-favs-title-row favs-title-row' : 'favs-title-row';
+
+  const levelLabel = favLevelLabel(favsFilterLevel);
+  titleRow.innerHTML = `
+    <div class="${isIpad ? 'ipad-favs-title favs-title' : 'favs-title'}">Cocktails you <em class="favs-title-italic">${levelLabel}</em></div>
+    <div class="favs-title-btn" id="favsTitleBtn${isIpad?'Ipad':''}">▲</div>
+  `;
+  wrapper.appendChild(titleRow);
+
+  // Filter tabs dropdown (hidden by default, shown on title click)
+  const filterBar = document.createElement('div');
+  filterBar.className = isIpad ? 'ipad-favs-filter-bar favs-filter-bar' : 'favs-filter-bar';
+  filterBar.style.display = 'none';
+  filterBar.id = `favsFilterBar${isIpad?'Ipad':''}`;
+  [['Loved',2],['Liked',1],["Didn't like",0]].forEach(([label, lv]) => {
+    const tab = document.createElement('div');
+    tab.className = 'favs-filter-tab' + (favsFilterLevel === lv ? ' active' : '');
+    tab.textContent = label;
+    tab.addEventListener('click', () => {
+      favsFilterLevel = lv;
+      buildFavsGrid(containerId, openFn, isIpad);
+    });
+    filterBar.appendChild(tab);
+  });
+  wrapper.appendChild(filterBar);
+
+  // Title button toggles filter
+  const titleBtn = titleRow.querySelector('.favs-title-btn');
+  if (titleBtn) titleBtn.addEventListener('click', () => {
+    filterBar.style.display = filterBar.style.display === 'none' ? '' : 'none';
+  });
+
+  // Photo grid
+  const grid = document.createElement('div');
+  grid.className = isIpad ? 'ipad-favs-photo-grid favs-photo-grid' : 'favs-photo-grid';
+
+  // Get cocktails at this fav level
+  const favIds = [...state.favs.entries()]
+    .filter(([, lv]) => lv === favsFilterLevel)
+    .map(([id]) => id)
+    .filter(id => META_DATA[id] || SCRAPED_DATA[id]);
+
+  if (favIds.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'favs-empty';
+    const labels = {2:'No cocktails loved yet.', 1:'No cocktails liked yet.', 0:'No cocktails disliked yet.'};
+    empty.textContent = labels[favsFilterLevel] || 'Nothing here yet.';
+    wrapper.appendChild(empty);
+  } else {
+    favIds.forEach(id => {
+      const s = SCRAPED_DATA[id] || {};
+      const m = META_DATA[id] || {};
+      const name = m.name || s.name || id.replace(/_/g,' ');
+      const img = s.img_url || '';
+      const subtype = m.subtype || '';
+      const dotCol = SUBTYPE_COLORS[subtype] || '#999';
+
+      const item = document.createElement('div');
+      item.className = 'favs-photo-item';
+      item.dataset.id = id;
+
+      if (img) {
+        const fallback = document.createElement('div');
+        fallback.className = 'favs-photo-fallback';
+        fallback.style.cssText = `background:${dotCol}44;display:none`;
+        fallback.textContent = name.charAt(0);
+        const imgEl = document.createElement('img');
+        imgEl.src = img;
+        imgEl.loading = 'lazy';
+        imgEl.onerror = function() { this.style.display='none'; fallback.style.display='flex'; };
+        item.appendChild(imgEl);
+        item.appendChild(fallback);
+      } else {
+        const fallback = document.createElement('div');
+        fallback.className = 'favs-photo-fallback';
+        fallback.style.cssText = `background:${dotCol}44`;
+        fallback.textContent = name.charAt(0);
+        item.appendChild(fallback);
+      }
+      const label = document.createElement('div');
+      label.className = 'favs-photo-label';
+      const labelSpan = document.createElement('span');
+      labelSpan.textContent = name;
+      label.appendChild(labelSpan);
+      item.appendChild(label);
+      item.addEventListener('click', () => openFn(id));
+      grid.appendChild(item);
+    });
+    wrapper.appendChild(grid);
   }
-  if (level === 2) return '<svg viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-  if (level === 1) return '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
-  // level 0 = not for me (grimace); null = unrated (plain heart)
-  if (level === 0) return '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s.5-1 1.5-1.5S12 12 12 12s1 .5 2.5.5S16 14 16 14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>';
-  return '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
+  container.appendChild(wrapper);
+}
+
+function showFavsGrid(show, containerId, openFn, isIpad) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.card, .no-results').forEach(el => el.style.display = show ? 'none' : '');
+  let diary = container.querySelector('.diary-list, .ipad-diary-list');
+  if (diary) diary.style.display = 'none';
+  if (show) {
+    buildFavsGrid(containerId, openFn, isIpad);
+  } else {
+    let existing = container.querySelector('.favs-grid, .ipad-favs-grid');
+    if (existing) existing.remove();
+  }
+}
+function favHeartIcon(level, forCard = true) {
+  // Not used for card left icons anymore; kept for diary/ed-list rating icons
+  if (level === 2) return '<svg viewBox="0 0 24 24" stroke="#ff385c" fill="#ff385c" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  if (level === 1) return '<svg viewBox="0 0 24 24" stroke="#34c759" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+  if (level === 0) return '<svg viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
+  return '';
 }
 let activeFavDropdown = null;
 function closeFavDropdown() {
@@ -1245,17 +1503,18 @@ function openFavDropdown(id, anchorEl) {
   const drop = document.createElement('div');
   drop.className = 'fav-dropdown';
   const opts = [
-    { level: 0, icon: '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s.5-1 1.5-1.5S12 12 12 12s1 .5 2.5.5S16 14 16 14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>', label: 'Not for me' },
-    { level: 1, icon: '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>', label: 'Liked it' },
     { level: 2, icon: '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>', label: 'Loved it' },
+    { level: 1, icon: '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>', label: 'Liked it' },
+    { level: 0, icon: '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>', label: "Didn\'t like" },
   ];
   opts.forEach(opt => {
     const el = document.createElement('div');
     el.className = 'fav-option' + (cur === opt.level ? ' active' : '');
+    el.dataset.level = opt.level;
     el.innerHTML = opt.icon + '<span>' + opt.label + '</span>';
-    if (cur === opt.level && opt.level > 0) {
-      // clicking current non-zero → remove
-      el.addEventListener('click', () => { setFavLevel(id, 0); closeFavDropdown(); });
+    if (cur === opt.level) {
+      // clicking the already-active level → reset to empty state
+      el.addEventListener('click', () => { clearFavLevel(id); closeFavDropdown(); });
     } else {
       el.addEventListener('click', () => { setFavLevel(id, opt.level); closeFavDropdown(); });
     }
@@ -1276,43 +1535,69 @@ function openFavDropdown(id, anchorEl) {
   drop.style.top = top + 'px';
   drop.style.left = left + 'px';
 }
+function clearFavLevel(id) {
+  state.favs.delete(id);
+  document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => {
+    c.classList.remove('favourited');
+    const hb = c.querySelector('.heart-btn');
+    if (hb) hb.innerHTML = '';
+    updateCardLeftIcon(c, id);
+  });
+  document.querySelectorAll('.detail-love-btn[data-id="'+id+'"]').forEach(btn => {
+    updateDetailLoveBtn(btn, id);
+  });
+  if (state.tab==='favs') {
+    buildFavsGrid('listScroll', openDetail, false);
+    buildFavsGrid('ipadListScroll', ipadOpenDetail, true);
+  }
+  save();
+}
 function setFavLevel(id, level) {
-  if (level === 0) state.favs.set(id, 0);  // store 0 explicitly = "not for me"
+  if (level === 0) state.favs.set(id, 0);
   else state.favs.set(id, level);
   const isFav = level > 0;
   document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => {
     c.classList.toggle('favourited', isFav);
     const hb = c.querySelector('.heart-btn');
     if (hb) hb.innerHTML = favHeartIcon(level, true);
+    updateCardLeftIcon(c, id);
   });
   // Update detail button if open
   document.querySelectorAll('.detail-love-btn[data-id="'+id+'"]').forEach(btn => {
     updateDetailLoveBtn(btn, id);
   });
-  if (state.tab==='favs') applyFilters();
+  if (state.tab==='favs') {
+    buildFavsGrid('listScroll', openDetail, false);
+    buildFavsGrid('ipadListScroll', ipadOpenDetail, true);
+  }
   // Update diary rating icon in real-time if on tried tab
   if (state.tab==='tried') {
     const lv = favLevel(id);
     let ratingIcon = '';
     if (lv === 2) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#ff385c" fill="#ff385c" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-    else if (lv === 1) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
-    else if (lv === 0) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#aaa" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s.5-1 1.5-1.5S12 12 12 12s1 .5 2.5.5S16 14 16 14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>';
+    else if (lv === 1) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#34c759" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+    else if (lv === 0) ratingIcon = '<svg viewBox="0 0 24 24" stroke="#ff8c00" fill="none" stroke-width="1.8"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
     document.querySelectorAll(`.diary-entry[data-id="${id}"] .diary-rating`).forEach(el => { el.innerHTML = ratingIcon; });
   }
   save();
 }
 function updateDetailLoveBtn(btn, id) {
   const lv = favLevel(id);
+  const isTried = state.tried.has(id);
   btn.classList.toggle('active', lv !== null);
-  if (lv === 2) {
-    btn.innerHTML = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Loved it</span>';
-  } else if (lv === 1) {
-    btn.innerHTML = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg><span>Liked it</span>';
-  } else if (lv === 0) {
-    btn.innerHTML = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s.5-1 1.5-1.5S12 12 12 12s1 .5 2.5.5S16 14 16 14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg><span>Not for me</span>';
-  } else {
-    btn.innerHTML = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Love It</span>';
-  }
+  // Enable/disable based on tried state
+  if (isTried) { btn.style.opacity = ''; btn.style.pointerEvents = ''; }
+  else { btn.style.opacity = '0.38'; btn.style.pointerEvents = 'none'; }
+  // SVGs
+  const H_FULL = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  const H_EMPTY = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  const T_UP = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+  const T_DN = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
+  btn.classList.remove('liked','disliked');
+  if (lv === 2) { btn.innerHTML = H_FULL + '<span>Loved it</span>'; }
+  else if (lv === 1) { btn.innerHTML = T_UP + '<span>Liked it</span>'; btn.classList.add('liked'); }
+  else if (lv === 0) { btn.innerHTML = T_DN + "<span>Didn't like</span>"; btn.classList.add('disliked'); }
+  else { btn.innerHTML = H_EMPTY + '<span>Rate it</span>'; }
 }
 
 // ── TRIED with confirm + animation ──
@@ -1331,10 +1616,18 @@ function triedBurstAnim(id) {
 function markTried(id) {
   state.tried.add(id);
   state.triedDates.set(id, Date.now());
-  document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.add('tried'));
+  document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => {
+    c.classList.add('tried');
+    updateCardLeftIcon(c, id);
+  });
   document.querySelectorAll('.detail-tried-btn[data-id="'+id+'"]').forEach(btn => {
     btn.classList.add('active');
-    btn.querySelector('span').textContent = 'Tried It!';
+    const sp1 = btn.querySelector('span'); if (sp1) sp1.textContent = 'Tried It!';
+  });
+  // Enable the review button now that drink is tried
+  document.querySelectorAll('.detail-love-btn[data-id="'+id+'"]').forEach(btn => {
+    btn.style.opacity = ''; btn.style.pointerEvents = '';
+    updateDetailLoveBtn(btn, id);
   });
   triedBurstAnim(id);
   save();
@@ -1350,10 +1643,25 @@ function confirmUntry(id, anchorEl) {
   popup.querySelector('.confirm-ok').addEventListener('click', () => {
     state.tried.delete(id);
     state.triedDates.delete(id);
-    document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.remove('tried'));
+    document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => {
+      c.classList.remove('tried');
+      updateCardLeftIcon(c, id);
+    });
     document.querySelectorAll('.detail-tried-btn[data-id="'+id+'"]').forEach(btn => {
       btn.classList.remove('active');
-      btn.querySelector('span').textContent = 'Tried It?';
+      const sp2 = btn.querySelector('span'); if (sp2) sp2.textContent = 'Tried It?';
+    });
+    // Disable review button
+    document.querySelectorAll('.detail-love-btn[data-id="'+id+'"]').forEach(btn => {
+      btn.style.opacity = '0.38'; btn.style.pointerEvents = 'none';
+    });
+    // Clear review when untrying
+    if (state.favs.has(id)) {
+      state.favs.delete(id);
+      document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => c.classList.remove('favourited'));
+    }
+    document.querySelectorAll('.detail-love-btn[data-id="'+id+'"]').forEach(btn => {
+      updateDetailLoveBtn(btn, id);
     });
     save(); applyFilters(); closeConfirmPopup();
   });
@@ -1386,24 +1694,23 @@ function handleTriedClick(id, anchorEl) {
 
 // ── INTERACTIONS ──
 document.getElementById('listScroll').addEventListener('click', e => {
-  const g = e.target.closest('.glass-btn');
-  if (g) { e.stopPropagation(); handleTriedClick(g.dataset.id, g); return; }
-  const h = e.target.closest('.heart-btn');
-  if (h) { e.stopPropagation(); openFavDropdown(h.dataset.id, h); return; }
-  const card = e.target.closest('.card');
-  if (card) openDetail(card.dataset.id);
+  try {
+    const h = e.target.closest('.heart-btn');
+    if (h) { e.stopPropagation(); openFavDropdown(h.dataset.id, h); return; }
+    const card = e.target.closest('.card');
+    if (card) openDetail(card.dataset.id);
+  } catch(err) { console.warn('listScroll click error:', err); }
 });
 
-// iPad list scroll — same handlers
 document.addEventListener('click', e => {
-  const ipadScroll = document.getElementById('ipadListScroll');
-  if (!ipadScroll || !ipadScroll.contains(e.target)) return;
-  const g = e.target.closest('.glass-btn');
-  if (g) { e.stopPropagation(); handleTriedClick(g.dataset.id, g); return; }
-  const h = e.target.closest('.heart-btn');
-  if (h) { e.stopPropagation(); openFavDropdown(h.dataset.id, h); return; }
-  const card = e.target.closest('.card');
-  if (card) ipadOpenDetail(card.dataset.id);
+  try {
+    const ipadScroll = document.getElementById('ipadListScroll');
+    if (!ipadScroll || !ipadScroll.contains(e.target)) return;
+    const h = e.target.closest('.heart-btn');
+    if (h) { e.stopPropagation(); openFavDropdown(h.dataset.id, h); return; }
+    const card = e.target.closest('.card');
+    if (card) ipadOpenDetail(card.dataset.id);
+  } catch(err) { console.warn('ipadScroll click error:', err); }
 });
 
 // Mobile search
@@ -1433,10 +1740,33 @@ document.getElementById('ipadSearchClear').addEventListener('click', () => {
   applyFilters();
 });
 
+function resetDetailPanel() {
+  // Mobile: close slide-over detail panel
+  closeDetail();
+  // iPad: remove pane and show empty state
+  const right = document.getElementById('ipadRight');
+  if (right) {
+    const pane = right.querySelector('.ipad-detail-pane');
+    if (pane) pane.remove();
+    // Reset tint to neutral
+    right.classList.remove('detail-tinted');
+    right.style.removeProperty('--detail-bg');
+    right.style.removeProperty('--detail-card');
+    right.style.background = '';
+  }
+  const empty = document.getElementById('ipadEmpty');
+  if (empty) empty.style.display = '';
+  // Deselect all cards
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected-card'));
+  currentDetailId = null;
+}
+
 document.querySelectorAll('.nav-tab').forEach(tab => tab.addEventListener('click', () => {
-  state.tab=tab.dataset.tab;
+  const newTab = tab.dataset.tab;
+  state.tab = newTab;
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   tab.classList.add('active');
+  if (newTab === 'favs' || newTab === 'tried') resetDetailPanel();
   applyFilters();
 }));
 
@@ -1489,7 +1819,7 @@ function updateIpadSubSync() {
 function syncIpadSort() {
   document.querySelectorAll('#ipadSortBody .ipad-nav-item').forEach(i =>
     i.classList.toggle('active', i.dataset.sort === state.sort));
-  const labels = {popular:'Popular', az:'A – Z', za:'Z – A', untried:'Untried first'};
+  const labels = {popular:'Popular', az:'A – Z', za:'Z – A', untried:'To try', tried:'Already tried'};
   const lbl = document.getElementById('ipadSortSummary');
   if (lbl) lbl.textContent = labels[state.sort] || 'Popular';
 }
@@ -1508,13 +1838,14 @@ document.querySelectorAll('.ipad-nav-item[data-tab]').forEach(item => {
     item.classList.add('active');
     state.tab = item.dataset.tab;
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === state.tab));
+    if (state.tab === 'favs' || state.tab === 'tried') resetDetailPanel();
     applyFilters();
   });
 });
 
 // Collapsible headers
 document.querySelectorAll('.ipad-filter-header').forEach(header => {
-  header.addEventListener('click', () => header.closest('.ipad-filter-group').classList.toggle('open'));
+  header.addEventListener('click', () => { const g = header.closest('.ipad-filter-group'); if(g) g.classList.toggle('open'); });
 });
 
 // Category multi-select (iPad)
@@ -1570,6 +1901,10 @@ const SCRAPED_DATA = {"alexander":{"id":"alexander","category":"The Unforgettabl
 
 const COCKTAIL_DATA = SCRAPED_DATA;
 
+window.addEventListener('error', function(e) {
+  // Silently catch querySelector-on-null errors from cloned card interactions
+  if (e.message && e.message.includes('querySelector')) e.preventDefault();
+});
 buildWheel();
 buildFilterChips();
 buildCards();
@@ -1651,29 +1986,30 @@ function buildDetailHTML(id, onSimilarClick) {
     html += '</div>';
   }
 
-  // Category line
-  if (category) {
-    html += '<div class="detail-meta-row">';
-    html += '<span class="detail-spirit-label">Category</span>';
-    html += '<span class="detail-tag">' + category + '</span>';
-    html += '</div>';
-  }
+  // Category line removed
 
   html += '</div>';
 
-  // ── Love It / Tried It ──
+  // ── Tried It / Review (Tried left, Review right; review disabled if not tried) ──
   const favLv = favLevel(id) ?? null;
   const isTried = state.tried && state.tried.has(id);
+  const SVG_HEART_FULL = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  const SVG_HEART_EMPTY = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  const SVG_THUMB_UP = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+  const SVG_THUMB_DOWN = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
+  let reviewIcon = SVG_HEART_EMPTY, reviewLabel = 'Rate it';
+  let reviewCls = 'detail-love-btn';
+  if (favLv === 2) { reviewIcon = SVG_HEART_FULL; reviewLabel = 'Loved it'; reviewCls += ' active'; }
+  else if (favLv === 1) { reviewIcon = SVG_THUMB_UP; reviewLabel = 'Liked it'; reviewCls += ' active'; }
+  else if (favLv === 0) { reviewIcon = SVG_THUMB_DOWN; reviewLabel = "Didn't like"; reviewCls += ' active'; }
+  const reviewStyle = !isTried ? ' style="opacity:0.38;pointer-events:none;"' : '';
   html += '<div class="detail-action-row">';
-  html += '<button class="detail-love-btn' + (favLv !== null ? ' active' : '') + '" data-action="love" data-id="' + id + '">';
-  if (favLv === 2) html += '<svg viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Loved it</span>';
-  else if (favLv === 1) html += '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg><span>Liked it</span>';
-  else if (favLv === 0) html += '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s.5-1 1.5-1.5S12 12 12 12s1 .5 2.5.5S16 14 16 14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg><span>Not for me</span>';
-  else html += '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Love It</span>';
-  html += '</button>';
-  html += '<button class="detail-tried-btn' + (isTried?' active':'') + '" data-action="tried" data-id="' + id + '">';
+  html += '<button class="detail-tried-btn' + (isTried ? ' active' : '') + '" data-action="tried" data-id="' + id + '">';
   html += '<svg viewBox="0 0 24 24"><path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/></svg>';
   html += '<span>' + (isTried ? 'Tried It!' : 'Tried It?') + '</span></button>';
+  html += '<button class="' + reviewCls + '" data-action="love" data-id="' + id + '"' + reviewStyle + '>';
+  html += reviewIcon + '<span>' + reviewLabel + '</span>';
+  html += '</button>';
   html += '</div>';
 
   // ── Ingredients + Glassware ──
@@ -1716,10 +2052,70 @@ function buildDetailHTML(id, onSimilarClick) {
     html += '</div>';
   }
 
-  // ── Past Editions (collapsible) ──
+  // ── Past Editions (collapsible with timeline) ──
+  const EDITION_DATA = [
+    {key:'1', name:'1st Edition', years:'1961–1987', short:'1ST'},
+    {key:'2', name:'2nd Edition', years:'1987–2004', short:'2ND'},
+    {key:'3', name:'3rd Edition', years:'1993–2004', short:'3RD'},
+    {key:'4', name:'4th Edition', years:'2004–2011', short:'4TH'},
+    {key:'5', name:'5th Edition', years:'2011–2017', short:'5TH'},
+    {key:'6', name:'6th Edition', years:'2017–2020', short:'6TH'},
+    {key:'7', name:'7th Edition', years:'2020–Present', short:'7TH'},
+  ];
+  // Find which editions this cocktail appears in
+  const cocktailEditions = [];
+  for (let i = 0; i < EDITIONS.length; i++) {
+    const edKey = String(i + 1);
+    const edCocktails = EDITION_COCKTAILS[edKey] || [];
+    if (edCocktails.some(([cid]) => cid === id)) cocktailEditions.push(edKey);
+  }
+  // Also add edition 7 if it's a current cocktail
+  const isCurrent = (META_DATA[id]||{}).current !== false && SCRAPED_DATA[id]?.category;
+  if (isCurrent && !cocktailEditions.includes('7')) cocktailEditions.push('7');
+
+  const catColors = {'The Unforgettables':'#4a3fa0','Contemporary Classics':'#1a7050','New Era':'#a03a10','Pre-category':'#aaa'};
+  const thisCat = (SCRAPED_DATA[id]||{}).category || '';
+  const barColor = catColors[thisCat] || '#888';
+
+  // Build timeline HTML
+  let timelineHTML = '<div class="editions-timeline">';
+  // Legend
+  const legendItems = [
+    {color:'#aaa', label:'Pre-category'},
+    {color:'#4a3fa0', label:'The Unforgettables'},
+    {color:'#1a7050', label:'Contemporary Classics'},
+    {color:'#a03a10', label:'New Era'},
+  ];
+  timelineHTML += '<div class="ed-tl-legend">';
+  legendItems.forEach(li => {
+    timelineHTML += `<div class="ed-tl-legend-item"><span class="ed-tl-legend-swatch" style="background:${li.color}"></span>${li.label}</div>`;
+  });
+  timelineHTML += '</div>';
+  // Edition column headers
+  timelineHTML += '<div class="ed-tl-header">';
+  EDITION_DATA.forEach(ed => {
+    timelineHTML += `<div class="ed-tl-col-label">${ed.short}</div>`;
+  });
+  timelineHTML += '</div>';
+  // Presence bar — continuous filled segments
+  timelineHTML += '<div class="ed-tl-bar-row">';
+  EDITION_DATA.forEach(ed => {
+    const active = cocktailEditions.includes(ed.key);
+    timelineHTML += `<div class="ed-tl-seg${active ? ' active' : ''}" style="${active ? `background:${barColor}` : ''}"></div>`;
+  });
+  timelineHTML += '</div>';
+  // Edition year labels
+  timelineHTML += '<div class="ed-tl-years">';
+  EDITION_DATA.forEach(ed => {
+    timelineHTML += `<div class="ed-tl-year-label">${ed.years.split('–')[0]}</div>`;
+  });
+  timelineHTML += '<div class="ed-tl-year-label-end">Now</div>';
+  timelineHTML += '</div>';
+  timelineHTML += '</div>';
+
   html += '<div class="collapsible" data-collapsible>';
   html += '<div class="collapsible-header"><span class="collapsible-title">Past Editions</span><span class="collapsible-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div>';
-  html += '<div class="collapsible-body"><p class="collapsible-empty">Coming soon</p></div>';
+  html += `<div class="collapsible-body">${cocktailEditions.length > 0 ? timelineHTML : '<p class="collapsible-empty">No edition data available</p>'}</div>`;
   html += '</div>';
 
   // ── Similar Drinks (collapsible) ──
@@ -1788,23 +2184,26 @@ function buildDetailHTML(id, onSimilarClick) {
 }
 
 function wireDetailEvents(container, openFn) {
-  // Love button → fav dropdown
-  container.querySelectorAll('.detail-love-btn').forEach(btn => {
-    updateDetailLoveBtn(btn, btn.dataset.id);
-    btn.addEventListener('click', () => openFavDropdown(btn.dataset.id, btn));
-  });
-  // Tried button
-  container.querySelectorAll('.detail-tried-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleTriedClick(btn.dataset.id, btn));
-  });
-  // Collapsibles
-  container.querySelectorAll('[data-collapsible]').forEach(col => {
-    col.querySelector('.collapsible-header').addEventListener('click', () => col.classList.toggle('open'));
-  });
-  // Similar cards
-  container.querySelectorAll('.similar-card').forEach(sc => {
-    sc.addEventListener('click', () => openFn(sc.dataset.similar));
-  });
+  try {
+    // Love button → fav dropdown
+    container.querySelectorAll('.detail-love-btn').forEach(btn => {
+      updateDetailLoveBtn(btn, btn.dataset.id);
+      btn.addEventListener('click', () => openFavDropdown(btn.dataset.id, btn));
+    });
+    // Tried button
+    container.querySelectorAll('.detail-tried-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleTriedClick(btn.dataset.id, btn));
+    });
+    // Collapsibles
+    container.querySelectorAll('[data-collapsible]').forEach(col => {
+      const ch = col.querySelector('.collapsible-header');
+      if (ch) ch.addEventListener('click', () => col.classList.toggle('open'));
+    });
+    // Similar cards
+    container.querySelectorAll('.similar-card').forEach(sc => {
+      sc.addEventListener('click', () => openFn(sc.dataset.similar));
+    });
+  } catch(e) { console.warn('wireDetailEvents error:', e); }
 }
 
 function openDetail(id) {
@@ -1826,10 +2225,10 @@ function openDetail(id) {
   if (imgUrl) {
     const img = document.createElement('img'); img.src = imgUrl;
     img.onerror = () => { img.remove(); const fb=document.createElement('div'); fb.className='detail-hero-fallback'; fb.textContent=name.charAt(0); hero.insertBefore(fb, hero.querySelector('.detail-hero-grad')); };
-    hero.insertBefore(img, hero.querySelector('.detail-hero-grad'));
+    hero.insertBefore(img, hero.querySelector('.detail-hero-grad') || null);
   } else {
     const fb=document.createElement('div'); fb.className='detail-hero-fallback'; fb.textContent=name.charAt(0);
-    hero.insertBefore(fb, hero.querySelector('.detail-hero-grad'));
+    hero.insertBefore(fb, hero.querySelector('.detail-hero-grad') || null);
   }
   document.getElementById('detailHeroName').textContent = name;
   // category removed from hero
@@ -1843,7 +2242,11 @@ function openDetail(id) {
 }
 
 function closeDetail() {
-  document.getElementById('detailPanel').classList.remove('open');
+  const panel = document.getElementById('detailPanel');
+  panel.classList.remove('open');
+  panel.classList.remove('detail-tinted');
+  panel.style.removeProperty('--detail-bg');
+  panel.style.removeProperty('--detail-card');
   currentDetailId = null;
 }
 
