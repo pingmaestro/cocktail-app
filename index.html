@@ -58,23 +58,26 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .ipad-edition-list::-webkit-scrollbar { display: none; }
 .ipad-edition-list .ed-group-header { padding: 12px 4px 6px; }
 .ipad-edition-list .ed-row { padding: 8px 4px; }
-.diary-list { padding: 0 12px 120px; display: flex; flex-direction: column; }
-.diary-month { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; padding: 18px 4px 8px; }
-.diary-entry { display: flex; align-items: center; gap: 10px; padding: 7px 4px; border-bottom: 0.5px solid var(--border); cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.diary-entry:active { opacity: 0.7; }
-.diary-date-col { width: 36px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
-.diary-date { font-size: 22px; font-weight: 300; color: var(--text-secondary); line-height: 1; }
-.diary-date-month { font-size: 9px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 1px; }
-.diary-thumb { width: 40px; height: 40px; border-radius: 6px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.diary-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.diary-thumb-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.diary-body { flex: 1; min-width: 0; }
-.diary-name { font-size: 14px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.diary-cat { font-size: 11px; font-style: italic; color: var(--text-muted); margin-top: 1px; }
-.diary-rating { flex-shrink: 0; display: flex; align-items: center; width: 20px; }
-.diary-rating svg { width: 17px; height: 17px; }
+.diary-list { padding: 0 0 120px; display: flex; flex-direction: column; }
+.diary-month { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; padding: 20px 16px 10px; border-bottom: 0.5px solid var(--border); }
+.diary-entry { display: flex; align-items: stretch; gap: 0; border-bottom: 0.5px solid var(--border); cursor: pointer; -webkit-tap-highlight-color: transparent; background: var(--card); }
+.diary-entry:active { opacity: 0.75; }
+.diary-date-col { width: 52px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 0; border-right: 0.5px solid var(--border); background: var(--bg); }
+.diary-date { font-size: 26px; font-weight: 200; color: var(--text-primary); line-height: 1; }
+.diary-date-month { font-size: 9px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+.diary-thumb { width: 44px; height: 66px; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--border); }
+.diary-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.diary-thumb-fallback { width: 44px; height: 66px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.6); }
+.diary-body { flex: 1; min-width: 0; padding: 14px 12px; display: flex; flex-direction: column; justify-content: center; }
+.diary-name { font-size: 14px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+.diary-cat { font-size: 11px; color: var(--text-muted); margin-top: 3px; font-style: italic; }
+.diary-count { font-size: 11px; color: var(--text-secondary); margin-top: 4px; font-weight: 500; }
+.diary-rating { flex-shrink: 0; display: flex; align-items: center; padding: 0 14px 0 0; }
+.diary-rating svg { width: 18px; height: 18px; }
 .diary-empty { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 14px; }
-.ipad-diary-list { padding: 0 8px 40px; display: flex; flex-direction: column; }
+.ipad-diary-list { padding: 0 0 40px; display: flex; flex-direction: column; }
+#diaryContainer::-webkit-scrollbar { display: none; }
+#ipadDiaryContainer::-webkit-scrollbar { display: none; }
 
 /* Fav dropdown */
 .fav-dropdown { position: fixed; background: var(--card); border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08); z-index: 500; padding: 6px 0; min-width: 160px; animation: fadeScaleIn 0.15s cubic-bezier(0.34,1.56,0.64,1); }
@@ -173,6 +176,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 }
 /* Hide intro card on iPad (sidebar handles context), on non-all tabs, and when dismissed */
 @media (min-width: 900px) { .intro-card { display: none; } }
+@media (min-width: 900px) { #diaryContainer { display: none !important; } }
 .app.tab-tried .intro-card,
 .app.tab-favs .intro-card { display: none; }
 .intro-card.dismissed { display: none !important; }
@@ -214,10 +218,10 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .favs-photo-item:active { opacity: 0.85; }
 .favs-photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .favs-photo-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; color: rgba(255,255,255,0.7); }
-.favs-photo-label { position: absolute; bottom: 6px; left: 6px; right: 6px; display: flex; align-items: center; gap: 3px; }
-.favs-photo-label-name { background: #fff; color: #111; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; font-family: var(--sans); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; max-width: calc(100% - 28px); }
-.favs-photo-label-count { background: #34c759; color: #fff; font-size: 11px; font-weight: 700; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; font-family: var(--sans); white-space: nowrap; flex-shrink: 0; border: 1.5px solid #1a8c38; display: inline-flex; align-items: center; justify-content: center; margin-left: 2px; }
-.favs-photo-label-crown { font-size: 12px; flex-shrink: 0; }
+.favs-photo-label { position: absolute; bottom: 6px; left: 6px; right: 6px; }
+.favs-photo-label-name { background: #fff; color: #111; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; font-family: var(--sans); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.favs-photo-label-count { position: absolute; top: 8px; right: 8px; background: #34c759; color: #fff; font-size: 11px; font-weight: 700; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; font-family: var(--sans); border: 1.5px solid #1a8c38; display: inline-flex; align-items: center; justify-content: center; }
+.favs-photo-label-crown { position: absolute; top: 8px; right: 8px; font-size: 18px; line-height: 1; }
 .favs-empty { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 14px; }
 
 /* iPad favs grid */
@@ -700,6 +704,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   </div>
 
   <!-- MOBILE: count bar + list -->
+  <div class="diary-container" id="diaryContainer" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;"></div>
   <div class="list-scroll" id="listScroll">
     <div class="intro-card" id="introCard">
       <div class="intro-card-title">IBA Companion</div>
@@ -824,6 +829,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
     <div class="ipad-list-scroll" id="ipadListScroll">
       <!-- cards cloned here on iPad -->
     </div>
+    <div class="ipad-diary-container" id="ipadDiaryContainer" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;"></div>
     <div class="ipad-edition-list" id="ipadEditionList" style="display:none"></div>
   </div>
 
@@ -1357,18 +1363,25 @@ function applyFilters() {
   // ── Mirror to iPad list ──
   const ipadScroll = document.getElementById('ipadListScroll');
   if (ipadScroll) {
-    // Remove old iPad cards
-    ipadScroll.querySelectorAll('.card').forEach(c=>c.remove());
-    const noRes = ipadScroll.querySelector('.ipad-no-results');
-    // Clone visible cards into iPad list
-    const frag = document.createDocumentFragment();
-    visible.forEach(card => {
-      const clone = card.cloneNode(true);
-      clone.classList.remove('hidden');
-      if (currentDetailId === clone.dataset.id) clone.classList.add('selected-card');
-      frag.appendChild(clone);
-    });
-    ipadScroll.appendChild(frag);
+    // Handle diary/favs FIRST before touching cards
+    showDiary(isTried, 'ipadListScroll', ipadOpenDetail);
+    showFavsGrid(isFavs, 'ipadListScroll', ipadOpenDetail, true);
+
+    if (!isTried && !isFavs) {
+      // Remove old iPad cards and clone fresh ones
+      ipadScroll.querySelectorAll('.card').forEach(c=>c.remove());
+      const frag = document.createDocumentFragment();
+      visible.forEach(card => {
+        const clone = card.cloneNode(true);
+        clone.classList.remove('hidden');
+        if (currentDetailId === clone.dataset.id) clone.classList.add('selected-card');
+        frag.appendChild(clone);
+      });
+      ipadScroll.appendChild(frag);
+    } else {
+      ipadScroll.querySelectorAll('.card').forEach(c=>c.remove());
+    }
+
     // No results
     let nr = ipadScroll.querySelector('.ipad-no-results');
     if (!nr) { nr = document.createElement('div'); nr.className='ipad-no-results no-results'; ipadScroll.appendChild(nr); }
@@ -1395,14 +1408,11 @@ function applyFilters() {
       nr.classList.add('visible');
     } else {
       nr.textContent = 'No cocktails match.';
-      nr.classList.toggle('visible', visible.length===0 && !isTried);
+      nr.classList.toggle('visible', visible.length===0 && !isTried && !isFavs);
     }
     // Update count
     const lbl = document.getElementById('ipadCountLabel');
     if (lbl) lbl.textContent = isTried ? state.tried.size : isFavs ? [...state.favs.values()].filter(v=>v===favsFilterLevel).length : visible.length;
-    // Diary for iPad
-    showDiary(isTried, 'ipadListScroll', ipadOpenDetail);
-    showFavsGrid(isFavs, 'ipadListScroll', ipadOpenDetail, true);
   }
 }
 
@@ -1416,7 +1426,11 @@ function ratingHTML(id) {
 }
 
 function buildDiaryHTML(triedIds, openFn) {
-  if (triedIds.length === 0) return '<div class="diary-empty">No cocktails tried yet.<br>Mark cocktails as tried to see your diary.</div>';
+  if (triedIds.length === 0) return `<div class="diary-empty">
+    <svg viewBox="0 0 24 24" width="40" height="40" stroke="var(--text-muted)" fill="none" stroke-width="1.2" style="margin-bottom:12px;opacity:0.4"><path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/></svg>
+    <div style="font-weight:600;color:var(--text-secondary);margin-bottom:6px">No cocktails tried yet</div>
+    <div style="font-size:13px">Mark cocktails as tried to build your diary</div>
+  </div>`;
 
   const sorted = [...triedIds].sort((a, b) => (state.triedDates.get(b) || 0) - (state.triedDates.get(a) || 0));
 
@@ -1460,16 +1474,24 @@ function buildDiaryHTML(triedIds, openFn) {
           ? `<div class="diary-date-col"><div class="diary-date">${day.num}</div><div class="diary-date-month">${day.mon}</div></div>`
           : `<div class="diary-date-col"></div>`;
 
-        // Photo thumbnail — no square fallback, just dot
+        // Poster thumbnail — tall portrait like Letterboxd
         const thumbHTML = img
           ? `<div class="diary-thumb"><img src="${img}" loading="lazy" onerror="this.parentNode.style.display='none'"></div>`
-          : `<div class="diary-thumb-dot" style="background:${dotCol}"></div>`;
+          : `<div class="diary-thumb-fallback" style="background:${dotCol}55">${name.charAt(0)}</div>`;
+
+        // Count
+        const cnt = state.triedCounts.get(id) || 1;
+        const countHTML = cnt >= 100
+          ? `<div class="diary-count">👑 100 times</div>`
+          : cnt >= 2 ? `<div class="diary-count">${cnt}× tried</div>` : '';
 
         html += `<div class="diary-entry" data-id="${id}">
           ${dateHTML}
           ${thumbHTML}
           <div class="diary-body">
             <div class="diary-name">${name}</div>
+            <div class="diary-cat">${cat}</div>
+            ${countHTML}
           </div>
           <div class="diary-rating">${ratingIcon}</div>
         </div>`;
@@ -1480,13 +1502,15 @@ function buildDiaryHTML(triedIds, openFn) {
 }
 
 function renderDiary(containerId, openFn) {
-  const container = document.getElementById(containerId);
+  const isIpad = containerId === 'ipadListScroll';
+  const targetId = isIpad ? 'ipadListScroll' : 'diaryContainer';
+  const container = document.getElementById(targetId);
   if (!container) return;
   const triedIds = [...state.tried];
   let diary = container.querySelector('.diary-list, .ipad-diary-list');
   if (!diary) {
     diary = document.createElement('div');
-    diary.className = containerId === 'listScroll' ? 'diary-list' : 'ipad-diary-list';
+    diary.className = isIpad ? 'ipad-diary-list' : 'diary-list';
     container.appendChild(diary);
   }
   diary.innerHTML = buildDiaryHTML(triedIds, openFn);
@@ -1496,19 +1520,42 @@ function renderDiary(containerId, openFn) {
 }
 
 function showDiary(show, containerId, openFn) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  // Toggle cards visibility (only restore if not on favs either)
-  if (!show) {
-    container.querySelectorAll('.card, .no-results').forEach(el => el.style.display = '');
-  }
-  // Toggle diary
-  let diary = container.querySelector('.diary-list, .ipad-diary-list');
-  if (show) {
-    renderDiary(containerId, openFn);
-    if (diary) diary.style.display = '';
+  const isIpad = containerId === 'ipadListScroll';
+  if (!isIpad) {
+    // Mobile: toggle listScroll vs diaryContainer
+    const listScroll = document.getElementById('listScroll');
+    const diaryContainer = document.getElementById('diaryContainer');
+    if (listScroll) listScroll.style.display = show ? 'none' : '';
+    if (diaryContainer) {
+      diaryContainer.style.display = show ? 'flex' : 'none';
+      diaryContainer.style.flexDirection = 'column';
+      if (show) renderDiary(containerId, openFn);
+    }
   } else {
-    if (diary) diary.style.display = 'none';
+    // iPad: use dedicated ipadDiaryContainer inside middle column
+    const ipadListScroll = document.getElementById('ipadListScroll');
+    const ipadDiaryContainer = document.getElementById('ipadDiaryContainer');
+    if (ipadListScroll) ipadListScroll.style.display = show ? 'none' : '';
+    if (ipadDiaryContainer) {
+      ipadDiaryContainer.style.display = show ? 'flex' : 'none';
+      ipadDiaryContainer.style.flexDirection = 'column';
+      if (show) {
+        let diary = ipadDiaryContainer.querySelector('.diary-list, .ipad-diary-list');
+        if (!diary) {
+          diary = document.createElement('div');
+          diary.className = 'ipad-diary-list';
+          ipadDiaryContainer.appendChild(diary);
+        }
+        const triedIds = [...state.tried];
+        diary.innerHTML = buildDiaryHTML(triedIds, openFn);
+        diary.querySelectorAll('.diary-entry').forEach(entry => {
+          entry.addEventListener('click', () => openFn(entry.dataset.id));
+        });
+      }
+    }
+    // Also hide/show favs grid
+    const favsGrid = document.querySelector('.ipad-favs-grid');
+    if (favsGrid) favsGrid.style.display = show ? 'none' : '';
   }
 }
 // ── FAVS GRID ──
@@ -1619,19 +1666,19 @@ function buildFavsGrid(containerId, openFn, isIpad) {
       labelSpan.className = 'favs-photo-label-name';
       labelSpan.textContent = name;
       label.appendChild(labelSpan);
+      item.appendChild(label);
       const cnt = state.triedCounts.get(id) || 1;
       if (cnt >= 100) {
         const crownEl = document.createElement('span');
         crownEl.className = 'favs-photo-label-crown';
         crownEl.textContent = '👑';
-        label.appendChild(crownEl);
+        item.appendChild(crownEl);
       } else if (cnt >= 2) {
         const cntEl = document.createElement('span');
         cntEl.className = 'favs-photo-label-count';
         cntEl.textContent = cnt;
-        label.appendChild(cntEl);
+        item.appendChild(cntEl);
       }
-      item.appendChild(label);
       item.addEventListener('click', () => openFn(id));
       grid.appendChild(item);
     });
