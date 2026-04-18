@@ -36,6 +36,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .count-bar-num { color: var(--text-primary); font-size: 13px; letter-spacing: 0; }
 .count-tried-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; }
 .progress-wrap { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.intro-progress-wrap { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
 .progress-bar { height: 100%; background: #34c759; border-radius: 2px; width: 0%; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
 
 /* ── EDITION LIST ── */
@@ -93,8 +94,10 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 @media (max-width: 899px) {
   .app.tab-favs .top-bar,
   .app.tab-tried .top-bar,
-  .app.tab-favs .count-bar,
-  .app.tab-tried .count-bar { display: none; }
+  .app.tab-favs #mobileCountBar,
+  .app.tab-tried #mobileCountBar { display: none; }
+  .app.tab-favs .intro-card,
+  .app.tab-tried .intro-card { display: none; }
 }
 
 .card.tried { background: rgba(52,199,89,0.055); border-color: rgba(52,199,89,0.22); }
@@ -113,13 +116,13 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .list-scroll::-webkit-scrollbar { display: none; }
 
 /* CARD */
-.card { background: var(--card); border-radius: 15px; border: 0.5px solid var(--border); padding: 11px 13px; display: flex; align-items: center; gap: 11px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.card { background: var(--card); border-radius: 15px; border: 0.5px solid var(--border); padding: 14px 13px; display: flex; align-items: center; gap: 11px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .card:active { opacity: 0.7; }
 .card.hidden { display: none; }
 .monogram { width: 44px; height: 44px; border-radius: 10px; background: #efefed; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: #666; flex-shrink: 0; overflow: hidden; }
 .monogram img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .glass-thumb { background: transparent; border-radius: 0; width: auto; height: auto; }
-.glass-thumb svg { width: 22px; height: 22px; }
+.glass-thumb svg { width: 28px; height: 28px; }
 .item-body { flex: 1; min-width: 0; }
 .item-name { font-size: 15px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .item-cat { font-size: 11px; font-style: italic; color: var(--text-muted); margin-top: 2px; }
@@ -132,6 +135,48 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .card.tried .glass-svg { stroke: #34c759; fill: rgba(52,199,89,0.18); }
 .glass-btn { position: relative; }
 .card.tried .glass-btn::after { content: "✓"; position: absolute; top: -5px; right: -5px; width: 12px; height: 12px; background: #34c759; color: #fff; font-size: 8px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; }
+.intro-card {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 18px 26px;
+  flex-shrink: 0;
+  margin-bottom: 0;
+  text-align: center;
+}
+.list-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  padding: 8px 4px 6px;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.intro-card-title {
+  font-size: 15px; font-weight: 700; color: var(--text-primary);
+  font-family: var(--sans); margin-bottom: 10px;
+}
+.intro-card-line {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.55;
+  font-family: var(--sans); margin-bottom: 8px;
+}
+.intro-card-line:last-of-type { margin-bottom: 14px; }
+.intro-card-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; padding: 13px 16px;
+  background: #fc463c; color: #fff;
+  border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 600; font-family: var(--sans);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  letter-spacing: 0.01em; text-align: center;
+}
+/* Hide intro card on iPad (sidebar handles context), on non-all tabs, and when dismissed */
+@media (min-width: 900px) { .intro-card { display: none; } }
+.app.tab-tried .intro-card,
+.app.tab-favs .intro-card { display: none; }
+.intro-card.dismissed { display: none !important; }
+
 .no-results { text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 14px; display: none; }
 .no-results.visible { display: block; }
 
@@ -139,12 +184,12 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .glass-thumb { display: flex; align-items: center; justify-content: center; }
 .card.tried .glass-thumb svg { display: none; }
 .tried-check-icon, .tried-heart-icon {
-  width: 28px; height: 28px; border-radius: 50%;
+  width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 14px; line-height: 1; flex-shrink: 0;
+  font-size: 17px; line-height: 1; flex-shrink: 0;
 }
-.tried-check-icon { background: #fff; color: #34c759; box-shadow: 0 0 0 1.5px rgba(52,199,89,0.35); }
-.tried-heart-icon { background: #fff; color: #ff385c; box-shadow: 0 0 0 1.5px rgba(255,56,92,0.25); font-size: 16px; }
+.tried-check-icon { background: #fff; color: #34c759; box-shadow: 0 0 0 2px rgba(52,199,89,0.35); }
+.tried-heart-icon { background: #fff; color: #ff385c; box-shadow: 0 0 0 2px rgba(255,56,92,0.25); font-size: 18px; }
 
 /* Taste profile label tag (replaces dot) */
 .taste-tag {
@@ -169,8 +214,10 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .favs-photo-item:active { opacity: 0.85; }
 .favs-photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .favs-photo-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; color: rgba(255,255,255,0.7); }
-.favs-photo-label { position: absolute; bottom: 6px; left: 6px; right: 6px; }
-.favs-photo-label span { background: #fff; color: #111; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; font-family: var(--sans); display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.favs-photo-label { position: absolute; bottom: 6px; left: 6px; right: 6px; display: flex; align-items: center; gap: 3px; }
+.favs-photo-label-name { background: #fff; color: #111; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; font-family: var(--sans); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; max-width: calc(100% - 28px); }
+.favs-photo-label-count { background: #34c759; color: #fff; font-size: 11px; font-weight: 700; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; font-family: var(--sans); white-space: nowrap; flex-shrink: 0; border: 1.5px solid #1a8c38; display: inline-flex; align-items: center; justify-content: center; margin-left: 2px; }
+.favs-photo-label-crown { font-size: 12px; flex-shrink: 0; }
 .favs-empty { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 14px; }
 
 /* iPad favs grid */
@@ -275,7 +322,14 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .detail-tag-plus { font-size: 13px; font-weight: 500; color: var(--text-muted); padding: 0 1px; }
 
 /* Love It / Tried It */
-.detail-action-row { display: flex; gap: 8px; margin-bottom: 20px; }
+.detail-action-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.detail-stepper { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 20px; background: var(--card); border-radius: 12px; border: 0.5px solid var(--border); overflow: hidden; }
+.detail-stepper-btn { background: none; border: none; width: 48px; height: 40px; font-size: 20px; font-weight: 300; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
+.detail-stepper-btn:active { background: rgba(0,0,0,0.05); }
+.detail-stepper-count { flex: 1; text-align: center; font-size: 14px; font-weight: 600; color: var(--text-primary); font-family: var(--sans); }
+.tried-badge { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; background: #34c759; color: #fff; border-radius: 10px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 5px; font-family: var(--sans); border: 1.5px solid #1a8c38; line-height: 1; z-index: 2; }
+.tried-crown { position: absolute; top: -8px; right: -6px; font-size: 16px; line-height: 1; z-index: 2; }
+.glass-thumb { position: relative; overflow: visible; }
 .detail-love-btn, .detail-tried-btn { flex: 1; padding: 13px 10px; background: var(--card); border-radius: 14px; border: 0.5px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: var(--text-secondary); cursor: pointer; -webkit-tap-highlight-color: transparent; font-family: var(--sans); }
 .detail-love-btn svg, .detail-tried-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; }
 /* Tried active */
@@ -646,16 +700,22 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   </div>
 
   <!-- MOBILE: count bar + list -->
-  <div class="count-bar">
-    <div class="count-bar-row">
-      <span><span class="count-bar-num" id="countLabel">102</span> <span>cocktails</span></span>
-      <span class="count-tried-label" id="triedProgressLabel"></span>
-    </div>
-    <div class="progress-wrap" id="progressWrap">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-  </div>
   <div class="list-scroll" id="listScroll">
+    <div class="intro-card" id="introCard">
+      <div class="intro-card-title">IBA Companion</div>
+      <p class="intro-card-line">Explore the IBA's official selection of timeless cocktails, curated across 7 editions since 1961.</p>
+      <p class="intro-card-line">Keep track of every cocktail you've tried and loved.</p>
+      <button class="intro-card-cta" onclick="document.getElementById('introCard').classList.add('dismissed')">Create a profile</button>
+    </div>
+    <div class="list-sticky-header" id="mobileCountBar">
+      <div class="count-bar-row">
+        <span><span class="count-bar-num" id="countLabel">102</span> <span>cocktails</span></span>
+        <span class="count-tried-label" id="triedProgressLabel"></span>
+      </div>
+      <div class="intro-progress-wrap" id="progressWrap">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
     <div class="no-results" id="noResults">No cocktails match.</div>
   </div>
   <div class="edition-list" id="editionList" style="display:none"></div>
@@ -695,6 +755,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         <div class="ipad-nav-item" data-sort="za">Z – A</div>
         <div class="ipad-nav-item" data-sort="untried">To try</div>
         <div class="ipad-nav-item" data-sort="tried">Already tried</div>
+        <div class="ipad-nav-item" data-sort="mostdrank">Most drank</div>
       </div>
     </div>
 
@@ -831,6 +892,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
     <div class="chip plain" data-sort="za">Z – A</div>
     <div class="chip plain" data-sort="untried">To try</div>
         <div class="chip plain" data-sort="tried">Already tried</div>
+        <div class="chip plain" data-sort="mostdrank">Most drank</div>
   </div>
   <h3>Category</h3>
   <div class="filter-chips" id="categoryChips">
@@ -895,6 +957,7 @@ const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
 let state = {
   tried: new Set(JSON.parse(localStorage.getItem('iba_tried')||'[]')),
   triedDates: new Map(JSON.parse(localStorage.getItem('iba_tried_dates')||'[]')),
+  triedCounts: new Map(JSON.parse(localStorage.getItem('iba_tried_counts')||'[]')),
   favs:  new Map(JSON.parse(localStorage.getItem('iba_favs_v2')||'[]')),
   filterCats: new Set(),
   filterSubs: new Set(),
@@ -909,6 +972,7 @@ try { const old=JSON.parse(localStorage.getItem('iba_favs')||'[]'); old.forEach(
 const save = () => {
   localStorage.setItem('iba_tried', JSON.stringify([...state.tried]));
   localStorage.setItem('iba_tried_dates', JSON.stringify([...state.triedDates]));
+  localStorage.setItem('iba_tried_counts', JSON.stringify([...state.triedCounts]));
   localStorage.setItem('iba_favs_v2', JSON.stringify([...state.favs]));
 };
 
@@ -1142,21 +1206,29 @@ function updateCardLeftIcon(card, id) {
   if (!thumb) return;
   const isTried = state.tried.has(id);
   const lv = favLevel(id);
-  // Remove any existing icons
-  thumb.querySelectorAll('.tried-check-icon,.tried-heart-icon').forEach(e=>e.remove());
+  const count = state.triedCounts.get(id) || 1;
+  // Remove any existing icons + badges
+  thumb.querySelectorAll('.tried-check-icon,.tried-heart-icon,.tried-badge,.tried-crown').forEach(e=>e.remove());
   const svgEl = thumb.querySelector('svg');
   if (isTried) {
     if (svgEl) svgEl.style.display = 'none';
     const icon = document.createElement('span');
-    // Only Loved (lv===2) shows heart; everything else (tried, liked, disliked, no rating) = green check
-    if (lv === 2) {
-      icon.className = 'tried-heart-icon';
-      icon.textContent = '♥';
-    } else {
-      icon.className = 'tried-check-icon';
-      icon.textContent = '✓';
-    }
+    if (lv === 2) { icon.className = 'tried-heart-icon'; icon.textContent = '♥'; }
+    else { icon.className = 'tried-check-icon'; icon.textContent = '✓'; }
     thumb.appendChild(icon);
+    if (count >= 100) {
+      // Crown badge at 100
+      const crown = document.createElement('span');
+      crown.className = 'tried-crown';
+      crown.textContent = '👑';
+      thumb.appendChild(crown);
+    } else if (count >= 2) {
+      // Number badge from 2–99
+      const badge = document.createElement('span');
+      badge.className = 'tried-badge';
+      badge.textContent = count;
+      thumb.appendChild(badge);
+    }
   } else {
     if (svgEl) svgEl.style.display = '';
   }
@@ -1200,6 +1272,12 @@ function applyFilters() {
       const aT = state.tried.has(a.dataset.id) ? 0 : 1;
       const bT = state.tried.has(b.dataset.id) ? 0 : 1;
       if (aT !== bT) return aT - bT; // tried first
+      return a.dataset.name.localeCompare(b.dataset.name); // then a-z
+    }
+    if (state.sort==='mostdrank') {
+      const aC = state.triedCounts.get(a.dataset.id) || 0;
+      const bC = state.triedCounts.get(b.dataset.id) || 0;
+      if (bC !== aC) return bC - aC; // highest count first
       return a.dataset.name.localeCompare(b.dataset.name); // then a-z
     }
     return 0;
@@ -1495,7 +1573,8 @@ function buildFavsGrid(containerId, openFn, isIpad) {
   const favIds = [...state.favs.entries()]
     .filter(([, lv]) => lv === favsFilterLevel)
     .map(([id]) => id)
-    .filter(id => META_DATA[id] || SCRAPED_DATA[id]);
+    .filter(id => META_DATA[id] || SCRAPED_DATA[id])
+    .sort((a, b) => (state.triedCounts.get(b) || 1) - (state.triedCounts.get(a) || 1));
 
   if (favIds.length === 0) {
     const empty = document.createElement('div');
@@ -1537,8 +1616,21 @@ function buildFavsGrid(containerId, openFn, isIpad) {
       const label = document.createElement('div');
       label.className = 'favs-photo-label';
       const labelSpan = document.createElement('span');
+      labelSpan.className = 'favs-photo-label-name';
       labelSpan.textContent = name;
       label.appendChild(labelSpan);
+      const cnt = state.triedCounts.get(id) || 1;
+      if (cnt >= 100) {
+        const crownEl = document.createElement('span');
+        crownEl.className = 'favs-photo-label-crown';
+        crownEl.textContent = '👑';
+        label.appendChild(crownEl);
+      } else if (cnt >= 2) {
+        const cntEl = document.createElement('span');
+        cntEl.className = 'favs-photo-label-count';
+        cntEl.textContent = cnt;
+        label.appendChild(cntEl);
+      }
       item.appendChild(label);
       item.addEventListener('click', () => openFn(id));
       grid.appendChild(item);
@@ -1711,6 +1803,8 @@ function markTried(id) {
     btn.style.opacity = ''; btn.style.pointerEvents = '';
     updateDetailLoveBtn(btn, id);
   });
+  if (!state.triedCounts.has(id)) state.triedCounts.set(id, 1);
+  updateStepperDisplay(id);
   triedBurstAnim(id);
   save();
   applyFilters();
@@ -1745,6 +1839,9 @@ function confirmUntry(id, anchorEl) {
     document.querySelectorAll('.detail-love-btn[data-id="'+id+'"]').forEach(btn => {
       updateDetailLoveBtn(btn, id);
     });
+    // Reset count and hide stepper
+    state.triedCounts.delete(id);
+    updateStepperDisplay(id);
     save(); applyFilters(); closeConfirmPopup();
   });
   document.body.appendChild(popup);
@@ -1903,7 +2000,7 @@ function updateIpadSubSync() {
 function syncIpadSort() {
   document.querySelectorAll('#ipadSortBody .ipad-nav-item').forEach(i =>
     i.classList.toggle('active', i.dataset.sort === state.sort));
-  const labels = {popular:'Popular', az:'A – Z', za:'Z – A', untried:'To try', tried:'Already tried'};
+  const labels = {popular:'Popular', az:'A – Z', za:'Z – A', untried:'To try', tried:'Already tried', mostdrank:'Most drank'};
   const lbl = document.getElementById('ipadSortSummary');
   if (lbl) lbl.textContent = labels[state.sort] || 'Popular';
 }
@@ -2207,6 +2304,19 @@ function buildDetailHTML(id, onSimilarClick) {
   html += '</button>';
   html += '</div>';
 
+  // ── Tried counter stepper (only shown when tried) ──
+  const triedCount = state.triedCounts.get(id) || 1;
+  const stepperStyle = !isTried ? ' style="display:none"' : '';
+  html += '<div class="detail-stepper" id="stepper-' + id + '"' + stepperStyle + '>';
+  html += '<button class="detail-stepper-btn" data-action="count-minus" data-id="' + id + '">−</button>';
+  if (triedCount >= 100) {
+    html += '<span class="detail-stepper-count">👑</span>';
+  } else {
+    html += '<span class="detail-stepper-count">' + (triedCount === 1 ? 'Tried once' : triedCount + '× tried') + '</span>';
+  }
+  html += '<button class="detail-stepper-btn" data-action="count-plus" data-id="' + id + '">+</button>';
+  html += '</div>';
+
   // ── Ingredients + Glassware ──
   if (ingredients.length || glassware || garnish) {
     html += '<div class="detail-section">';
@@ -2382,6 +2492,18 @@ function buildDetailHTML(id, onSimilarClick) {
   return html;
 }
 
+function updateStepperDisplay(id) {
+  document.querySelectorAll('#stepper-' + id).forEach(stepper => {
+    const count = state.triedCounts.get(id) || 1;
+    const countEl = stepper.querySelector('.detail-stepper-count');
+    if (countEl) {
+      if (count >= 100) { countEl.textContent = '👑'; }
+      else { countEl.textContent = count === 1 ? 'Tried once' : count + '× tried'; }
+    }
+    stepper.style.display = state.tried.has(id) ? '' : 'none';
+  });
+}
+
 function wireDetailEvents(container, openFn) {
   try {
     // Love button → fav dropdown
@@ -2401,6 +2523,27 @@ function wireDetailEvents(container, openFn) {
     // Similar cards
     container.querySelectorAll('.similar-card').forEach(sc => {
       sc.addEventListener('click', () => openFn(sc.dataset.similar));
+    });
+    // Count stepper
+    container.querySelectorAll('[data-action="count-plus"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const cur = state.triedCounts.get(id) || 1;
+        if (cur >= 99) { state.triedCounts.set(id, 100); } else { state.triedCounts.set(id, cur + 1); }
+        updateStepperDisplay(id);
+        document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => updateCardLeftIcon(c, id));
+        save();
+      });
+    });
+    container.querySelectorAll('[data-action="count-minus"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const cur = state.triedCounts.get(id) || 1;
+        if (cur > 1) { state.triedCounts.set(id, cur - 1); }
+        updateStepperDisplay(id);
+        document.querySelectorAll(`.card[data-id="${id}"]`).forEach(c => updateCardLeftIcon(c, id));
+        save();
+      });
     });
   } catch(e) { console.warn('wireDetailEvents error:', e); }
 }
