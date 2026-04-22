@@ -9,7 +9,7 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #F2F1F6;
+  --bg: #FFFFFF;
   --card: #ffffff;
   --border: #e8e8e6;
   --text-primary: #111111;
@@ -181,13 +181,8 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 @media (min-width: 900px) { #diaryContainer { display: none !important; } }
 .app.tab-tried .intro-card,
 .app.tab-favs .intro-card { display: none; }
-.app.tab-favs .search-wrap,
-.app.tab-tried .search-wrap { display: none; }
-.app.tab-favs #sortChips, .app.tab-favs #sortChips + h3,
-.app.tab-tried #sortChips, .app.tab-tried #sortChips + h3 { display: none; }
-/* Hide Sort label (h3 precedes sortChips) */
-.app.tab-favs .drawer h3:first-of-type,
-.app.tab-tried .drawer h3:first-of-type { display: none; }
+.app.tab-favs .mobile-search-bar,
+.app.tab-tried .mobile-search-bar { display: none; }
 .intro-card.dismissed { display: none !important; }
 
 .no-results { text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 14px; display: none; }
@@ -270,16 +265,30 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 
 /* BOTTOM NAV */
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 0.5px solid var(--border); padding-bottom: env(safe-area-inset-bottom, 0px); z-index: 100; }
-.search-wrap { padding: 10px 14px 6px; }
-.search-input-wrap { position: relative; display: flex; align-items: center; }
-.search-input { width: 100%; background: #f2f2f0; border: none; border-radius: 12px; padding: 13px 40px 13px 16px; font-size: 15px; font-family: var(--sans); color: var(--text-primary); outline: none; }
-.search-input::placeholder { color: var(--text-muted); }
-.search-clear { position: absolute; right: 10px; background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; }
-.search-clear svg { width: 18px; height: 18px; stroke: var(--text-muted); fill: none; stroke-width: 2; }
 .nav-tabs { display: flex; justify-content: space-around; padding: 4px 8px 12px; }
 .nav-tab { display: flex; align-items: center; justify-content: center; padding: 6px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .nav-tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; color: #bbb; }
 .nav-tab.active svg { color: var(--text-primary); }
+
+/* MOBILE SEARCH — inline above count bar */
+.mobile-search-bar { padding: 8px 16px 0; flex-shrink: 0; }
+.search-toggle-row { display: flex; align-items: center; gap: 8px; }
+.search-input-wrap { position: relative; display: flex; align-items: center; flex: 1; }
+.search-input { width: 100%; background: #f2f2f0; border: none; border-radius: 12px; padding: 10px 40px 10px 14px; font-size: 15px; font-family: var(--sans); color: var(--text-primary); outline: none; }
+.search-input::placeholder { color: var(--text-muted); }
+.search-clear { position: absolute; right: 10px; background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; }
+.search-clear svg { width: 18px; height: 18px; stroke: var(--text-muted); fill: none; stroke-width: 2; }
+/* Quick toggle */
+.quick-toggle { display: flex; background: #f2f2f0; border-radius: 12px; padding: 3px; gap: 2px; flex-shrink: 0; }
+.quick-toggle-btn { width: 36px; height: 36px; border: none; background: transparent; border-radius: 9px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; color: var(--text-muted); transition: background 0.15s, color 0.15s; }
+.quick-toggle-btn svg { width: 18px; height: 18px; }
+.quick-toggle-btn.active { background: #fff; color: var(--text-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+/* Quick filter pills row */
+.quick-filter-pills { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.quick-filter-pills::-webkit-scrollbar { display: none; }
+.quick-pill { flex-shrink: 0; font-size: 13px; font-family: var(--sans); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.quick-pill.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); font-weight: 500; }
+.quick-pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
 /* OVERLAY */
 .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 400; }
@@ -307,15 +316,69 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .wheel-item-count { font-size: 13px; color: var(--text-secondary); font-family: var(--sans); display: flex; align-items: center; gap: 4px; }
 .wheel-item-count svg { width: 13px; height: 13px; stroke: var(--text-secondary); fill: none; stroke-width: 1.6; }
 
-/* FILTER DRAWER */
-.drawer { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: var(--card); border-radius: 18px 18px 0 0; padding: 20px 20px calc(28px + env(safe-area-inset-bottom, 0px)); z-index: 401; transform: translateY(100%); transition: transform 0.28s cubic-bezier(0.4,0,0.2,1); max-height: 88vh; overflow-y: auto; }
-.drawer::-webkit-scrollbar { display: none; }
-.drawer.open { transform: translateY(0); }
-.drawer-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 0 auto 20px; }
-.drawer h3 { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 10px; font-family: var(--sans); }
+/* FILTER DRAWER — iOS floating sheet style */
+.drawer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  max-width: 480px; margin: 0 auto;
+  background: transparent;
+  z-index: 401;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  max-height: 92vh;
+  display: flex; flex-direction: column;
+  padding: 0 12px calc(12px + env(safe-area-inset-bottom, 0px));
+  pointer-events: none;
+}
+.drawer.open { transform: translateY(0); pointer-events: all; }
+.drawer-inner {
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  flex: 1;
+  display: flex; flex-direction: column;
+  max-height: 80vh;
+}
+.drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 10px;
+  flex-shrink: 0;
+}
+.drawer-cancel { font-size: 13px; color: var(--text-secondary); font-family: var(--sans); background: none; border: none; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent; }
+.drawer-title { font-size: 13px; font-weight: 600; color: var(--text-primary); font-family: var(--sans); }
+.drawer-clear { font-size: 13px; color: #fc463c; font-family: var(--sans); background: none; border: none; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent; }
+.drawer-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 0 8px; }
+.drawer-body::-webkit-scrollbar { display: none; }
+.drawer-section-title {
+  font-size: 12px; font-weight: 700; color: var(--text-primary);
+  font-family: var(--sans); padding: 14px 18px 6px;
+}
+.drawer-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 18px; border-bottom: 0.5px solid var(--border);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  background: var(--card);
+}
+.drawer-row:last-child { border-bottom: none; }
+.drawer-row:active { background: var(--bg); }
+.drawer-row-label { font-size: 13px; color: var(--text-primary); font-family: var(--sans); }
+.drawer-row-check { width: 22px; height: 22px; border-radius: 4px; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.drawer-row-check.checked { background: #fc463c; border-color: #fc463c; }
+.drawer-row-check.checked::after { content: ''; display: block; width: 6px; height: 11px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg) translate(-1px, -1px); }
+.drawer-row-radio { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.drawer-row-radio.checked { border-color: #fc463c; }
+.drawer-row-radio.checked::after { content: ''; width: 12px; height: 12px; border-radius: 50%; background: #fc463c; display: block; }
+.drawer-divider { height: 8px; background: var(--bg); }
+/* Show count button at bottom */
+.drawer-show-btn {
+  background: #fc463c; color: #fff;
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 600; font-family: var(--sans);
+  padding: 16px; width: 100%; margin-top: 10px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+/* Legacy chip styles kept for iPad */
 .filter-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
-
-/* Chips */
 .chip { font-size: 13px; font-family: var(--sans); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; gap: 6px; }
 .chip.plain.active { background: rgba(0,0,0,0.12); color: var(--text-primary); border-color: rgba(0,0,0,0.2); font-weight: 600; }
 .chip.colored { border-width: 1.5px; }
@@ -403,10 +466,17 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .ingredient-row { background: var(--card); padding: 11px 14px; display: flex; align-items: baseline; }
 .ingredient-row:not(:last-child) { border-bottom: 0.5px solid var(--border); }
 .ing-measure { font-size: 12px; font-weight: 600; color: var(--text-secondary); width: 90px; min-width: 90px; text-align: right; flex-shrink: 0; padding-right: 12px; }
+/* Unit toggle */
+.unit-toggle { display: inline-flex; background: var(--border); border-radius: 8px; padding: 2px; gap: 1px; margin-left: 8px; vertical-align: middle; }
+.unit-toggle-btn { font-size: 11px; font-weight: 600; font-family: var(--sans); padding: 3px 8px; border-radius: 6px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.15s, color 0.15s; }
+.unit-toggle-btn.active { background: var(--card); color: var(--text-primary); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 .ing-name { font-size: 14px; color: var(--text-primary); text-transform: capitalize; }
 .garnish-row .garnish-measure { font-size: 16px; line-height: 1; padding-top: 1px; }
 
 /* Ingredients + Glassware 2-col layout */
+.ingredients-header-row { display: flex; gap: 12px; align-items: baseline; margin-bottom: 8px; }
+.ingredients-header-glass { width: 80px; flex-shrink: 0; font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; font-family: var(--sans); }
+.ingredients-header-ing { flex: 1; display: flex; align-items: center; gap: 8px; }
 .ingredients-glass-row { display: flex; gap: 12px; align-items: flex-start; }
 .glassware-col-wrap { display: flex; flex-direction: column; flex-shrink: 0; }
 .glassware-card-new { background: var(--card); border-radius: 14px; border: 0.5px solid var(--border); padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 80px; }
@@ -433,20 +503,26 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 
 /* ── EDITION TIMELINE ── */
 /* ── EDITIONS TIMELINE LEGEND ── */
-.ed-tl-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+/* Edition summary + story badge */
+.ed-summary-row { display: flex; align-items: center; margin-bottom: 12px; }
+.ed-summary-text { font-size: 12px; color: var(--text-secondary); font-family: var(--sans); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.ed-summary-text strong { color: var(--text-primary); font-weight: 700; }
+.ed-story-badge { font-size: 11px; font-weight: 600; font-family: var(--sans); padding: 3px 9px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; display: inline-block; }
+
+.ed-tl-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
 .ed-tl-legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text-secondary); font-family: var(--sans); }
 .ed-tl-legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
 .editions-timeline { padding: 8px 4px 4px; }
-.ed-tl-header { display: flex; margin-bottom: 6px; }
+.ed-tl-header { display: flex; margin-bottom: 8px; }
 .ed-tl-col-label { flex: 1; font-size: 10px; font-weight: 700; color: var(--text-secondary); letter-spacing: 0.05em; text-align: center; text-transform: uppercase; }
-.ed-tl-bar-row { display: flex; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 6px; }
+.ed-tl-bar-row { display: flex; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 8px; }
 .ed-tl-seg { flex: 1; background: #ffffff; border-right: 1px solid var(--border); }
 .ed-tl-seg:last-child { border-right: none; }
 .ed-tl-seg.active { background: #4a3fa0; border-right-color: transparent; }
 .ed-tl-seg:first-child { border-radius: 5px 0 0 5px; }
 .ed-tl-seg:last-child { border-radius: 0 5px 5px 0; }
-.ed-tl-years { display: flex; position: relative; }
+.ed-tl-years { display: flex; position: relative; margin-top: 2px; }
 .ed-tl-year-label { flex: 1; font-size: 10px; color: var(--text-secondary); text-align: left; font-weight: 500; }
 .ed-tl-year-label-end { font-size: 10px; color: var(--text-secondary); position: absolute; right: 0; font-weight: 500; }
 
@@ -715,19 +791,20 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   /* Multi-select items */
   .ipad-multi-item {
     display: flex; align-items: center; gap: 8px;
-    padding: 7px 16px; margin: 1px 8px;
-    border-radius: 8px; cursor: pointer;
-    font-size: 13px; font-weight: 400; color: var(--text-secondary);
+    justify-content: space-between;
+    padding: 11px 20px; border-bottom: 0.5px solid var(--border);
+    cursor: pointer;
+    font-size: 13px; font-weight: 400; color: var(--text-primary);
     font-family: var(--sans); -webkit-tap-highlight-color: transparent;
-    transition: background 0.12s;
+    background: var(--card);
   }
-  .ipad-multi-item:hover { background: rgba(0,0,0,0.04); }
-  .ipad-multi-item.active {
-    background: rgba(0,0,0,0.12); color: var(--text-primary); font-weight: 600;
-  }
-  .ipad-multi-item.active .ipad-spirit-dot {
-    box-shadow: none;
-  }
+  .ipad-multi-item:last-child { border-bottom: none; }
+  .ipad-multi-item:active { background: var(--bg); }
+  .ipad-multi-item.active { font-weight: 500; }
+  .ipad-multi-item .ipad-item-left { display: flex; align-items: center; gap: 8px; }
+  .ipad-item-check { width: 20px; height: 20px; border-radius: 4px; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .ipad-multi-item.active .ipad-item-check { background: #fc463c; border-color: #fc463c; }
+  .ipad-multi-item.active .ipad-item-check::after { content: ''; display: block; width: 5px; height: 9px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg) translate(-1px, -1px); }
   .ipad-spirit-dot {
     width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block;
   }
@@ -759,11 +836,33 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   <!-- MOBILE: count bar + list -->
   <div class="diary-container" id="diaryContainer" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;"></div>
   <div class="list-scroll" id="listScroll">
-    <div class="intro-card" id="introCard">
-      <div class="intro-card-title">IBA Companion</div>
-      <p class="intro-card-line">Explore the IBA's official selection of timeless cocktails, curated across 7 editions since 1961.</p>
-      <p class="intro-card-line">Keep track of every cocktail you've tried and loved.</p>
-      <button class="intro-card-cta" onclick="document.getElementById('introCard').classList.add('dismissed')">Create a profile</button>
+    <div class="mobile-search-bar" id="mobileSearchWrap">
+      <div class="search-toggle-row">
+        <div class="search-input-wrap">
+          <input class="search-input" id="searchInput" type="text" placeholder="Search cocktails…" autocomplete="off" autocorrect="off" spellcheck="false">
+          <button class="search-clear" id="searchClear" style="display:none">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </button>
+        </div>
+        <div class="quick-toggle" id="quickToggle">
+          <button class="quick-toggle-btn active" id="toggleStrength" title="Strength">
+            <!-- Flexed bicep arm -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15c0 0 1-1 3-1s3 2 5 2 3-1 3-1"/>
+              <path d="M4 15c-1-2-1-4 1-5l3-2c1-.5 2-.5 3 0l2 1c1 .5 1 2 0 2.5L11 13"/>
+              <path d="M16 11c1.5 0 3 1 3 3s-1.5 3-3 3"/>
+            </svg>
+          </button>
+          <button class="quick-toggle-btn" id="toggleSpirit" title="Base Spirit">
+            <!-- Upright bottle -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 2h6v4l2 3v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-3V2z"/>
+              <line x1="7" y1="13" x2="17" y2="13"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="quick-filter-pills" id="quickFilterPills" style="display:none"></div>
     </div>
     <div class="list-sticky-header" id="mobileCountBar">
       <div class="count-bar-row">
@@ -826,9 +925,9 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         <span class="ipad-filter-summary" id="ipadCatSummary">All</span>
       </div>
       <div class="ipad-filter-body" id="ipadCatBody">
-        <div class="ipad-multi-item active" data-cat="The Unforgettables">The Unforgettables</div>
-        <div class="ipad-multi-item" data-cat="Contemporary Classics">Contemporary Classics</div>
-        <div class="ipad-multi-item" data-cat="New Era">New Era</div>
+        <div class="ipad-multi-item active" data-cat="The Unforgettables"><span class="ipad-item-left">The Unforgettables</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-cat="Contemporary Classics"><span class="ipad-item-left">Contemporary Classics</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-cat="New Era"><span class="ipad-item-left">New Era</span><span class="ipad-item-check"></span></div>
       </div>
     </div>
 
@@ -841,11 +940,11 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         <span class="ipad-filter-summary" id="ipadStrengthSummary">All</span>
       </div>
       <div class="ipad-filter-body" id="ipadStrengthBody">
-        <div class="ipad-multi-item" data-strength="Nonalcoholic"><span class="ipad-spirit-dot" style="background:#F4F8FC;border:1px solid #C8DDEF"></span>Non-alc</div>
-        <div class="ipad-multi-item" data-strength="Low"><span class="ipad-spirit-dot" style="background:#C8DDEF"></span>Low</div>
-        <div class="ipad-multi-item" data-strength="Medium"><span class="ipad-spirit-dot" style="background:#8BBAD8"></span>Medium</div>
-        <div class="ipad-multi-item" data-strength="Strong"><span class="ipad-spirit-dot" style="background:#4A8BB5"></span>Strong</div>
-        <div class="ipad-multi-item" data-strength="Very Strong"><span class="ipad-spirit-dot" style="background:#1A4F72"></span>Very strong</div>
+        <div class="ipad-multi-item" data-strength="Nonalcoholic"><span class="ipad-item-left">Non-alc</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-strength="Low"><span class="ipad-item-left">Low</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-strength="Medium"><span class="ipad-item-left">Medium</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-strength="Strong"><span class="ipad-item-left">Strong</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-strength="Very Strong"><span class="ipad-item-left">Very strong</span><span class="ipad-item-check"></span></div>
       </div>
     </div>
 
@@ -858,22 +957,22 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         <span class="ipad-filter-summary" id="ipadSubSummary">All</span>
       </div>
       <div class="ipad-filter-body" id="ipadSubBody">
-        <div class="ipad-multi-item" data-sub="gin"><span class="ipad-spirit-dot" style="background:#4A90A4"></span>Gin</div>
-        <div class="ipad-multi-item" data-sub="vodka"><span class="ipad-spirit-dot" style="background:#A8C8E8"></span>Vodka</div>
-        <div class="ipad-multi-item" data-sub="rum"><span class="ipad-spirit-dot" style="background:#8B2500"></span>Rum</div>
-        <div class="ipad-multi-item" data-sub="tequila/mezcal"><span class="ipad-spirit-dot" style="background:#D4A843"></span>Tequila / Mezcal</div>
-        <div class="ipad-multi-item" data-sub="whiskey"><span class="ipad-spirit-dot" style="background:#B8682A"></span>Whiskey</div>
-        <div class="ipad-multi-item" data-sub="brandy"><span class="ipad-spirit-dot" style="background:#7B3F00"></span>Brandy</div>
-        <div class="ipad-multi-item" data-sub="sparkling"><span class="ipad-spirit-dot" style="background:#F5D76E"></span>Sparkling</div>
-        <div class="ipad-multi-item" data-sub="campari"><span class="ipad-spirit-dot" style="background:#C8102E"></span>Campari</div>
-        <div class="ipad-multi-item" data-sub="cachaça"><span class="ipad-spirit-dot" style="background:#3D7A3D"></span>Cachaça</div>
-        <div class="ipad-multi-item" data-sub="pisco"><span class="ipad-spirit-dot" style="background:#E8C49A"></span>Pisco</div>
-        <div class="ipad-multi-item" data-sub="fernet"><span class="ipad-spirit-dot" style="background:#1B4D2E"></span>Fernet</div>
-        <div class="ipad-multi-item" data-sub="sherry"><span class="ipad-spirit-dot" style="background:#A67B5B"></span>Sherry</div>
-        <div class="ipad-multi-item" data-sub="chartreuse"><span class="ipad-spirit-dot" style="background:#B8E000"></span>Chartreuse</div>
-        <div class="ipad-multi-item" data-sub="liqueur"><span class="ipad-spirit-dot" style="background:#8B3A8B"></span>Liqueur</div>
-        <div class="ipad-multi-item" data-sub="port"><span class="ipad-spirit-dot" style="background:#5C1A2E"></span>Port</div>
-        <div class="ipad-multi-item" data-sub="mixed"><span class="ipad-spirit-dot" style="background:#888780"></span>Mixed</div>
+        <div class="ipad-multi-item" data-sub="gin"><span class="ipad-item-left">Gin</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="vodka"><span class="ipad-item-left">Vodka</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="rum"><span class="ipad-item-left">Rum</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="tequila/mezcal"><span class="ipad-item-left">Tequila / Mezcal</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="whiskey"><span class="ipad-item-left">Whiskey</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="brandy"><span class="ipad-item-left">Brandy</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="sparkling"><span class="ipad-item-left">Sparkling</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="campari"><span class="ipad-item-left">Campari</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="cachaça"><span class="ipad-item-left">Cachaça</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="pisco"><span class="ipad-item-left">Pisco</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="fernet"><span class="ipad-item-left">Fernet</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="sherry"><span class="ipad-item-left">Sherry</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="chartreuse"><span class="ipad-item-left">Chartreuse</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="liqueur"><span class="ipad-item-left">Liqueur</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="port"><span class="ipad-item-left">Port</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-sub="mixed"><span class="ipad-item-left">Mixed</span><span class="ipad-item-check"></span></div>
       </div>
     </div>
 
@@ -886,16 +985,16 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         <span class="ipad-filter-summary" id="ipadFamSummary">All</span>
       </div>
       <div class="ipad-filter-body" id="ipadFamBody">
-        <div class="ipad-multi-item" data-fam="Sour"><span class="ipad-spirit-dot" style="background:#1D9E75"></span>Sour</div>
-        <div class="ipad-multi-item" data-fam="Highball"><span class="ipad-spirit-dot" style="background:#185FA5"></span>Highball</div>
-        <div class="ipad-multi-item" data-fam="Lowball"><span class="ipad-spirit-dot" style="background:#BA7517"></span>Lowball</div>
-        <div class="ipad-multi-item" data-fam="Martini"><span class="ipad-spirit-dot" style="background:#534AB7"></span>Martini</div>
-        <div class="ipad-multi-item" data-fam="Collins"><span class="ipad-spirit-dot" style="background:#3B6D11"></span>Collins</div>
-        <div class="ipad-multi-item" data-fam="Tiki"><span class="ipad-spirit-dot" style="background:#633806"></span>Tiki</div>
-        <div class="ipad-multi-item" data-fam="Flip"><span class="ipad-spirit-dot" style="background:#444441"></span>Flip</div>
-        <div class="ipad-multi-item" data-fam="Spritz"><span class="ipad-spirit-dot" style="background:#0C447C"></span>Spritz</div>
-        <div class="ipad-multi-item" data-fam="Punch"><span class="ipad-spirit-dot" style="background:#993556"></span>Punch</div>
-        <div class="ipad-multi-item" data-fam="Sling"><span class="ipad-spirit-dot" style="background:#993C1D"></span>Sling</div>
+        <div class="ipad-multi-item" data-fam="Sour"><span class="ipad-item-left">Sour</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Highball"><span class="ipad-item-left">Highball</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Lowball"><span class="ipad-item-left">Lowball</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Martini"><span class="ipad-item-left">Martini</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Collins"><span class="ipad-item-left">Collins</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Tiki"><span class="ipad-item-left">Tiki</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Flip"><span class="ipad-item-left">Flip</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Spritz"><span class="ipad-item-left">Spritz</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Punch"><span class="ipad-item-left">Punch</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-fam="Sling"><span class="ipad-item-left">Sling</span><span class="ipad-item-check"></span></div>
       </div>
     </div>
 
@@ -908,9 +1007,9 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         <span class="ipad-filter-summary" id="ipadOccSummary">All</span>
       </div>
       <div class="ipad-filter-body" id="ipadOccBody">
-        <div class="ipad-multi-item" data-occ="Aperitif"><span class="ipad-spirit-dot" style="background:#2E7D32"></span>Aperitif</div>
-        <div class="ipad-multi-item" data-occ="Digestif"><span class="ipad-spirit-dot" style="background:#6A3FA0"></span>Digestif</div>
-        <div class="ipad-multi-item" data-occ="Social"><span class="ipad-spirit-dot" style="background:#E65100"></span>Social</div>
+        <div class="ipad-multi-item" data-occ="Aperitif"><span class="ipad-item-left">Aperitif</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-occ="Digestif"><span class="ipad-item-left">Digestif</span><span class="ipad-item-check"></span></div>
+        <div class="ipad-multi-item" data-occ="Social"><span class="ipad-item-left">Social</span><span class="ipad-item-check"></span></div>
       </div>
     </div>
 
@@ -921,12 +1020,29 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   <!-- ── IPAD MIDDLE PANE ── -->
   <div class="ipad-middle" id="ipadMiddle">
     <div class="ipad-middle-header" id="ipadMiddleHeader">
-      <div class="ipad-search-wrap" id="ipadSearchWrap">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input id="ipadSearchInput" type="search" placeholder="Search cocktails…" autocomplete="off" autocorrect="off" spellcheck="false">
-        <button class="ipad-search-clear" id="ipadSearchClear" style="display:none">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-        </button>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div class="ipad-search-wrap" id="ipadSearchWrap" style="flex:1;margin-bottom:0;">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="ipadSearchInput" type="text" placeholder="Search cocktails…" autocomplete="off" autocorrect="off" spellcheck="false">
+          <button class="ipad-search-clear" id="ipadSearchClear" style="display:none">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </button>
+        </div>
+        <div class="quick-toggle" id="ipadQuickToggle">
+          <button class="quick-toggle-btn active" id="ipadToggleStrength" title="Strength">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15c0 0 1-1 3-1s3 2 5 2 3-1 3-1"/>
+              <path d="M4 15c-1-2-1-4 1-5l3-2c1-.5 2-.5 3 0l2 1c1 .5 1 2 0 2.5L11 13"/>
+              <path d="M16 11c1.5 0 3 1 3 3s-1.5 3-3 3"/>
+            </svg>
+          </button>
+          <button class="quick-toggle-btn" id="ipadToggleSpirit" title="Base Spirit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 2h6v4l2 3v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-3V2z"/>
+              <line x1="7" y1="13" x2="17" y2="13"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="ipad-count">
         <div class="count-bar-row"><span><span class="count-bar-num" id="ipadCountLabel">102</span> <span>cocktails</span></span><span class="count-tried-label" id="ipadTriedProgressLabel"></span></div>
@@ -958,14 +1074,6 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 
 <!-- BOTTOM NAV — fixed full width -->
 <div class="bottom-nav">
-    <div class="search-wrap" id="mobileSearchWrap">
-      <div class="search-input-wrap">
-        <input class="search-input" id="searchInput" type="search" placeholder="Search cocktails…" autocomplete="off" autocorrect="off" spellcheck="false">
-        <button class="search-clear" id="searchClear" style="display:none">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-        </button>
-      </div>
-    </div>
     <div class="nav-tabs">
       <div class="nav-tab active" data-tab="all">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -997,56 +1105,74 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 <!-- FILTER DRAWER -->
 <div class="overlay" id="drawerOverlay"></div>
 <div class="drawer" id="drawer">
-  <div class="drawer-handle"></div>
-  <h3>Sort</h3>
-  <div class="filter-chips" id="sortChips">
-    <div class="chip plain active" data-sort="popular">Popular</div>
-    <div class="chip plain" data-sort="az">A – Z</div>
-    <div class="chip plain" data-sort="za">Z – A</div>
-    <div class="chip plain" data-sort="untried">To try</div>
-    <div class="chip plain" data-sort="tried">Already tried</div>
-    <div class="chip plain" data-sort="mostdrank">Most drank</div>
-  </div>
-  <h3>Category</h3>
-  <div class="filter-chips" id="categoryChips">
-    <div class="chip plain active" data-cat="all">All</div>
-    <div class="chip plain" data-cat="The Unforgettables">The Unforgettables</div>
-    <div class="chip plain" data-cat="Contemporary Classics">Contemporary Classics</div>
-    <div class="chip plain" data-cat="New Era">New Era</div>
-  </div>
-  <h3>Strength</h3>
-  <div class="filter-chips" id="strengthChips">
-    <div class="chip plain active" data-strength="all">All</div>
-    <div class="chip plain" data-strength="Nonalcoholic">Non-alc</div>
-    <div class="chip plain" data-strength="Low">Low</div>
-    <div class="chip plain" data-strength="Medium">Medium</div>
-    <div class="chip plain" data-strength="Strong">Strong</div>
-    <div class="chip plain" data-strength="Very Strong">Very strong</div>
-  </div>
-  <h3>Base Spirit</h3>
-  <div class="filter-chips" id="subtypeChips">
-    <div class="chip plain active" data-sub="all">All</div>
-  </div>
-  <h3>Family</h3>
-  <div class="filter-chips" id="familyChips">
-    <div class="chip plain active" data-fam="all">All</div>
-    <div class="chip plain" data-fam="Sour">Sour</div>
-    <div class="chip plain" data-fam="Highball">Highball</div>
-    <div class="chip plain" data-fam="Lowball">Lowball</div>
-    <div class="chip plain" data-fam="Martini">Martini</div>
-    <div class="chip plain" data-fam="Collins">Collins</div>
-    <div class="chip plain" data-fam="Tiki">Tiki</div>
-    <div class="chip plain" data-fam="Flip">Flip</div>
-    <div class="chip plain" data-fam="Spritz">Spritz</div>
-    <div class="chip plain" data-fam="Punch">Punch</div>
-    <div class="chip plain" data-fam="Sling">Sling</div>
-  </div>
-  <h3>Occasion</h3>
-  <div class="filter-chips" id="occasionChips">
-    <div class="chip plain active" data-occ="all">All</div>
-    <div class="chip plain" data-occ="Aperitif">Aperitif</div>
-    <div class="chip plain" data-occ="Digestif">Digestif</div>
-    <div class="chip plain" data-occ="Social">Social</div>
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <button class="drawer-cancel" id="drawerCancel">Cancel</button>
+      <span class="drawer-title">Filters</span>
+      <button class="drawer-clear" id="drawerClear">Clear all</button>
+    </div>
+    <div class="drawer-body">
+      <!-- Sort -->
+      <div class="drawer-section-title" id="drawerSortTitle">Sort</div>
+      <div id="sortRows">
+        <div class="drawer-row" data-sort="popular"><span class="drawer-row-label">Popular</span><span class="drawer-row-radio checked" id="sort-radio-popular"></span></div>
+        <div class="drawer-row" data-sort="az"><span class="drawer-row-label">A – Z</span><span class="drawer-row-radio" id="sort-radio-az"></span></div>
+        <div class="drawer-row" data-sort="za"><span class="drawer-row-label">Z – A</span><span class="drawer-row-radio" id="sort-radio-za"></span></div>
+        <div class="drawer-row" data-sort="untried"><span class="drawer-row-label">To try</span><span class="drawer-row-radio" id="sort-radio-untried"></span></div>
+        <div class="drawer-row" data-sort="tried"><span class="drawer-row-label">Already tried</span><span class="drawer-row-radio" id="sort-radio-tried"></span></div>
+        <div class="drawer-row" data-sort="mostdrank"><span class="drawer-row-label">Most drank</span><span class="drawer-row-radio" id="sort-radio-mostdrank"></span></div>
+      </div>
+      <div class="drawer-divider" id="drawerSortDivider"></div>
+      <!-- Category -->
+      <div class="drawer-section-title">Category</div>
+      <div id="categoryRows">
+        <div class="drawer-row" data-cat="The Unforgettables"><span class="drawer-row-label">The Unforgettables</span><span class="drawer-row-check" id="cat-check-unforg"></span></div>
+        <div class="drawer-row" data-cat="Contemporary Classics"><span class="drawer-row-label">Contemporary Classics</span><span class="drawer-row-check" id="cat-check-contemp"></span></div>
+        <div class="drawer-row" data-cat="New Era"><span class="drawer-row-label">New Era</span><span class="drawer-row-check" id="cat-check-newera"></span></div>
+      </div>
+      <div class="drawer-divider"></div>
+      <!-- Strength -->
+      <div class="drawer-section-title">Strength</div>
+      <div id="strengthRows">
+        <div class="drawer-row" data-strength="Nonalcoholic"><span class="drawer-row-label">Non-alcoholic</span><span class="drawer-row-check" id="str-check-na"></span></div>
+        <div class="drawer-row" data-strength="Low"><span class="drawer-row-label">Low</span><span class="drawer-row-check" id="str-check-low"></span></div>
+        <div class="drawer-row" data-strength="Medium"><span class="drawer-row-label">Medium</span><span class="drawer-row-check" id="str-check-med"></span></div>
+        <div class="drawer-row" data-strength="Strong"><span class="drawer-row-label">Strong</span><span class="drawer-row-check" id="str-check-str"></span></div>
+        <div class="drawer-row" data-strength="Very Strong"><span class="drawer-row-label">Very strong</span><span class="drawer-row-check" id="str-check-vs"></span></div>
+      </div>
+      <div class="drawer-divider"></div>
+      <!-- Base Spirit -->
+      <div class="drawer-section-title">Base Spirit</div>
+      <div id="spiritRows">
+        <!-- populated by buildFilterChips -->
+      </div>
+      <div class="drawer-divider"></div>
+      <!-- Family -->
+      <div class="drawer-section-title">Family</div>
+      <div id="familyRows">
+        <div class="drawer-row" data-fam="Sour"><span class="drawer-row-label">Sour</span><span class="drawer-row-check" id="fam-check-sour"></span></div>
+        <div class="drawer-row" data-fam="Highball"><span class="drawer-row-label">Highball</span><span class="drawer-row-check" id="fam-check-highball"></span></div>
+        <div class="drawer-row" data-fam="Lowball"><span class="drawer-row-label">Lowball</span><span class="drawer-row-check" id="fam-check-lowball"></span></div>
+        <div class="drawer-row" data-fam="Martini"><span class="drawer-row-label">Martini</span><span class="drawer-row-check" id="fam-check-martini"></span></div>
+        <div class="drawer-row" data-fam="Collins"><span class="drawer-row-label">Collins</span><span class="drawer-row-check" id="fam-check-collins"></span></div>
+        <div class="drawer-row" data-fam="Tiki"><span class="drawer-row-label">Tiki</span><span class="drawer-row-check" id="fam-check-tiki"></span></div>
+        <div class="drawer-row" data-fam="Flip"><span class="drawer-row-label">Flip</span><span class="drawer-row-check" id="fam-check-flip"></span></div>
+        <div class="drawer-row" data-fam="Spritz"><span class="drawer-row-label">Spritz</span><span class="drawer-row-check" id="fam-check-spritz"></span></div>
+        <div class="drawer-row" data-fam="Punch"><span class="drawer-row-label">Punch</span><span class="drawer-row-check" id="fam-check-punch"></span></div>
+        <div class="drawer-row" data-fam="Sling"><span class="drawer-row-label">Sling</span><span class="drawer-row-check" id="fam-check-sling"></span></div>
+      </div>
+      <div class="drawer-divider"></div>
+      <!-- Occasion -->
+      <div class="drawer-section-title">Occasion</div>
+      <div id="occasionRows">
+        <div class="drawer-row" data-occ="Aperitif"><span class="drawer-row-label">Aperitif</span><span class="drawer-row-check" id="occ-check-aperitif"></span></div>
+        <div class="drawer-row" data-occ="Digestif"><span class="drawer-row-label">Digestif</span><span class="drawer-row-check" id="occ-check-digestif"></span></div>
+        <div class="drawer-row" data-occ="Social"><span class="drawer-row-label">Social</span><span class="drawer-row-check" id="occ-check-social"></span></div>
+      </div>
+    </div>
+    <div style="padding: 0 12px 12px; flex-shrink:0;">
+      <button class="drawer-show-btn" id="drawerShowBtn">Show cocktails</button>
+    </div>
   </div>
 </div>
 
@@ -1069,6 +1195,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 
 <script>
 const EDITIONS = [
+  {name:'All Editions',years:'1961–Present',count:185},
   {name:'1st Edition',years:'1961–1987',count:50},
   {name:'2nd Edition',years:'1987–1993',count:73},
   {name:'3rd Edition',years:'1993–2004',count:60},
@@ -1173,7 +1300,7 @@ let state = {
   filterOccs: new Set(),
   filterStrengths: new Set(),
   sort:'popular', tab:'all', query:'',
-  editionIdx: 6, // 6 = 7th (current)
+  editionIdx: 7, // 7 = 7th Edition (0 = All Editions)
 };
 // Seed dates for already-tried items that don't have a date
 state.tried.forEach(id => { if (!state.triedDates.has(id)) state.triedDates.set(id, Date.now()); });
@@ -1192,9 +1319,12 @@ function buildWheel() {
   const ws = document.getElementById('wheelScroll');
   EDITIONS.forEach((ed,i) => {
     const div = document.createElement('div');
-    div.className = 'wheel-item' + (i===6 ? ' selected' : '');
+    div.className = 'wheel-item' + (i===7 ? ' selected' : '');
     div.dataset.idx = i;
-    div.innerHTML = `<span class="wheel-item-name">${ed.name} <span class="wheel-item-years">(${ed.years})</span></span><span class="wheel-item-count">${ed.count}<svg viewBox="0 0 24 24"><path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/></svg></span>`;
+    const countLabel = i === 0
+      ? `<span class="wheel-item-count">185<svg viewBox="0 0 24 24"><path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/></svg></span>`
+      : `<span class="wheel-item-count">${ed.count}<svg viewBox="0 0 24 24"><path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/></svg></span>`;
+    div.innerHTML = `<span class="wheel-item-name">${ed.name} <span class="wheel-item-years">(${ed.years})</span></span>${countLabel}`;
     div.addEventListener('click', () => {
       setEditionTitle(ed.name, ed.years);
       ws.scrollTo({top: i*44, behavior:'smooth'});
@@ -1204,7 +1334,7 @@ function buildWheel() {
     });
     ws.appendChild(div);
   });
-  setTimeout(() => { ws.scrollTo({top: 6*44, behavior:'instant'}); setEditionTitle(EDITIONS[6].name, EDITIONS[6].years); }, 30);
+  setTimeout(() => { ws.scrollTo({top: 7*44, behavior:'instant'}); setEditionTitle(EDITIONS[7].name, EDITIONS[7].years); }, 30);
   let t;
   ws.addEventListener('scroll', () => {
     clearTimeout(t);
@@ -1228,7 +1358,6 @@ function switchEdition(idx) {
   state.editionIdx = idx;
   const ed = EDITIONS[idx];
   setEditionTitle(ed.name, ed.years);
-  // Hide edition list views (no longer needed)
   showEditionList(false);
   applyFilters();
 }
@@ -1336,7 +1465,7 @@ function closeSheet(s,o) { document.getElementById(s).classList.remove('open'); 
 document.getElementById('editionBtn').addEventListener('click', () => openSheet('editionSheet','editionOverlay'));
 document.getElementById('editionClose').addEventListener('click', () => closeSheet('editionSheet','editionOverlay'));
 document.getElementById('editionOverlay').addEventListener('click', () => closeSheet('editionSheet','editionOverlay'));
-document.getElementById('menuBtn').addEventListener('click', () => openSheet('drawer','drawerOverlay'));
+document.getElementById('menuBtn').addEventListener('click', () => { openSheet('drawer','drawerOverlay'); syncDrawerUI(); });
 document.getElementById('drawerOverlay').addEventListener('click', () => closeSheet('drawer','drawerOverlay'));
 
 // ── FILTER CHIPS (family + subtype) ──
@@ -1349,16 +1478,29 @@ function subtypeLabel(s) { return SUBTYPE_LABELS[s] || capitalize(s); }
 
 function buildFilterChips() {
   const subs = [...new Set(COCKTAILS.map(c=>c.subtype))].sort();
+  // iPad sub body (chips stay for iPad)
   const sc = document.getElementById('subtypeChips');
-
-  subs.forEach(s => {
-    const c = document.createElement('div');
-    c.className = 'chip colored'; c.dataset.sub = s;
-    const col = SUBTYPE_COLORS[s]||'#999';
-    c.style.borderColor = col+'66';
-    c.innerHTML = `<span class="chip-dot" style="background:${col}"></span>${subtypeLabel(s)}`;
-    sc.appendChild(c);
-  });
+  if (sc) {
+    subs.forEach(s => {
+      const c = document.createElement('div');
+      c.className = 'chip colored'; c.dataset.sub = s;
+      const col = SUBTYPE_COLORS[s]||'#999';
+      c.style.borderColor = col+'66';
+      c.innerHTML = `<span class="chip-dot" style="background:${col}"></span>${subtypeLabel(s)}`;
+      sc.appendChild(c);
+    });
+  }
+  // Mobile spirit rows
+  const sr = document.getElementById('spiritRows');
+  if (sr) {
+    subs.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'drawer-row'; row.dataset.sub = s;
+      const col = SUBTYPE_COLORS[s]||'#999';
+      row.innerHTML = `<span class="drawer-row-label" style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:50%;background:${col};display:inline-block;flex-shrink:0"></span>${subtypeLabel(s)}</span><span class="drawer-row-check"></span>`;
+      sr.appendChild(row);
+    });
+  }
 }
 
 // ── CARDS ──
@@ -1448,18 +1590,27 @@ function updateCardLeftIcon(card, id) {
 
 // ── FILTERS ──
 function applyFilters() {
-  // Build set of IDs allowed by current edition (null = all 102)
-  const editionIds = state.editionIdx === 6 ? null :
-    new Set((EDITION_COCKTAILS[String(state.editionIdx + 1)] || []).map(e => e[0]));
+  // idx 0 = All Editions (all 185), idx 1-6 = historical editions, idx 7 = 7th (current 102)
+  const isAllEditions = state.editionIdx === 0;
+  const is7th = state.editionIdx === 7;
+  const editionIds = isAllEditions ? null :
+    is7th ? null :
+    new Set((EDITION_COCKTAILS[String(state.editionIdx)] || []).map(e => e[0]));
 
   const cards = [...document.querySelectorAll('#listScroll .card')];
   const q = state.query.toLowerCase().trim();
+  // Secret # story keywords
+  const STORY_KEYWORDS = { '#comeback':'comeback', '#rising':'rising', '#onehit':'onehit', '#fallen':'fallen', '#legacy':'legacy' };
+  const storyFilter = STORY_KEYWORDS[q] || null;
+  const isStorySearch = storyFilter !== null;
   let visible = [];
   cards.forEach(card => {
     // On favs/tried tabs, ignore edition filter — show from all editions
     const editionOk = (state.tab === 'favs' || state.tab === 'tried')
       ? true
-      : (editionIds ? editionIds.has(card.dataset.id) : card.dataset.current !== '0');
+      : isAllEditions ? true
+      : is7th ? card.dataset.current !== '0'
+      : (editionIds ? editionIds.has(card.dataset.id) : true);
     const ok =
       editionOk &&
       (state.filterCats.size===0 || state.filterCats.has(card.dataset.cat)) &&
@@ -1467,7 +1618,11 @@ function applyFilters() {
       (state.filterFams.size===0 || state.filterFams.has(card.dataset.fam)) &&
       (state.filterOccs.size===0 || [...state.filterOccs].some(o => (OCCASION_DATA[card.dataset.id]||'').split(',').map(s=>s.trim()).includes(o))) &&
       (state.filterStrengths.size===0 || state.filterStrengths.has(STRENGTH_DATA[card.dataset.id])) &&
-      (!q || card.dataset.name.includes(q) || card.dataset.aka.includes(q)) &&
+      (!q || (isStorySearch
+        ? (storyFilter === 'legacy'
+            ? RAW.some(([rid,,, cat]) => rid === card.dataset.id && !cat)
+            : getStoryMap()[card.dataset.id] === storyFilter)
+        : (card.dataset.name.includes(q) || card.dataset.aka.includes(q)))) &&
       state.tab !== 'favs' &&
       state.tab !== 'tried';
     card.classList.toggle('hidden',!ok);
@@ -1510,8 +1665,8 @@ function applyFilters() {
       // Find which edition it belongs to
       const matchId = match.dataset.id;
       let foundEdIdx = -1;
-      for (let i = 0; i < EDITIONS.length; i++) {
-        const edCocktails = EDITION_COCKTAILS[String(i+1)] || [];
+      for (let i = 1; i <= 6; i++) {
+        const edCocktails = EDITION_COCKTAILS[String(i)] || [];
         if (edCocktails.some(([cid]) => cid === matchId)) { foundEdIdx = i; break; }
       }
       const matchName = match.dataset.name;
@@ -1550,6 +1705,8 @@ function applyFilters() {
   const hideSortTabs = state.tab === 'favs' || state.tab === 'tried';
   const mobileSearchWrap = document.getElementById('mobileSearchWrap');
   if (mobileSearchWrap) mobileSearchWrap.style.display = hideSortTabs ? 'none' : '';
+  const ipadQuickToggle = document.getElementById('ipadQuickToggle');
+  if (ipadQuickToggle) ipadQuickToggle.style.display = hideSortTabs ? 'none' : '';
   ['ipadSortGroup','ipadCatGroup','ipadStrengthGroup','ipadSubGroup','ipadFamGroup','ipadOccGroup'].forEach(gid => {
     const g = document.getElementById(gid);
     if (!g) return;
@@ -1557,12 +1714,10 @@ function applyFilters() {
     const div = g.nextElementSibling;
     if (div && div.classList.contains('ipad-nav-divider')) div.style.display = hideSortTabs ? 'none' : '';
   });
-  ['sortChips','categoryChips','strengthChips','subtypeChips','familyChips','occasionChips'].forEach(cid => {
-    const el = document.getElementById(cid);
-    if (!el) return;
-    el.style.display = hideSortTabs ? 'none' : '';
-    const h3 = el.previousElementSibling;
-    if (h3 && h3.tagName === 'H3') h3.style.display = hideSortTabs ? 'none' : '';
+  // Mobile drawer sections
+  ['drawerSortTitle','drawerSortDivider','sortRows'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = hideSortTabs ? 'none' : '';
   });
 
   document.getElementById('countLabel').textContent = isTried ? state.tried.size : isFavs ? [...state.favs.values()].filter(v=>v===favsFilterLevel).length : visible.length;
@@ -1619,8 +1774,8 @@ function applyFilters() {
       if (match) {
         const matchId = match.dataset.id;
         let foundEdIdx = -1;
-        for (let i = 0; i < EDITIONS.length; i++) {
-          const edCocktails = EDITION_COCKTAILS[String(i+1)] || [];
+        for (let i = 1; i <= 6; i++) {
+          const edCocktails = EDITION_COCKTAILS[String(i)] || [];
           if (edCocktails.some(([cid]) => cid === matchId)) { foundEdIdx = i; break; }
         }
         if (foundEdIdx >= 0) {
@@ -2181,6 +2336,73 @@ document.getElementById('searchClear').addEventListener('click', () => {
   applyFilters();
 });
 
+// ── Quick toggle: switch card tag between Strength and Base Spirit ──
+let cardTagMode = 'strength';
+
+function refreshCardTags() {
+  document.querySelectorAll('#listScroll .card, #ipadListScroll .card').forEach(card => {
+    const id = card.dataset.id;
+    const right = card.querySelector('.item-right');
+    if (!right) return;
+    let badge = right.querySelector('.strength-badge');
+    if (cardTagMode === 'strength') {
+      const strength = STRENGTH_DATA[id] || '';
+      const bg = STRENGTH_COLORS[strength] || '#888';
+      const col = STRENGTH_TEXT_COLORS[strength] || '#2A5A80';
+      if (strength) {
+        if (!badge) { badge = document.createElement('span'); badge.className = 'strength-badge'; right.insertBefore(badge, right.firstChild); }
+        badge.style.background = bg; badge.style.color = col; badge.textContent = strength;
+      } else if (badge) badge.remove();
+    } else {
+      const subtype = (META_DATA[id]||{}).subtype || '';
+      const label = SUBTYPE_LABELS[subtype] || (subtype.charAt(0).toUpperCase() + subtype.slice(1));
+      const bg = (SUBTYPE_COLORS[subtype]||'#888') + '28';
+      const col = SUBTYPE_COLORS[subtype] || '#888';
+      if (subtype) {
+        if (!badge) { badge = document.createElement('span'); badge.className = 'strength-badge'; right.insertBefore(badge, right.firstChild); }
+        badge.style.background = bg; badge.style.color = col; badge.textContent = label;
+      } else if (badge) badge.remove();
+    }
+  });
+}
+
+document.getElementById('toggleStrength').addEventListener('click', () => {
+  if (cardTagMode === 'strength') return;
+  cardTagMode = 'strength';
+  document.getElementById('toggleStrength').classList.add('active');
+  document.getElementById('toggleSpirit').classList.remove('active');
+  document.getElementById('ipadToggleStrength').classList.add('active');
+  document.getElementById('ipadToggleSpirit').classList.remove('active');
+  refreshCardTags();
+});
+document.getElementById('toggleSpirit').addEventListener('click', () => {
+  if (cardTagMode === 'spirit') return;
+  cardTagMode = 'spirit';
+  document.getElementById('toggleSpirit').classList.add('active');
+  document.getElementById('toggleStrength').classList.remove('active');
+  document.getElementById('ipadToggleSpirit').classList.add('active');
+  document.getElementById('ipadToggleStrength').classList.remove('active');
+  refreshCardTags();
+});
+document.getElementById('ipadToggleStrength').addEventListener('click', () => {
+  if (cardTagMode === 'strength') return;
+  cardTagMode = 'strength';
+  document.getElementById('ipadToggleStrength').classList.add('active');
+  document.getElementById('ipadToggleSpirit').classList.remove('active');
+  document.getElementById('toggleStrength').classList.add('active');
+  document.getElementById('toggleSpirit').classList.remove('active');
+  refreshCardTags();
+});
+document.getElementById('ipadToggleSpirit').addEventListener('click', () => {
+  if (cardTagMode === 'spirit') return;
+  cardTagMode = 'spirit';
+  document.getElementById('ipadToggleSpirit').classList.add('active');
+  document.getElementById('ipadToggleStrength').classList.remove('active');
+  document.getElementById('toggleSpirit').classList.add('active');
+  document.getElementById('toggleStrength').classList.remove('active');
+  refreshCardTags();
+});
+
 // iPad search
 document.getElementById('ipadSearchInput').addEventListener('input', e => {
   state.query = e.target.value;
@@ -2226,79 +2448,102 @@ document.querySelectorAll('.nav-tab').forEach(tab => tab.addEventListener('click
   applyFilters();
 }));
 
-// Mobile drawer — Category multi-select
-document.getElementById('categoryChips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip'); if (!chip) return;
-  const val = chip.dataset.cat;
-  if (val === 'all') { state.filterCats.clear(); }
-  else { if (state.filterCats.has(val)) state.filterCats.delete(val); else state.filterCats.add(val); }
-  document.querySelectorAll('#categoryChips .chip').forEach(c => {
-    const cv = c.dataset.cat;
-    c.classList.toggle('active', cv==='all' ? state.filterCats.size===0 : state.filterCats.has(cv));
+// ── Mobile drawer — new row-based listeners ──
+
+// Helper: sync all drawer row checkmarks/radios to current state
+function syncDrawerUI() {
+  // Sort radios
+  document.querySelectorAll('#sortRows .drawer-row').forEach(row => {
+    row.querySelector('.drawer-row-radio').classList.toggle('checked', row.dataset.sort === state.sort);
   });
-  updateIpadCatSync(); applyFilters();
+  // Category checkboxes
+  document.querySelectorAll('#categoryRows .drawer-row').forEach(row => {
+    row.querySelector('.drawer-row-check').classList.toggle('checked', state.filterCats.has(row.dataset.cat));
+  });
+  // Strength checkboxes
+  document.querySelectorAll('#strengthRows .drawer-row').forEach(row => {
+    row.querySelector('.drawer-row-check').classList.toggle('checked', state.filterStrengths.has(row.dataset.strength));
+  });
+  // Spirit checkboxes
+  document.querySelectorAll('#spiritRows .drawer-row').forEach(row => {
+    row.querySelector('.drawer-row-check').classList.toggle('checked', state.filterSubs.has(row.dataset.sub));
+  });
+  // Family checkboxes
+  document.querySelectorAll('#familyRows .drawer-row').forEach(row => {
+    row.querySelector('.drawer-row-check').classList.toggle('checked', state.filterFams.has(row.dataset.fam));
+  });
+  // Occasion checkboxes
+  document.querySelectorAll('#occasionRows .drawer-row').forEach(row => {
+    row.querySelector('.drawer-row-check').classList.toggle('checked', state.filterOccs.has(row.dataset.occ));
+  });
+  // Show button count
+  const btn = document.getElementById('drawerShowBtn');
+  if (btn) {
+    const count = [...document.querySelectorAll('#listScroll .card')].filter(c => !c.classList.contains('hidden')).length;
+    btn.textContent = `Show ${count} cocktails`;
+  }
+}
+
+// Sort rows
+document.getElementById('sortRows').addEventListener('click', e => {
+  const row = e.target.closest('.drawer-row'); if (!row) return;
+  state.sort = row.dataset.sort;
+  syncIpadSort(); applyFilters(); syncDrawerUI();
 });
 
-// Mobile drawer — Family multi-select
-document.getElementById('familyChips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip'); if (!chip) return;
-  const val = chip.dataset.fam;
-  if (val === 'all') { state.filterFams.clear(); }
-  else { if (state.filterFams.has(val)) state.filterFams.delete(val); else state.filterFams.add(val); }
-  document.querySelectorAll('#familyChips .chip').forEach(c => {
-    const cv = c.dataset.fam;
-    c.classList.toggle('active', cv==='all' ? state.filterFams.size===0 : state.filterFams.has(cv));
-  });
-  updateIpadFamSync(); applyFilters();
+// Category rows
+document.getElementById('categoryRows').addEventListener('click', e => {
+  const row = e.target.closest('.drawer-row'); if (!row) return;
+  const val = row.dataset.cat;
+  if (state.filterCats.has(val)) state.filterCats.delete(val); else state.filterCats.add(val);
+  updateIpadCatSync(); applyFilters(); syncDrawerUI();
 });
 
-// Mobile drawer — Occasion multi-select
-document.getElementById('occasionChips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip'); if (!chip) return;
-  const val = chip.dataset.occ;
-  if (val === 'all') { state.filterOccs.clear(); }
-  else { if (state.filterOccs.has(val)) state.filterOccs.delete(val); else state.filterOccs.add(val); }
-  document.querySelectorAll('#occasionChips .chip').forEach(c => {
-    const cv = c.dataset.occ;
-    c.classList.toggle('active', cv==='all' ? state.filterOccs.size===0 : state.filterOccs.has(cv));
-  });
-  updateIpadOccSync(); applyFilters();
+// Strength rows
+document.getElementById('strengthRows').addEventListener('click', e => {
+  const row = e.target.closest('.drawer-row'); if (!row) return;
+  const val = row.dataset.strength;
+  if (state.filterStrengths.has(val)) state.filterStrengths.delete(val); else state.filterStrengths.add(val);
+  updateIpadStrengthSync(); applyFilters(); syncDrawerUI();
 });
 
-// Mobile drawer — Taste Profile multi-select
-document.getElementById('subtypeChips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip'); if (!chip) return;
-  const val = chip.dataset.sub;
-  if (val === 'all') { state.filterSubs.clear(); }
-  else { if (state.filterSubs.has(val)) state.filterSubs.delete(val); else state.filterSubs.add(val); }
-  document.querySelectorAll('#subtypeChips .chip').forEach(c => {
-    const cv = c.dataset.sub;
-    c.classList.toggle('active', cv==='all' ? state.filterSubs.size===0 : state.filterSubs.has(cv));
-  });
-  updateIpadSubSync(); applyFilters();
+// Spirit rows (populated dynamically)
+document.getElementById('spiritRows').addEventListener('click', e => {
+  const row = e.target.closest('.drawer-row'); if (!row) return;
+  const val = row.dataset.sub;
+  if (state.filterSubs.has(val)) state.filterSubs.delete(val); else state.filterSubs.add(val);
+  updateIpadSubSync(); applyFilters(); syncDrawerUI();
 });
 
-// Mobile drawer — Strength multi-select
-document.getElementById('strengthChips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip'); if (!chip) return;
-  const val = chip.dataset.strength;
-  if (val === 'all') { state.filterStrengths.clear(); }
-  else { if (state.filterStrengths.has(val)) state.filterStrengths.delete(val); else state.filterStrengths.add(val); }
-  document.querySelectorAll('#strengthChips .chip').forEach(c => {
-    const cv = c.dataset.strength;
-    c.classList.toggle('active', cv==='all' ? state.filterStrengths.size===0 : state.filterStrengths.has(cv));
-  });
-  updateIpadStrengthSync(); applyFilters();
+// Family rows
+document.getElementById('familyRows').addEventListener('click', e => {
+  const row = e.target.closest('.drawer-row'); if (!row) return;
+  const val = row.dataset.fam;
+  if (state.filterFams.has(val)) state.filterFams.delete(val); else state.filterFams.add(val);
+  updateIpadFamSync(); applyFilters(); syncDrawerUI();
 });
 
-// Mobile drawer — Sort
-document.getElementById('sortChips').addEventListener('click', e => {
-  const chip=e.target.closest('.chip'); if(!chip) return;
-  state.sort=chip.dataset.sort;
-  document.querySelectorAll('#sortChips .chip').forEach(c=>c.classList.remove('active'));
-  chip.classList.add('active');
-  syncIpadSort(); applyFilters();
+// Occasion rows
+document.getElementById('occasionRows').addEventListener('click', e => {
+  const row = e.target.closest('.drawer-row'); if (!row) return;
+  const val = row.dataset.occ;
+  if (state.filterOccs.has(val)) state.filterOccs.delete(val); else state.filterOccs.add(val);
+  updateIpadOccSync(); applyFilters(); syncDrawerUI();
 });
+
+// Cancel — close without changes
+document.getElementById('drawerCancel').addEventListener('click', () => closeSheet('drawer','drawerOverlay'));
+
+// Clear all
+document.getElementById('drawerClear').addEventListener('click', () => {
+  state.filterCats.clear(); state.filterSubs.clear(); state.filterFams.clear();
+  state.filterOccs.clear(); state.filterStrengths.clear(); state.sort = 'popular';
+  updateIpadCatSync(); updateIpadFamSync(); updateIpadOccSync(); updateIpadSubSync(); updateIpadStrengthSync(); syncIpadSort();
+  applyFilters(); syncDrawerUI();
+});
+
+// Show button — just close the drawer
+document.getElementById('drawerShowBtn').addEventListener('click', () => closeSheet('drawer','drawerOverlay'));
 
 // ── Sync helpers ──
 function updateIpadCatSync() {
@@ -2365,12 +2610,7 @@ document.querySelectorAll('#ipadCatBody .ipad-multi-item').forEach(item => {
   item.addEventListener('click', () => {
     const val = item.dataset.cat;
     if (state.filterCats.has(val)) state.filterCats.delete(val); else state.filterCats.add(val);
-    updateIpadCatSync();
-    document.querySelectorAll('#categoryChips .chip').forEach(c => {
-      const cv = c.dataset.cat;
-      c.classList.toggle('active', cv==='all' ? state.filterCats.size===0 : state.filterCats.has(cv));
-    });
-    applyFilters();
+    updateIpadCatSync(); applyFilters(); syncDrawerUI();
   });
 });
 
@@ -2379,12 +2619,7 @@ document.querySelectorAll('#ipadFamBody .ipad-multi-item').forEach(item => {
   item.addEventListener('click', () => {
     const val = item.dataset.fam;
     if (state.filterFams.has(val)) state.filterFams.delete(val); else state.filterFams.add(val);
-    updateIpadFamSync();
-    document.querySelectorAll('#familyChips .chip').forEach(c => {
-      const cv = c.dataset.fam;
-      c.classList.toggle('active', cv==='all' ? state.filterFams.size===0 : state.filterFams.has(cv));
-    });
-    applyFilters();
+    updateIpadFamSync(); applyFilters(); syncDrawerUI();
   });
 });
 
@@ -2393,12 +2628,7 @@ document.querySelectorAll('#ipadOccBody .ipad-multi-item').forEach(item => {
   item.addEventListener('click', () => {
     const val = item.dataset.occ;
     if (state.filterOccs.has(val)) state.filterOccs.delete(val); else state.filterOccs.add(val);
-    updateIpadOccSync();
-    document.querySelectorAll('#occasionChips .chip').forEach(c => {
-      const cv = c.dataset.occ;
-      c.classList.toggle('active', cv==='all' ? state.filterOccs.size===0 : state.filterOccs.has(cv));
-    });
-    applyFilters();
+    updateIpadOccSync(); applyFilters(); syncDrawerUI();
   });
 });
 
@@ -2407,12 +2637,7 @@ document.querySelectorAll('#ipadSubBody .ipad-multi-item').forEach(item => {
   item.addEventListener('click', () => {
     const val = item.dataset.sub;
     if (state.filterSubs.has(val)) state.filterSubs.delete(val); else state.filterSubs.add(val);
-    updateIpadSubSync();
-    document.querySelectorAll('#subtypeChips .chip').forEach(c => {
-      const cv = c.dataset.sub;
-      c.classList.toggle('active', cv==='all' ? state.filterSubs.size===0 : state.filterSubs.has(cv));
-    });
-    applyFilters();
+    updateIpadSubSync(); applyFilters(); syncDrawerUI();
   });
 });
 
@@ -2421,12 +2646,7 @@ document.querySelectorAll('#ipadStrengthBody .ipad-multi-item').forEach(item => 
   item.addEventListener('click', () => {
     const val = item.dataset.strength;
     if (state.filterStrengths.has(val)) state.filterStrengths.delete(val); else state.filterStrengths.add(val);
-    updateIpadStrengthSync();
-    document.querySelectorAll('#strengthChips .chip').forEach(c => {
-      const cv = c.dataset.strength;
-      c.classList.toggle('active', cv==='all' ? state.filterStrengths.size===0 : state.filterStrengths.has(cv));
-    });
-    applyFilters();
+    updateIpadStrengthSync(); applyFilters(); syncDrawerUI();
   });
 });
 
@@ -2434,10 +2654,7 @@ document.querySelectorAll('#ipadStrengthBody .ipad-multi-item').forEach(item => 
 document.querySelectorAll('#ipadSortBody .ipad-nav-item[data-sort]').forEach(item => {
   item.addEventListener('click', () => {
     state.sort = item.dataset.sort;
-    syncIpadSort();
-    document.querySelectorAll('#sortChips .chip').forEach(c =>
-      c.classList.toggle('active', c.dataset.sort === state.sort));
-    applyFilters();
+    syncIpadSort(); applyFilters(); syncDrawerUI();
   });
 });
 
@@ -2504,7 +2721,7 @@ const RAW = [
   ["king_alfonso",1987,1993,null],["kir",1987,2011,null],["kir",2011,null,"Contemporary Classics"],
   ["kir_imperial",1987,1993,null],["kir_royal",1987,2011,null],
   ["ladyboy",2004,2011,null],["last_word",2020,null,"The Unforgettables"],
-  ["lemon_drop_martini",2011,null,"New Era"],["lemon_drop_martini",2024,null,"Contemporary Classics"],
+  ["lemon_drop_martini",2011,2024,"New Era"],["lemon_drop_martini",2024,null,"Contemporary Classics"],
   ["long_island_iced_tea",2004,2011,null],["long_island_iced_tea",2011,null,"Contemporary Classics"],
   ["mai_tai",1987,1993,null],["mai_tai",2004,2011,null],["mai_tai",2011,null,"Contemporary Classics"],
   ["manhattan",1961,2011,null],["manhattan",2011,null,"The Unforgettables"],
@@ -2570,7 +2787,52 @@ window.addEventListener('error', function(e) {
 });
 buildWheel();
 buildFilterChips();
+// ── Story map: compute badge for every cocktail ID from RAW ──
+// ── Story map: lazy singleton ──
+let _STORY_MAP = null;
+function getStoryMap() {
+  if (_STORY_MAP) return _STORY_MAP;
+  const EDITIONS = [
+    {start:1961,end:1987},{start:1987,end:1993},{start:1993,end:2004},
+    {start:2004,end:2011},{start:2011,end:2020},{start:2020,end:2024},{start:2024,end:null}
+  ];
+  const CAT_ORDER = {'The Unforgettables':0,'Contemporary Classics':1,'New Era':2};
+  const map = new Map();
+  RAW.forEach(([id, ya, yr, cat]) => {
+    if (!map.has(id)) map.set(id, []);
+    map.get(id).push({ya, yr: yr, cat});
+  });
+  _STORY_MAP = {};
+  map.forEach((segs, id) => {
+    const stillActive = segs.some(s => s.yr === null);
+    const edCount = (() => {
+      const s = new Set();
+      segs.forEach(seg => EDITIONS.filter(ed => seg.ya <= ed.start && (seg.yr === null || seg.yr > ed.start)).forEach(ed => s.add(ed.start)));
+      return s.size;
+    })();
+    const sorted = [...segs].sort((a,b) => a.ya - b.ya);
+    let isComeback = false;
+    for (let i = 1; i < sorted.length; i++) {
+      if (sorted[i-1].yr !== null && EDITIONS.some(ed => ed.start >= sorted[i-1].yr && ed.start < sorted[i].ya)) {
+        isComeback = true; break;
+      }
+    }
+    const catSegs = segs.filter(s => s.cat !== null).sort((a,b) => a.ya - b.ya);
+    let isRising = false;
+    for (let i = 1; i < catSegs.length; i++) {
+      if ((CAT_ORDER[catSegs[i-1].cat] ?? 9) > (CAT_ORDER[catSegs[i].cat] ?? 9)) { isRising = true; break; }
+    }
+    const isFallen = !stillActive && segs.some(s => s.cat !== null);
+    if (edCount === 1 && !stillActive) _STORY_MAP[id] = 'onehit';
+    else if (isComeback)               _STORY_MAP[id] = 'comeback';
+    else if (isRising)                 _STORY_MAP[id] = 'rising';
+    else if (isFallen)                 _STORY_MAP[id] = 'fallen';
+  });
+  return _STORY_MAP;
+}
+
 buildCards();
+refreshCardTags();
 
 // ── DETAIL PANEL ──
 function formatMethod(text) {
@@ -2735,25 +2997,39 @@ function buildDetailHTML(id, onSimilarClick) {
   // ── Ingredients + Glassware ──
   if (ingredients.length || glassware || garnish) {
     html += '<div class="detail-section">';
+
+    // Single title row with both labels aligned
+    html += '<div class="ingredients-header-row">';
+    if (glassware) html += '<div class="ingredients-header-glass">Glassware</div>';
+    html += '<div class="ingredients-header-ing">';
+    html += '<span class="detail-section-title" style="margin:0">Ingredients</span>';
+    if (ingredients.length) {
+      html += '<span class="unit-toggle" id="unitToggle-' + id + '">';
+      html += '<button class="unit-toggle-btn active" data-unit="ml">ml</button>';
+      html += '<button class="unit-toggle-btn" data-unit="oz">oz</button>';
+      html += '</span>';
+    }
+    html += '</div>';
+    html += '</div>'; // ingredients-header-row
+
     html += '<div class="ingredients-glass-row">';
 
-    // Glassware card (left column) with label above
+    // Glassware card
     if (glassware) {
       html += '<div class="glassware-col-wrap">';
-      html += '<div class="detail-section-title">Glassware</div>';
       html += '<div class="glassware-card-new">';
       html += getGlassSVG(glassware);
       html += '<span class="glassware-label">' + glassware + '</span>';
       html += '</div></div>';
     }
 
-    // Ingredients column with label above
+    // Ingredients list
     html += '<div class="ingredients-col">';
-    html += '<div class="detail-section-title">Ingredients</div>';
     if (ingredients.length) {
-      html += '<div class="ingredients-list">';
+      html += '<div class="ingredients-list" id="ingList-' + id + '">';
       ingredients.forEach(ing => {
-        html += '<div class="ingredient-row"><span class="ing-measure">' + (ing.measure||'') + '</span><span class="ing-name">' + (ing.ingredient||'') + '</span></div>';
+        const measure = ing.measure || '';
+        html += '<div class="ingredient-row"><span class="ing-measure" data-ml="' + measure + '">' + measure + '</span><span class="ing-name">' + (ing.ingredient||'') + '</span></div>';
       });
       if (garnish) {
         html += '<div class="ingredient-row garnish-row"><span class="ing-measure garnish-measure">🌿</span><span class="ing-name">' + garnish + '</span></div>';
@@ -2786,29 +3062,94 @@ function buildDetailHTML(id, onSimilarClick) {
   const catColors = {'The Unforgettables':'#7F77DD','Contemporary Classics':'#1D9E75','New Era':'#D85A30'};
   const preColor = '#C8C8C0';
 
-  // Use RAW data for accurate per-edition segments with correct category colors
   const cocktailRaw = (typeof RAW !== 'undefined') ? RAW.filter(([n]) => n === id) : [];
 
-  // Determine color for each edition from RAW segments
   function getEdColor(edStart) {
     for (const [n, ya, yr, cat] of cocktailRaw) {
       if (ya <= edStart && (yr === null || yr > edStart)) {
         return cat ? (catColors[cat] || '#888') : preColor;
       }
     }
-    return null; // not in this edition
+    return null;
   }
 
-  const hasAny = ED_RANGES.some(ed => getEdColor(ed.start) !== null);
+  // ── Compute edition stats for summary + story badge ──
+  const edPresence = ED_RANGES.map(ed => ({ ...ed, color: getEdColor(ed.start) }));
+  const editionCount = edPresence.filter(e => e.color !== null).length;
+  const firstEd = edPresence.find(e => e.color !== null);
+  const lastEd = [...edPresence].reverse().find(e => e.color !== null);
+  const stillActive = lastEd && lastEd.key === '7';
+  const firstEdNum  = firstEd ? parseInt(firstEd.key) : null;
+  const firstYear   = firstEd ? firstEd.start : null;
+
+  // Detect gaps (comeback)
+  let isComeback = false;
+  if (editionCount > 1) {
+    let inGap = false;
+    for (let i = 0; i < edPresence.length; i++) {
+      if (edPresence[i].color !== null) {
+        if (inGap) { isComeback = true; break; }
+        inGap = false;
+      } else if (i > 0 && edPresence.slice(0, i).some(e => e.color !== null)) {
+        inGap = true;
+      }
+    }
+  }
+
+  // Detect rising star (category got more prestigious across editions)
+  const catOrder = {'The Unforgettables': 0, 'Contemporary Classics': 1, 'New Era': 2};
+  const namedSegs = edPresence.filter(e => e.color && e.color !== preColor);
+  let isRisingStar = false;
+  if (namedSegs.length > 1) {
+    const cats = namedSegs.map(e => {
+      for (const [n,ya,yr,cat] of cocktailRaw) {
+        if (ya <= e.start && (yr === null || yr > e.start) && cat) return cat;
+      }
+      return null;
+    }).filter(Boolean);
+    for (let i = 1; i < cats.length; i++) {
+      if ((catOrder[cats[i]] ?? 9) < (catOrder[cats[i-1]] ?? 9)) { isRisingStar = true; break; }
+    }
+  }
+
+  const isOneHit    = editionCount === 1 && !stillActive;
+  const isFallen    = !stillActive && editionCount > 0;
+  const hasAny = editionCount > 0;
+
+  // Story badge
+  const STORY_BADGES = [
+    { test: isOneHit,    label: 'One-hit Wonder', bg: '#EFEFED', color: '#888780' },
+    { test: isComeback,  label: 'Comeback Kid',   bg: '#FEF3DC', color: '#B07A10' },
+    { test: isRisingStar,label: 'Rising Star',    bg: '#DCF5F0', color: '#1D9E75' },
+    { test: isFallen && !isOneHit, label: 'Fall from Grace', bg: '#FDECEA', color: '#C04040' },
+  ];
+  const storyBadge = STORY_BADGES.find(b => b.test);
+
+  // Ordinal helper
+  const ordinals = ['','1st','2nd','3rd','4th','5th','6th','7th'];
 
   const legendItems = [
-    {color: preColor, label:'Pre-category'},
+    {color: preColor, label:'Legacy'},
     {color:'#7F77DD', label:'The Unforgettables'},
     {color:'#1D9E75', label:'Contemporary Classics'},
     {color:'#D85A30', label:'New Era'},
   ];
 
   let timelineHTML = '<div class="editions-timeline">';
+
+  // ── Summary line + story badge ──
+  if (hasAny) {
+    timelineHTML += '<div class="ed-summary-row">';
+    timelineHTML += '<span class="ed-summary-text">';
+    timelineHTML += `<strong>${editionCount}</strong> of 7 editions`;
+    if (firstYear) timelineHTML += ` · Since ${firstYear}`;
+    if (storyBadge) {
+      timelineHTML += ` <span class="ed-story-badge" style="background:${storyBadge.bg};color:${storyBadge.color}">${storyBadge.label}</span>`;
+    }
+    timelineHTML += '</span>';
+    timelineHTML += '</div>';
+  }
+
   // Legend
   timelineHTML += '<div class="ed-tl-legend">';
   legendItems.forEach(li => {
@@ -2819,7 +3160,7 @@ function buildDetailHTML(id, onSimilarClick) {
   timelineHTML += '<div class="ed-tl-header">';
   ED_RANGES.forEach(ed => { timelineHTML += `<div class="ed-tl-col-label">${ed.short}</div>`; });
   timelineHTML += '</div>';
-  // Bar — each segment colored by its category
+  // Bar
   timelineHTML += '<div class="ed-tl-bar-row">';
   ED_RANGES.forEach(ed => {
     const col = getEdColor(ed.start);
@@ -2919,8 +3260,39 @@ function updateStepperDisplay(id) {
   });
 }
 
+function convertMlToOz(measure) {
+  // Match patterns like "60 ml", "22.5 ml", "1/2 ml" etc.
+  return measure.replace(/(\d+(?:\.\d+)?)\s*ml/gi, (_, n) => {
+    const oz = parseFloat(n) / 29.5735;
+    // Round to nearest 1/4 oz for readability
+    const rounded = Math.round(oz * 4) / 4;
+    const whole = Math.floor(rounded);
+    const frac = rounded - whole;
+    const fracStr = frac === 0.25 ? '¼' : frac === 0.5 ? '½' : frac === 0.75 ? '¾' : '';
+    const wholeStr = whole > 0 ? whole.toString() : '';
+    const result = (wholeStr + (fracStr ? (wholeStr ? ' ' : '') + fracStr : '')) || rounded.toFixed(2);
+    return result + ' oz';
+  });
+}
+
 function wireDetailEvents(container, openFn) {
   try {
+    // Unit toggle (ml ↔ oz)
+    container.querySelectorAll('.unit-toggle').forEach(toggle => {
+      toggle.querySelectorAll('.unit-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const unit = btn.dataset.unit;
+          toggle.querySelectorAll('.unit-toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.unit === unit));
+          // Find the ingredients list in the same col
+          const list = toggle.closest('.detail-section').querySelector('.ingredients-list');
+          if (!list) return;
+          list.querySelectorAll('.ing-measure[data-ml]').forEach(el => {
+            const ml = el.dataset.ml;
+            el.textContent = unit === 'oz' ? convertMlToOz(ml) : ml;
+          });
+        });
+      });
+    });
     // Love button → fav dropdown
     container.querySelectorAll('.detail-love-btn').forEach(btn => {
       updateDetailLoveBtn(btn, btn.dataset.id);
@@ -2963,6 +3335,65 @@ function wireDetailEvents(container, openFn) {
   } catch(e) { console.warn('wireDetailEvents error:', e); }
 }
 
+// ── TheCocktailDB image fetcher ──
+const COCKTAILDB_CACHE = {};
+// Known TheCocktailDB IDs for cocktails that have no scraped image
+const COCKTAILDB_IDS = {
+  'martini': '11728',
+  'orgasm':  '11872',
+  'rose':    '17208',
+};
+
+async function fetchCocktailDBImage(id, name) {
+  const cacheKey = id;
+  if (COCKTAILDB_CACHE[cacheKey] !== undefined) return COCKTAILDB_CACHE[cacheKey];
+  try {
+    let url;
+    if (COCKTAILDB_IDS[id]) {
+      url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${COCKTAILDB_IDS[id]}`;
+    } else {
+      url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(name)}`;
+    }
+    const res = await fetch(url);
+    const data = await res.json();
+    const thumb = data.drinks?.[0]?.strDrinkThumb || null;
+    COCKTAILDB_CACHE[cacheKey] = thumb;
+    return thumb;
+  } catch(e) {
+    COCKTAILDB_CACHE[cacheKey] = null;
+    return null;
+  }
+}
+
+function setHeroImage(hero, imgUrl, name) {
+  hero.querySelectorAll('img, .detail-hero-fallback').forEach(e => e.remove());
+  const gradEl = hero.querySelector('.detail-hero-grad');
+  if (imgUrl) {
+    const img = document.createElement('img'); img.src = imgUrl;
+    img.onerror = () => {
+      img.remove();
+      const fb = document.createElement('div'); fb.className = 'detail-hero-fallback'; fb.textContent = name.charAt(0);
+      hero.insertBefore(fb, gradEl || null);
+    };
+    hero.insertBefore(img, gradEl || null);
+  } else {
+    const fb = document.createElement('div'); fb.className = 'detail-hero-fallback'; fb.textContent = name.charAt(0);
+    hero.insertBefore(fb, gradEl || null);
+  }
+}
+
+async function loadHeroImage(hero, imgUrl, name, cocktailId) {
+  // Show stored image or fallback immediately
+  setHeroImage(hero, imgUrl, name);
+  // If no image, try TheCocktailDB live
+  if (!imgUrl) {
+    const fetched = await fetchCocktailDBImage(cocktailId, name);
+    if (fetched && currentDetailId) {
+      setHeroImage(hero, fetched, name);
+    }
+  }
+}
+
 function openDetail(id) {
   if (!SCRAPED_DATA[id] && !META_DATA[id]) return;
   currentDetailId = id;
@@ -2979,14 +3410,7 @@ function openDetail(id) {
   const catColors = {'The Unforgettables':'#4a3fa0','Contemporary Classics':'#1a7050','New Era':'#a03a10'};
   const dotColor = SUBTYPE_COLORS[m.subtype||''] || catColors[category] || '#555';
   hero.style.background = `linear-gradient(135deg, ${blendOnWhite(dotColor, 0.85)} 0%, ${dotColor} 100%)`;
-  if (imgUrl) {
-    const img = document.createElement('img'); img.src = imgUrl;
-    img.onerror = () => { img.remove(); const fb=document.createElement('div'); fb.className='detail-hero-fallback'; fb.textContent=name.charAt(0); hero.insertBefore(fb, hero.querySelector('.detail-hero-grad')); };
-    hero.insertBefore(img, hero.querySelector('.detail-hero-grad') || null);
-  } else {
-    const fb=document.createElement('div'); fb.className='detail-hero-fallback'; fb.textContent=name.charAt(0);
-    hero.insertBefore(fb, hero.querySelector('.detail-hero-grad') || null);
-  }
+  loadHeroImage(hero, imgUrl, name, id);
   document.getElementById('detailHeroName').textContent = name;
   // category badge under title
   const heroBadgeEl = document.getElementById('detailHeroBadge');
@@ -3046,14 +3470,8 @@ function ipadOpenDetail(id) {
   const hero = document.createElement('div');
   hero.className = 'detail-hero';
   hero.style.background = `linear-gradient(135deg, ${blendOnWhite(dotColor, 0.85)} 0%, ${dotColor} 100%)`;
-  if (imgUrl) {
-    const img = document.createElement('img'); img.src=imgUrl; img.alt=name;
-    img.onerror=()=>{ img.remove(); const fb=document.createElement('div'); fb.className='detail-hero-fallback'; fb.textContent=name.charAt(0); hero.insertBefore(fb,hero.firstChild); };
-    hero.appendChild(img);
-  } else {
-    const fb=document.createElement('div'); fb.className='detail-hero-fallback'; fb.textContent=name.charAt(0); hero.appendChild(fb);
-  }
   const grad=document.createElement('div'); grad.className='detail-hero-grad'; hero.appendChild(grad);
+  loadHeroImage(hero, imgUrl, name, id);
   const hbot=document.createElement('div'); hbot.className='detail-hero-bottom';
   const nwrap=document.createElement('div');
   const nd=document.createElement('div'); nd.className='detail-hero-name'; nd.textContent=name; nwrap.appendChild(nd);
