@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>IBA Cocktails</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -484,6 +484,62 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
 .glassware-label { font-size: 10px; color: var(--text-muted); text-align: center; line-height: 1.3; }
 .ingredients-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 
+/* ── TRIED BOARD (iPad) ── */
+.tried-board { padding: 20px 16px 60px; overflow-y: auto; flex: 1; background: var(--bg); }
+.tried-board::-webkit-scrollbar { display: none; }
+.tried-board-row { display: flex; gap: 24px; margin-bottom: 32px; align-items: flex-start; flex-wrap: nowrap; }
+.tried-board-group { flex: 1; min-width: 0; }
+.tried-board-group-header {
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px; font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px; line-height: 1.1;
+}
+.tried-board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 6px;
+}
+.tried-polaroid {
+  display: flex; flex-direction: column;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.13), 0 0 0 0.5px rgba(0,0,0,0.06);
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.tried-polaroid:active { transform: scale(0.97); }
+.tried-polaroid.is-tried { box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(0,0,0,0.08); }
+.tried-polaroid-img {
+  width: 100%; aspect-ratio: 1/1;
+  background: #1a1a1a;
+  overflow: hidden; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.tried-polaroid-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tried-polaroid-img-fallback { font-size: 22px; font-weight: 700; color: rgba(255,255,255,0.4); }
+.tried-polaroid.not-tried .tried-polaroid-img { filter: brightness(0.3) saturate(0); }
+.tried-polaroid-label {
+  padding: 4px 4px 6px;
+  font-size: 8px; font-weight: 600;
+  color: #333; font-family: var(--sans);
+  text-align: center; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tried-polaroid.not-tried .tried-polaroid-label { color: #aaa; }
+.tried-polaroid-tick {
+  position: absolute; top: 4px; right: 4px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #34c759; display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: #fff; font-weight: 700; line-height: 1;
+}
+.tried-board-progress {
+  font-size: 10px; color: var(--text-muted); font-family: var(--sans);
+  margin-bottom: 6px; font-weight: 500;
+}
+
 /* Method */
 .method-card { background: var(--card); border-radius: 14px; border: 0.5px solid var(--border); overflow: hidden; }
 .method-step { background: var(--card); padding: 11px 14px; display: flex; align-items: baseline; gap: 12px; font-size: 13px; color: var(--text-primary); line-height: 1.6; }
@@ -768,7 +824,71 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
   .ipad-empty-title { font-size: 18px; font-weight: 600; color: var(--text-secondary); }
   .ipad-empty-sub { font-size: 14px; }
 
-  /* Detail panel rendered inline in right pane on iPad */
+  /* ── TRIED BOARD in right pane ── */
+  .tried-board-pane {
+    height: 100%; overflow-y: auto; padding: 52px 16px 40px;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+  .tried-board-pane::-webkit-scrollbar { display: none; }
+  .tried-board-row { display: flex; gap: 16px; }
+  .tried-board-group { flex: 1; min-width: 0; }
+  .tried-board-group-title {
+    font-size: 13px; font-weight: 700; color: var(--text-primary);
+    font-family: var(--sans); margin-bottom: 4px;
+    letter-spacing: 0.03em;
+  }
+  .tried-board-group-progress {
+    font-size: 10px; color: var(--text-muted); font-family: var(--sans);
+    margin-bottom: 6px;
+  }
+  .tried-board-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 5px;
+  }
+  .tried-polaroid {
+    display: flex; flex-direction: column;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(0,0,0,0.07);
+    border-radius: 2px; overflow: hidden;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    transition: transform 0.12s;
+  }
+  .tried-polaroid:active { transform: scale(0.95); }
+  .tried-polaroid-img {
+    width: 100%; aspect-ratio: 1/1;
+    background: #1a1a1a; overflow: hidden;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tried-polaroid-img img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .tried-polaroid-fallback {
+    font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.35);
+    position: relative; z-index: 0;
+  }
+  .tried-polaroid.not-tried .tried-polaroid-img { filter: brightness(0.22) saturate(0); }
+  .tried-polaroid-caption {
+    padding: 3px 3px 4px; font-size: 7px; font-weight: 600;
+    font-family: var(--sans); text-align: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    color: #333; line-height: 1.2;
+  }
+  .tried-polaroid.not-tried .tried-polaroid-caption { color: #bbb; }
+  .tried-polaroid-tick {
+    position: absolute; top: 3px; right: 3px; z-index: 2;
+    width: 13px; height: 13px; border-radius: 50%;
+    background: #34c759; color: #fff;
+    font-size: 7px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* Back button on iPad tried tab detail */
+  .ipad-back-btn {
+    position: absolute; top: 16px; left: 16px; z-index: 10;
+  }
+  .ipad-detail-pane { position: relative; }
   .ipad-detail-pane .detail-back { display: none; }
   .ipad-detail-pane .detail-hero { aspect-ratio: unset; height: 460px; }
   .ipad-detail-pane .detail-content { padding: 18px 20px 40px; }
@@ -817,6 +937,285 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
     transform: translateX(-50%) translateY(0);
   }
 }
+/* ── Wheel of fortune tab ── */
+/* Hide everything else when on wheel tab */
+.app.tab-wheel .top-bar,
+.app.tab-wheel #mobileCountBar,
+.app.tab-wheel #listScroll,
+.app.tab-wheel .mobile-search-bar,
+.app.tab-wheel .intro-card,
+.app.tab-wheel #mobileDrawerBtn { display: none !important; }
+/* ═══════════ WHEEL OF FORTUNE — mobile strip wheels ═══════════ */
+.wheel-panel {
+  flex: 1; overflow-y: auto;
+  padding: 20px 16px 120px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  -webkit-overflow-scrolling: touch;
+}
+.wheel-panel::-webkit-scrollbar { display: none; }
+.app.tab-wheel .wheel-panel { display: flex; }
+.wheel-title {
+  font-size: 20px; font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-top: 10px;
+}
+.wheel-subtitle {
+  font-size: 12px; color: var(--text-muted);
+  text-align: center;
+  max-width: 280px;
+  line-height: 1.5;
+  margin-top: -10px;
+}
+
+.wheel-area { display: flex; gap: 12px; align-items: flex-start; }
+.wheel-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.wheel-col-label {
+  font-size: 10px; font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.strip-wrapper {
+  position: relative;
+  width: 150px; height: 280px;
+}
+.strip-mask {
+  position: absolute; inset: 0; overflow: hidden;
+  border-radius: 14px; background: var(--card);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.strip-inner {
+  position: absolute; left: 0; right: 0; top: 0;
+  will-change: transform;
+}
+.wheel-slice {
+  height: 56px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
+  box-sizing: border-box; padding: 0 6px; text-align: center;
+  transition: transform 0.25s ease-out, opacity 0.25s ease-out, box-shadow 0.4s ease-out;
+  position: relative;
+  font-family: var(--sans);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.wheel-slice:last-child { border-bottom: none; }
+.wheel-slice[data-dist="0"] { transform: scale(1); opacity: 1; z-index: 2; cursor: default; }
+.wheel-slice[data-dist="1"] { transform: scale(0.93); opacity: 0.72; }
+.wheel-slice[data-dist="2"] { transform: scale(0.85); opacity: 0.38; }
+.wheel-slice[data-dist="3"],
+.wheel-slice[data-dist="4"],
+.wheel-slice[data-dist="5"] {
+  transform: scale(0.78); opacity: 0.12;
+  pointer-events: none;
+}
+.strip-mask::before,
+.strip-mask::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 80px;
+  pointer-events: none; z-index: 4;
+}
+.strip-mask::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--card) 0%, rgba(255,255,255,0) 100%);
+}
+.strip-mask::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--card) 0%, rgba(255,255,255,0) 100%);
+}
+
+@keyframes wheelSlicePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(var(--pulse-rgb, 34 34 34) / 0); }
+  20%  { box-shadow: 0 0 0 8px rgba(var(--pulse-rgb, 34 34 34) / 0.38); }
+  40%  { box-shadow: 0 0 0 0 rgba(var(--pulse-rgb, 34 34 34) / 0); }
+  65%  { box-shadow: 0 0 0 5px rgba(var(--pulse-rgb, 34 34 34) / 0.24); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--pulse-rgb, 34 34 34) / 0); }
+}
+.wheel-slice.landed {
+  animation: wheelSlicePulse 0.9s ease-out;
+  z-index: 3;
+}
+
+.wheel-spin-btn {
+  margin-top: 12px;
+  padding: 14px 42px;
+  background: var(--text-primary); color: #fff;
+  border: none; border-radius: 28px;
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  transition: transform 0.1s, opacity 0.2s;
+}
+.wheel-spin-btn:active { transform: scale(0.97); }
+.wheel-spin-btn:disabled { opacity: 0.5; cursor: default; }
+.wheel-hint {
+  font-size: 11px; color: var(--text-muted);
+  text-align: center; max-width: 280px; line-height: 1.5;
+  margin-top: -4px;
+}
+
+/* Results area (card-style matching main list) */
+.wheel-results {
+  width: 100%;
+  margin-top: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+.wheel-results.visible { opacity: 1; }
+.wheel-results-header {
+  font-size: 11px; font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 10px; padding: 0 4px;
+}
+.wheel-results-count { color: var(--text-primary); margin-left: 6px; }
+.wheel-results-list { display: flex; flex-direction: column; gap: 6px; }
+
+/* Empty state */
+.wheel-empty {
+  padding: 22px 14px;
+  text-align: center;
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-radius: 15px;
+}
+.wheel-empty-title {
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.wheel-empty-msg {
+  font-size: 12px; color: var(--text-muted);
+  line-height: 1.5;
+  max-width: 280px; margin: 0 auto;
+}
+.wheel-suggest-section { margin-top: 18px; padding: 0 4px; }
+.wheel-suggest-label {
+  font-size: 10px; font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.wheel-suggest-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.wheel-suggest-tag {
+  font-size: 12px; font-weight: 500;
+  padding: 4px 11px; border-radius: 20px;
+  border: 0.5px solid transparent;
+  font-family: var(--sans);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.wheel-suggest-tag:active { opacity: 0.6; }
+
+/* Edition sections within results */
+.wheel-ed-section { margin-top: 4px; }
+.wheel-ed-section + .wheel-ed-section { margin-top: 18px; }
+.wheel-ed-header {
+  font-size: 10px; font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin: 10px 4px 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.wheel-ed-header .wheel-ed-count {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.wheel-ed-header .wheel-ed-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0.5;
+}
+.wheel-ed-header.current .wheel-ed-dot { background: #34c759; opacity: 1; }
+
+/* Celebration when all drinks in the result set have been tried */
+.wheel-celebrate {
+  background: rgba(52,199,89,0.08);
+  border: 0.5px solid rgba(52,199,89,0.25);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin: 4px 4px 12px;
+}
+.wheel-celebrate-emoji {
+  font-size: 20px; flex-shrink: 0;
+  line-height: 1;
+}
+.wheel-celebrate-text {
+  font-size: 12px; line-height: 1.4;
+  color: #1D7A3D;
+}
+.wheel-celebrate-text strong { font-weight: 600; }
+.ing-tag-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ing-tag {
+  font-size: 12px; font-weight: 500;
+  padding: 4px 11px; border-radius: 20px;
+  /* default (fallback) palette — matches Pantry tone */
+  background: #E5DDD2; color: #4A3E2E;
+  border: 0.5px solid #D1C5B4;
+  font-family: var(--sans);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.ing-tag:active { opacity: 0.6; }
+/* Category palette — muted, ingredient-evoking */
+.ing-tag.cat-base-spirits         { background:#F5E6D3; color:#6B4A20; border-color:#E6D0B0; }
+/* Override for clear/unaged spirits in the Base Spirits category */
+.ing-tag.cat-base-spirits-clear   { background:#E8EEF0; color:#3A5A66; border-color:#CDD9DE; }
+.ing-tag.cat-fermented-spirits    { background:#EADFD0; color:#6B4A28; border-color:#D8C8B3; }
+.ing-tag.cat-fruit-liqueurs       { background:#F2D5D0; color:#7A2A28; border-color:#E0B8B0; }
+.ing-tag.cat-herbal-floral-liqueurs { background:#DEE6D0; color:#4A6028; border-color:#C6D2B0; }
+.ing-tag.cat-spice-nut-liqueurs   { background:#E8D9C4; color:#6A4A28; border-color:#D4BFA3; }
+.ing-tag.cat-dessert-liqueurs     { background:#DCCFC0; color:#4A2E1A; border-color:#C6B59E; }
+.ing-tag.cat-bitters-waters       { background:#E8D4DB; color:#6A2F48; border-color:#D6B6C0; }
+.ing-tag.cat-produce-juice        { background:#EDE7C6; color:#5A5018; border-color:#D8CE9D; }
+.ing-tag.cat-herbs-spices         { background:#D5E0CF; color:#2E4A2E; border-color:#B8CAB0; }
+.ing-tag.cat-syrups-sweeteners    { background:#F2E2C0; color:#785320; border-color:#E2CC9C; }
+.ing-tag.cat-dairy                { background:#F0EAE0; color:#5A4B38; border-color:#DDD2C2; }
+.ing-tag.cat-soft-drinks          { background:#D4E2E8; color:#1F4A5A; border-color:#B5CCD6; }
+.ing-tag.cat-pantry               { background:#E5DDD2; color:#4A3E2E; border-color:#D1C5B4; }
+
+/* ── Ingredient popover card ── */
+.ing-popover-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+.ing-popover-backdrop.open { display: flex; }
+.ing-popover {
+  background: var(--card);
+  border-radius: 14px;
+  max-width: 360px; width: 100%;
+  max-height: 80vh; overflow-y: auto;
+  padding: 18px 18px 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  font-family: var(--sans);
+}
+.ing-popover-name { font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+.ing-popover-cat { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; margin-top: 4px; }
+.ing-popover-divider { height: 1px; background: var(--border); margin: 14px 0 12px; }
+.ing-popover-label { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.ing-popover-alt { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.ing-popover-see-also { display: flex; flex-wrap: wrap; gap: 6px; }
+.ing-popover-see-also .ing-tag { font-size: 11px; padding: 3px 9px; }
+.ing-popover-close {
+  margin-top: 14px; width: 100%;
+  padding: 10px;
+  background: var(--border); color: var(--text-primary);
+  border: none; border-radius: 8px;
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
 </style>
 </head>
 <body>
@@ -846,11 +1245,13 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
         </div>
         <div class="quick-toggle" id="quickToggle">
           <button class="quick-toggle-btn active" id="toggleStrength" title="Strength">
-            <!-- Flexed bicep arm -->
+            <!-- Dumbbell -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 15c0 0 1-1 3-1s3 2 5 2 3-1 3-1"/>
-              <path d="M4 15c-1-2-1-4 1-5l3-2c1-.5 2-.5 3 0l2 1c1 .5 1 2 0 2.5L11 13"/>
-              <path d="M16 11c1.5 0 3 1 3 3s-1.5 3-3 3"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+              <rect x="4" y="8" width="3" height="8" rx="0.5"/>
+              <rect x="17" y="8" width="3" height="8" rx="0.5"/>
+              <line x1="2.5" y1="10" x2="2.5" y2="14"/>
+              <line x1="21.5" y1="10" x2="21.5" y2="14"/>
             </svg>
           </button>
           <button class="quick-toggle-btn" id="toggleSpirit" title="Base Spirit">
@@ -876,6 +1277,34 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
     <div class="no-results" id="noResults">No cocktails match.</div>
   </div>
   <div class="edition-list" id="editionList" style="display:none"></div>
+
+  <!-- WHEEL OF FORTUNE TAB -->
+  <div class="wheel-panel" id="wheelPanel">
+    <div class="wheel-title">Don't know what to drink?</div>
+    <div class="wheel-subtitle">Let luck pick for you. One tap spins both wheels.</div>
+
+    <div class="wheel-area">
+      <div class="wheel-col">
+        <div class="wheel-col-label">Base Spirit</div>
+        <div class="strip-wrapper">
+          <div class="strip-mask"><div class="strip-inner" id="wheelInner1"></div></div>
+        </div>
+      </div>
+      <div class="wheel-col">
+        <div class="wheel-col-label">Family</div>
+        <div class="strip-wrapper">
+          <div class="strip-mask"><div class="strip-inner" id="wheelInner2"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="wheel-spin-btn" id="wheelSpinBtn">Spin!</button>
+    <div class="wheel-hint">Or tap any visible slice to pick it yourself.</div>
+
+    <div class="wheel-results" id="wheelResults">
+      <div id="wheelResultsContent"></div>
+    </div>
+  </div>
 
   <!-- ── IPAD LEFT PANE ── -->
   <div class="ipad-left" id="ipadLeft">
@@ -1053,6 +1482,7 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
       <!-- cards cloned here on iPad -->
     </div>
     <div class="ipad-diary-container" id="ipadDiaryContainer" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;"></div>
+
     <div class="ipad-edition-list" id="ipadEditionList" style="display:none"></div>
   </div>
 
@@ -1083,6 +1513,10 @@ html, body { height: 100%; background: var(--bg); font-family: var(--sans); -web
       </div>
       <div class="nav-tab" data-tab="favs">
         <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div class="nav-tab" data-tab="wheel">
+        <!-- Wheel of fortune -->
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="5.64" y1="5.64" x2="18.36" y2="18.36"/><line x1="18.36" y1="5.64" x2="5.64" y2="18.36"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
       </div>
     </div>
   </div>
@@ -2431,7 +2865,16 @@ function resetDetailPanel() {
     right.style.background = '';
   }
   const empty = document.getElementById('ipadEmpty');
-  if (empty) empty.style.display = '';
+  if (state.tab === 'tried') {
+    if (empty) empty.style.display = 'none';
+    // Restore board
+    const right = document.getElementById('ipadRight');
+    const existingBoard = right ? right.querySelector('.tried-board-pane') : null;
+    if (existingBoard) existingBoard.style.display = '';
+    else buildTriedBoard(ipadOpenDetail);
+  } else {
+    if (empty) empty.style.display = '';
+  }
   // Deselect all cards
   document.querySelectorAll('.card').forEach(c => c.classList.remove('selected-card'));
   currentDetailId = null;
@@ -2444,7 +2887,8 @@ document.querySelectorAll('.nav-tab').forEach(tab => tab.addEventListener('click
   state.tab = newTab;
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   tab.classList.add('active');
-  if (newTab === 'favs' || newTab === 'tried') resetDetailPanel();
+  if (newTab === 'favs' || newTab === 'tried' || newTab === 'wheel') resetDetailPanel();
+  if (newTab === 'wheel') initWheelIfNeeded();
   applyFilters();
 }));
 
@@ -2591,11 +3035,17 @@ document.querySelectorAll('.ipad-nav-item[data-tab]').forEach(item => {
   item.addEventListener('click', () => {
     document.querySelectorAll('.ipad-nav-item[data-tab]').forEach(i => i.classList.remove('active'));
     item.classList.add('active');
-    // Reset favs filter to Loved when leaving favs
     if (state.tab === 'favs' && item.dataset.tab !== 'favs') favsFilterLevel = 2;
+    const prevTab = state.tab;
     state.tab = item.dataset.tab;
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === state.tab));
     if (state.tab === 'favs' || state.tab === 'tried') resetDetailPanel();
+    // Show/hide tried board in right pane
+    if (state.tab === 'tried') {
+      buildTriedBoard(ipadOpenDetail);
+    } else if (prevTab === 'tried') {
+      clearTriedBoard();
+    }
     applyFilters();
   });
 });
@@ -2955,6 +3405,21 @@ function buildDetailHTML(id, onSimilarClick) {
       html += '<span class="detail-tag-plus">+</span><span class="detail-tag detail-tag-ing">' + ing + '</span>';
     });
     html += '</div>';
+  }
+
+  // ── Ingredients row (tappable tags → popover) ──
+  const cing = (window.COCKTAIL_INGREDIENTS || {}).drinks || {};
+  const cingDrink = cing[id];
+  if (cingDrink && cingDrink.primary_ingredients && cingDrink.primary_ingredients.length) {
+    html += '<div class="detail-info-row">';
+    html += '<span class="detail-info-label">Ingredients</span>';
+    html += '<span class="ing-tag-row">';
+    cingDrink.primary_ingredients.forEach(p => {
+      const safeId = escapeHtml(p.id || '');
+      const cls = ingTagClass(p.id);
+      html += '<span class="ing-tag ' + cls + '" data-ing-id="' + safeId + '">' + escapeHtml(p.name || '') + '</span>';
+    });
+    html += '</span></div>';
   }
 
   html += '</div>';
@@ -3332,8 +3797,105 @@ function wireDetailEvents(container, openFn) {
         save();
       });
     });
+    // Ingredient tag tap → popover
+    container.querySelectorAll('.ing-tag[data-ing-id]').forEach(tag => {
+      tag.addEventListener('click', () => showIngredientPopover(tag.dataset.ingId));
+    });
   } catch(e) { console.warn('wireDetailEvents error:', e); }
 }
+
+// ── Ingredient popover + data loading ──
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+// Ingredient IDs that are clear/unaged spirits — use the cool-toned variant
+// instead of the default amber Base Spirits color.
+const CLEAR_SPIRITS = new Set([
+  'gin', 'old_tom_gin',
+  'vodka',
+  'blanco_tequila',
+  'mezcal',
+  'light_rum', 'overproof_light_rum',
+  'unaged_cachaca',
+  'pisco',
+]);
+
+// Map an ingredient id → CSS class name based on its category. Categories
+// like "Herbal & Floral Liqueurs" become "cat-herbal-floral-liqueurs".
+function ingTagClass(ingId) {
+  const cards = (window.COCKTAIL_INGREDIENTS || {}).ingredient_cards || {};
+  const cat = (cards[ingId] && cards[ingId].category) || '';
+  if (!cat) return '';
+  const slug = cat.toLowerCase()
+                  .replace(/&/g, ' ')
+                  .replace(/[^a-z0-9]+/g, '-')
+                  .replace(/^-|-$/g, '');
+  // Special case: clear spirits get a cooler palette than aged ones
+  if (slug === 'base-spirits' && CLEAR_SPIRITS.has(ingId)) {
+    return 'cat-base-spirits-clear';
+  }
+  return 'cat-' + slug;
+}
+
+function showIngredientPopover(ingId) {
+  const cards = (window.COCKTAIL_INGREDIENTS || {}).ingredient_cards || {};
+  const card  = cards[ingId];
+  const el    = document.getElementById('ingPopover');
+  const back  = document.getElementById('ingPopoverBackdrop');
+  if (!el || !back) return;
+
+  const name     = (card && card.name) || (ingId || '').replace(/_/g, ' ');
+  const category = (card && card.category) || '';
+  const altNames = (card && card.alternative_names) || '';
+  const seeAlso  = (card && card.see_also) || [];
+
+  let html = '<div class="ing-popover-name">' + escapeHtml(name) + '</div>';
+  if (category) {
+    html += '<div class="ing-popover-cat">' + escapeHtml(category) + '</div>';
+  }
+  if (altNames) {
+    html += '<div class="ing-popover-divider"></div>';
+    html += '<div class="ing-popover-label">Also known as</div>';
+    html += '<div class="ing-popover-alt">' + escapeHtml(altNames) + '</div>';
+  }
+  if (seeAlso.length) {
+    html += '<div class="ing-popover-divider"></div>';
+    html += '<div class="ing-popover-label">See also</div>';
+    html += '<div class="ing-popover-see-also">';
+    seeAlso.forEach(sa => {
+      const safeId = escapeHtml(sa.id || '');
+      const cls = ingTagClass(sa.id);
+      html += '<span class="ing-tag ' + cls + '" data-ing-id="' + safeId + '">' + escapeHtml(sa.name || '') + '</span>';
+    });
+    html += '</div>';
+  }
+  html += '<button class="ing-popover-close" type="button" onclick="hideIngredientPopover()">Close</button>';
+
+  el.innerHTML = html;
+  back.classList.add('open');
+}
+
+function hideIngredientPopover() {
+  const back = document.getElementById('ingPopoverBackdrop');
+  if (back) back.classList.remove('open');
+}
+
+// Backdrop click-to-close + nested see_also tag navigation
+(function wireIngPopover() {
+  const back = document.getElementById('ingPopoverBackdrop');
+  if (!back) return;
+  back.addEventListener('click', (e) => {
+    if (e.target === back) { hideIngredientPopover(); return; }
+    const tag = e.target.closest('.ing-tag[data-ing-id]');
+    if (tag) showIngredientPopover(tag.dataset.ingId);
+  });
+})();
+
+// Ingredient data — inlined directly (no fetch needed)
+window.COCKTAIL_INGREDIENTS = {"drinks":{"alaska":{"drink_url":"https://cocktailpartyapp.com/drinks/alaska/","drink_category":"Spirit-Forward Cocktails","drink_description":"Nobody knows why this drink is named after the chilliest state in the US. It first appeared in The Savoy Cocktail Book , where author Harry Craddock says only that “it was probably first thought of in South Carolina hence its name,” which is pretty confusing.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1½ parts"},{"name":"Yellow herbal liqueur","id":"yellow_herbal_liqueur","quantity":"½ part"}]},"alexander":{"drink_url":"https://cocktailpartyapp.com/drinks/alexander/","drink_category":"Creamy Cocktails","drink_description":"The granddaddy of chocolate cream drinks, including the slightly-more-fashionable Brandy Alexander. The specifics are lost to time, but according to cocktail historian Barry Popik, it’s likely an invention of bartender Troy Alexander from pre-prohibition New York’s most popular lobster restaurant.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Crème de cacao","id":"creme_de_cacao","quantity":"1 part"},{"name":"Sweet cream","id":"sweet_cream","quantity":"1 part"}]},"americano":{"drink_url":"https://cocktailpartyapp.com/drinks/americano/","drink_category":"Highball Cocktails","drink_description":"Campari, a bitter Italian apéritif, can be difficult to develop an appreciation for. This drink is a great place to start – the vermouth balances some of the bitter elements, allowing Campari’s bright citrus notes to shine through.","primary_ingredients":[{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif","quantity":"1 parts"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1 part"},{"name":"Sparkling water","id":"sparkling_water","quantity":"2 parts"}]},"angel_face":{"drink_url":"https://cocktailpartyapp.com/drinks/angel-face/","drink_category":"Spirit-Forward Cocktails","drink_description":"This strong, easy-drinking classic comes to us from the timeless Savoy Cocktail Book . For an inspired garnish, take Savoy Stomp blogger Erik Ellestad’s idea and hang two half-apple slices off the edge of the glass, angled out so they resemble angel wings.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1 part"},{"name":"Apple brandy","id":"apple_brandy","quantity":"1 part"},{"name":"Apricot liqueur","id":"apricot_liqueur","quantity":"1 part"}]},"aviation":{"drink_url":"https://cocktailpartyapp.com/drinks/aviation/","drink_category":"Sour Cocktails","drink_description":"This is, to our minds, one of the most perfect cocktails ever invented: delicate, balanced, mysterious, and beautiful. We prefer the recipe from Doug Ford at cold-glass.com. He advises that it should be made “small, very cold, and emphatically sour.” After trying it ourselves, we can’t help but agree.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"¾ part"},{"name":"Maraschino","id":"maraschino","quantity":"½ part"},{"name":"Crème de violette","id":"creme_de_violette","quantity":"¼ part"}]},"b_52":{"drink_url":"https://cocktailpartyapp.com/drinks/b-52/","drink_category":"Creamy Cocktails","drink_description":"This layered shooter is named after the US B-52 Stratofortress bomber used in Vietnam. This drink takes advantage of the specific gravity of each ingredient, so you must build the drink in the order given in order to keep the layers from mingling. Building a shot like this is tricky, so don’t be disappointed if your first attempts are a little murky. Using a larger shot glass will help, but pouring slowly is the key to this technique.","primary_ingredients":[{"name":"Coffee liqueur","id":"coffee_liqueur","quantity":"1 part"},{"name":"Irish cream","id":"irish_cream","quantity":"1 part"},{"name":"Orange curaçao","id":"orange_curacao","quantity":"1 part"}]},"bamboo":{"drink_url":"https://cocktailpartyapp.com/drinks/bamboo/","drink_category":"Low-Proof Cocktails","drink_description":"The Bamboo is an antique gem with a surprising twist – it has a split base, and no base spirit! It’s smooth and easy to drink, without the high alcohol content of other spirit-forward drinks.","primary_ingredients":[{"name":"Dry sherry","id":"dry_sherry","quantity":"1½ parts"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"1½ parts"},{"name":"Simple syrup","id":"simple_syrup","quantity":"1 tsp"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"1 dash"},{"name":"Orange bitters","id":"orange_bitters","quantity":"1 dash"}]},"banana_bliss":{"drink_url":"https://cocktailpartyapp.com/drinks/banana-bliss/","drink_category":"Simple Cocktails","drink_description":"The Banana Bliss is a new twist on a forgotten recipe from Caitlin Laman at Chicago’s Ace Hotel. Where the original was a slightly acrid mix of cognac and banana liqueur, Laman’s choice to bring sherry to the party proved to be the missing piece the 1930s recipe needed to appeal to a modern palate.","primary_ingredients":[{"name":"Cognac","id":"cognac","quantity":"1 part"},{"name":"Sweet sherry","id":"sweet_sherry","quantity":"¾ part"},{"name":"Banana liqueur","id":"banana_liqueur","quantity":"¼ part"}]},"banana_daiquiri":{"drink_url":"https://cocktailpartyapp.com/drinks/banana-daiquiri/","drink_category":"Tropical Cocktails","drink_description":"The humble banana daiquiri is a good example of a drink that teeters on the balance between swill and sensational, and it all hinges on one ingredient: the banana liqueur.","primary_ingredients":[{"name":"Aged rum","id":"aged_rum","quantity":"1½ parts"},{"name":"Banana liqueur","id":"banana_liqueur","quantity":"½ part"},{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¼ part"}]},"bees_knees":{"drink_url":"https://cocktailpartyapp.com/drinks/bees-knees/","drink_category":"Sour Cocktails","drink_description":"We don’t know much about the history of this cocktail, other than apocryphal stories about its invention as a way to cover up the acrid flavors of Prohibition-era bathtub gin. It’s first mentioned in print in 1948, in David Embry’s The Fine Art of Mixing Drinks . Embry talks some trash about the original equal-parts recipe for the drink, before suggesting it’s better as a variation on the gin sour.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Honey syrup","id":"honey_syrup","quantity":"1 part"},{"name":"Lemon","id":"lemon","quantity":"½ part"}]},"bellini":{"drink_url":"https://cocktailpartyapp.com/drinks/bellini/","drink_category":"Fruit & Herb Cocktails","drink_description":"The trusty Bellini, invented by Giuseppe Cipriani in the mid-20th century, is one of our favorite ways to dispose of a bumper crop of fresh, almost-too-ripe peaches in summer.","primary_ingredients":[{"name":"Peach","id":"peach","quantity":"1 part Peach pureé"},{"name":"Sparkling white wine","id":"sparkling_white_wine","quantity":"2 parts"}]},"between_the_sheets":{"drink_url":"https://cocktailpartyapp.com/drinks/between-the-sheets/","drink_category":"Sour Cocktails","drink_description":"Another classic gaz regan dug up from Jones’ Complete Barguide, this one expertly marries brandy and either light, amber, or dark rum.","primary_ingredients":[{"name":"Brandy","id":"brandy","quantity":"1 part"},{"name":"Light rum","id":"light_rum","quantity":"1 part"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"Lemon","id":"lemon","quantity":"¾ part"}]},"bloody_mary":{"drink_url":"https://cocktailpartyapp.com/drinks/bloody-mary/","drink_category":"Savory Cocktails","drink_description":"Who ever thought a tomato juice cocktail could come this far? Since its invention sometime in the 20s, the Bloody Mary has been a staple of hungover mornings and fancy brunches alike.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"2 parts"},{"name":"Tomato","id":"tomato","quantity":"4 parts"},{"name":"Lemon","id":"lemon","quantity":"½ part"},{"name":"Black pepper","id":"black_pepper","quantity":"1 dash"},{"name":"Celery salt","id":"celery_salt","quantity":"1 dash"},{"name":"Prepared horseradish","id":"prepared_horseradish","quantity":"1 tsp"},{"name":"Worcestershire sauce","id":"worcestershire_sauce","quantity":"1 dash"},{"name":"Hot sauce","id":"hot_sauce","quantity":"1 dash"}]},"blue_lagoon":{"drink_url":"https://cocktailpartyapp.com/drinks/blue-lagoon/","drink_category":"Creamy Cocktails","drink_description":"Blue curaçao gets a bad rap, and usually with good reason – it tends to show up in terribly sweet, cloying drinks with little in the way of subtlety or craft.","primary_ingredients":[{"name":"Light rum","id":"light_rum","quantity":"1½ parts"},{"name":"Blue curaçao","id":"blue_curacao","quantity":"½ part"},{"name":"Absinthe","id":"absinthe","quantity":"¼ part"},{"name":"Pineapple syrup","id":"pineapple_syrup","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"1 part"},{"name":"Egg","id":"egg","quantity":"½ part Egg white"},{"name":"Vanilla extract","id":"vanilla_extract","quantity":"1 drop"},{"name":"Salt","id":"salt","quantity":"1 pinch"}]},"bobby_burns":{"drink_url":"https://cocktailpartyapp.com/drinks/bobby-burns/","drink_category":"Spirit-Forward Cocktails","drink_description":"This old cocktail has seen a few variations in its long life – it’s been made with Bénédictine, Drambuie, absinthe, and likely other herbal liqueurs.","primary_ingredients":[{"name":"Scotch","id":"scotch","quantity":"2 part"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1 part"},{"name":"Sweet herbal liqueur","id":"sweet_herbal_liqueur","quantity":"2 dashes"}]},"boulevardier":{"drink_url":"https://cocktailpartyapp.com/drinks/boulevardier/","drink_category":"Simple Cocktails","drink_description":"The Boulevardier is an early 20th-century classic built on the Negroni formula, with bourbon (or rye) in place of gin. It first appeared in Harry McElhone’s Barflies and Cocktails book in 1927. It was credited to American expat socialite Erskine Gwynne, founder of the Boulevardier literary magazine.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"1½ parts"},{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif","quantity":"1 part"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1 part"}]},"bramble":{"drink_url":"https://cocktailpartyapp.com/drinks/bramble/","drink_category":"Sour Cocktails","drink_description":"The Bramble is a drink so simple and obvious, you’d be forgiven for assuming it was a classic recipe like a Smash or a Daisy. But it’s actually from the 1980s, created by London legend Dick Bradsell.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1½ parts"},{"name":"Lemon","id":"lemon","quantity":"¾ part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"},{"name":"Blackberry liqueur","id":"blackberry_liqueur","quantity":"¾ part"}]},"bronx":{"drink_url":"https://cocktailpartyapp.com/drinks/bronx/","drink_category":"Sour Cocktails","drink_description":"This drink comes to us from way back in 1917, when adding orange juice to spirits was such a newfangled concept that the bar where it was invented went through more than a case of oranges a day. That’s a lot of oranges for 1917!","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"¼ part"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"¼ part"},{"name":"Orange","id":"orange","quantity":"1 part"},{"name":"Orange bitters","id":"orange_bitters","quantity":"2 dashes"}]},"brooklyn":{"drink_url":"https://cocktailpartyapp.com/drinks/brooklyn/","drink_category":"Spirit-Forward Cocktails","drink_description":"The Brooklyn is a classic cousin of the Manhattan that isn’t as well-known as it ought to be. This is probably due to the relative obscurity of Amer Picon, an amaro with dominant notes of orange peel, gentian, and quinquina. It’s not well-known or particularly easy to find outside of France, but it’s worth the search!","primary_ingredients":[{"name":"Rye whiskey","id":"rye_whiskey","quantity":"2 parts"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"1 part"},{"name":"Maraschino","id":"maraschino","quantity":"¼ part"},{"name":"Amaro","id":"amaro","quantity":"¼ part"}]},"bull_shot":{"drink_url":"https://cocktailpartyapp.com/drinks/bullshot/","drink_category":"Hot Cocktails","drink_description":"A good bartender is, as they say, “a pharmacist with limited inventory.” In fact, many ingredients used in cocktail began their life as pseudo-medicinal tinctures, and some of them (like bitters in club soda for a tummyache) do seem to have stood the test of time.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"2 parts"},{"name":"Beef broth","id":"beef_broth","quantity":"4 parts"},{"name":"Lemon","id":"lemon","quantity":"½ part"},{"name":"Black pepper","id":"black_pepper","quantity":"1 dash"},{"name":"Celery salt","id":"celery_salt","quantity":"1 dash"},{"name":"Worcestershire sauce","id":"worcestershire_sauce","quantity":"1 dash"},{"name":"Hot sauce","id":"hot_sauce","quantity":"1 dash"}]},"caipirinha":{"drink_url":"https://cocktailpartyapp.com/drinks/caipirinha/","drink_category":"Sour Cocktails","drink_description":"Okay, let’s talk pronunciation: it’s KAI-pur-een-YA. There you go, now you too can sound worldy like us. Cachaça is another tough one – it’s pronounced ka-SHA-sa. You could substitute regular rum for cachaça, but we don’t recommend it; this drink is inexorably linked to the grassy, fruity, musty flavors of real sugarcane cachaça. Unaged cachaça is best here, where its vegetal brightness plays off the lime; aged cachaça is tasty, but muted.","primary_ingredients":[{"name":"Unaged cachaça","id":"unaged_cachaca","quantity":"2 parts"},{"name":"Granulated sugar","id":"granulated_sugar","quantity":"1 tsp"},{"name":"Lime","id":"lime","quantity":"1 half Lime cut into quarters"}]},"canchanchara":{"drink_url":"https://cocktailpartyapp.com/drinks/canchanchara/","drink_category":"Sour Cocktails","drink_description":"Canchánchara is a classic Cuban cocktail, and one of the oldest on record. It dates back to at least the Ten Years’ War of the 19th century, taken warm as a healing concoction by Cuban guerrillas fighting against Spain for independence. It might go back even further, bearing a resemblance to a drink long enjoyed by the native Taino people.","primary_ingredients":[{"name":"Light rum","id":"light_rum","quantity":"1½ parts"},{"name":"Honey syrup","id":"honey_syrup","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Sparkling water","id":"sparkling_water","quantity":"1 splash"}]},"casino":{"drink_url":"https://cocktailpartyapp.com/drinks/casino/","drink_category":"Spirit-Forward Cocktails","drink_description":"This gentle, lovely cousin of the Martini comes to us from Harry Craddock’s Savoy Cocktail Book , by way of Robert Hess’ fantastically educational channel on The Small Screen Network website.","primary_ingredients":[{"name":"Old Tom gin","id":"old_tom_gin","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"⅛ part"},{"name":"Maraschino","id":"maraschino","quantity":"⅛ part"},{"name":"Orange bitters","id":"orange_bitters","quantity":"2 dashes"}]},"champagne_cocktail":{"drink_url":"https://cocktailpartyapp.com/drinks/champagne-cocktail/","drink_category":"Sparkling Cocktails","drink_description":"The Champagne Cocktail is an ancient recipe that’s so far out, it’s back in again. We like the proportions of this recipe from Simon Difford’s Cocktails: The Bartender’s Bible , which was featured in The Washington Post a few years ago. It’s really more of a template than a hard-and-fast recipe; it’s a great canvas for experimentation with spirits and bitters. It doesn’t even strictly require Champagne; any dry sparkling wine will do.","primary_ingredients":[{"name":"Sugar cube","id":"sugar_cube","quantity":"1 whole"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"3 drops"},{"name":"Brandy","id":"brandy","quantity":"½ part"},{"name":"Sparkling white wine","id":"sparkling_white_wine","quantity":"3 parts"}]},"chartreuse_swizzle":{"drink_url":"https://cocktailpartyapp.com/drinks/chartreuse-swizzle/","drink_category":"Sour Cocktails","drink_description":"The creator of this “improved” recipe over at kaiserpenguin.com insists on fresh pineapple juice for this, but we think it’s lovely even with the canned stuff. Traditionally, a “swizzle” drink is prepared with a swizzle stick, which had a paddle-shaped end and is spun between the palms. If you don’t have one of these tools, stirring with a barspoon will do just fine.","primary_ingredients":[{"name":"Green herbal liqueur","id":"green_herbal_liqueur","quantity":"1½ part"},{"name":"Overproof light rum","id":"overproof_light_rum","quantity":"¼ part"},{"name":"Pineapple","id":"pineapple","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Falernum liqueur","id":"falernum_liqueur","quantity":"½ parts"}]},"claridge":{"drink_url":"https://cocktailpartyapp.com/drinks/claridge/","drink_category":"Spirit-Forward Cocktails","drink_description":"This little gem from the 30s – published in Harry Craddock’s The Savoy Cocktail Book – is a favorite of ours. The apricot liqueur is key here; some recipes may call for “brandy,” but it’s the sweeter liqueur you’ll need here. Since it’s such an important component of the drink, you should use the best stuff you can get your hands on.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1 part"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"1 part"},{"name":"Triple sec","id":"triple_sec","quantity":"½ part"},{"name":"Apricot liqueur","id":"apricot_liqueur","quantity":"½ part"}]},"clover_club":{"drink_url":"https://cocktailpartyapp.com/drinks/clover-club/","drink_category":"Sour Cocktails","drink_description":"When this drink was invented in the late nineteenth century, the recipe called for raspberry syrup. Over time, the ingredient fell out of favor and was replaced by grenadine. We think it’s best with raspberry syrup, or a raspberry liqueur, but if you must use grenadine, at least use a real one and not a red-dyed corn syrup substitute.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 part"},{"name":"Lemon","id":"lemon","quantity":"1 part"},{"name":"Egg","id":"egg","quantity":"1 part Egg white"},{"name":"Raspberry syrup","id":"raspberry_syrup","quantity":"½ parts"}]},"corpse_reviver_2":{"drink_url":"https://cocktailpartyapp.com/drinks/corpse-reviver-no-2/","drink_category":"Sour Cocktails","drink_description":"Another potion from Harry Craddock’s The Savoy Cocktail Book of 1930. We like his note about it: “Four of these taken in swift succession will unrevive the corpse again.”","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1 part"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"White wine apéritif","id":"white_wine_aperitif","quantity":"1 part"},{"name":"Lemon","id":"lemon","quantity":"1 part"},{"name":"Absinthe","id":"absinthe","quantity":"2 dashes"}]},"cosmopolitan":{"drink_url":"https://cocktailpartyapp.com/drinks/cosmopolitan/","drink_category":"Sour Cocktails","drink_description":"The Cosmopolitan basically the love child of a Cape Codder and a Margarita, and is a legitimately distinguished sour cocktail in its own right. This updated recipe comes from Sarah Morrisey from Ernesto’s in New York, whose recipe took first place in a blind taste-test organized by PUNCH (an online cocktail magazine).","primary_ingredients":[{"name":"Citrus vodka","id":"citrus_vodka","quantity":"1½ parts"},{"name":"Triple sec","id":"triple_sec","quantity":"¾ part"},{"name":"Cranberry juice","id":"cranberry_juice","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"½ part"}]},"cuba_libre":{"drink_url":"https://cocktailpartyapp.com/drinks/cuba-libre/","drink_category":"Highball Cocktails","drink_description":"This drink gets a bad rap, and it’s understandable. When you order it in a typical bar, you’ll get a sickly-sweet rum and coke with a sad-looking wedge of lime on the side. The real one, though, is miles away. The difference is in the proportions; a real Cubra Libre needs one full part of lime juice to balance the sweetness of a mere 3 parts of cola.","primary_ingredients":[{"name":"Light rum","id":"light_rum","quantity":"2 parts"},{"name":"Lime","id":"lime","quantity":"1 part"},{"name":"Cola","id":"cola","quantity":"3 parts"}]},"daiquiri":{"drink_url":"https://cocktailpartyapp.com/drinks/daiquiri/","drink_category":"Sour Cocktails","drink_description":"You’d be forgiven for thinking that the daiquiri is a sickly-sweet frozen concoction served to the elderly aboard cruise ships, because that’s what the last few decades have made of it.","primary_ingredients":[{"name":"Light rum","id":"light_rum","quantity":"2 parts"},{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"}]},"dark_n_stormy":{"drink_url":"https://cocktailpartyapp.com/drinks/dark-n-stormy/","drink_category":"Highball Cocktails","drink_description":"A favorite of British sailors, the Dark N’ Stormy may just be the perfect summertime cocktail.","primary_ingredients":[{"name":"Black rum","id":"black_rum","quantity":"2 parts"},{"name":"Ginger beer","id":"ginger_beer","quantity":"3 parts"},{"name":"Lime","id":"lime","quantity":"1 wedge"}]},"derby":{"drink_url":"https://cocktailpartyapp.com/drinks/derby/","drink_category":"Sour Cocktails","drink_description":"Trader Vic wasn’t just a master of rum-based tiki drinks – in the Derby, he shows off an elegant little number with a bourbon base.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"½ part"},{"name":"Orange curaçao","id":"orange_curacao","quantity":"½ part"}]},"dirty_martini":{"drink_url":"https://cocktailpartyapp.com/drinks/dirty-martini/","drink_category":"Savory Cocktails","drink_description":"This isn’t a martini, and it’s definitely not a highbrow tipple – but it’s a welcome refresher on a hot day. Sort of like a sports drink for the booze set. It’s also one of the few ways we know of to use up pepper vodka, if you have it.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2½ part"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"½ part"},{"name":"Olive","id":"olive","quantity":"½ parts"}]},"manhattan_dry":{"drink_url":"https://cocktailpartyapp.com/drinks/dry-manhattan/","drink_category":"Simple Cocktails","drink_description":"A Dry Manhattan is exactly what it says on the tin: a Manhattan, made with dry vermouth instead of sweet vermouth. It’s a lighter, more refreshing take on the original, with a greater focus on the spicy notes of a good rye – bourbon or blended whiskey is acceptable, but rye is really best here.","primary_ingredients":[{"name":"Rye whiskey","id":"rye_whiskey","quantity":"2 parts"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"1 part"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"2 dashes"}]},"egg_nog":{"drink_url":"https://cocktailpartyapp.com/drinks/egg-nog/","drink_category":"Creamy Cocktails","drink_description":"We’re big nog junkies ’round these parts, so we’ve tried many different recipes over the years. This one from legendary barman Jeffrey Morgenthaler is our favorite – delicious, complex, but not too fussy to make.","primary_ingredients":[{"name":"Egg","id":"egg","quantity":"2 whole"},{"name":"Granulated sugar","id":"granulated_sugar","quantity":"3 parts"},{"name":"Brandy","id":"brandy","quantity":"2 parts"},{"name":"Spiced rum","id":"spiced_rum","quantity":"2 parts"},{"name":"Milk","id":"milk","quantity":"6 parts"},{"name":"Heavy whipping cream","id":"heavy_whipping_cream","quantity":"4 parts"}]},"fernandito":{"drink_url":"https://cocktailpartyapp.com/drinks/fernandito/","drink_category":"Highball Cocktails","drink_description":"Fernando, Fernandito, or Fernet con Coca: whatever you call this mix of fernet and cola, it’s a classic! Invented in the 80s by Argentinian college students, it’s quickly become a national treasure and the country’s unofficial-official cocktail.","primary_ingredients":[{"name":"Fernet","id":"fernet","quantity":"1 part"},{"name":"Cola","id":"cola","quantity":"3 parts"}]},"french_75":{"drink_url":"https://cocktailpartyapp.com/drinks/french-75/","drink_category":"Sparkling Cocktails","drink_description":"World War I was in full swing by 1915, when this drink was first sipped at the New York Bar in Paris. Much of France was a battleground, dotted with fearsome French artillery units, rolling their awe-inspiring 75mm field guns. This drink was named that year for that very gun, which may well have saved France and all the Allied powers from grievous defeat. We’ll drink to that!","primary_ingredients":[{"name":"Simple syrup","id":"simple_syrup","quantity":"1 tsp"},{"name":"Lemon","id":"lemon","quantity":"½ part"},{"name":"Gin","id":"gin","quantity":"1 part"},{"name":"Sparkling white wine","id":"sparkling_white_wine","quantity":"4 parts"}]},"french_connection":{"drink_url":"https://cocktailpartyapp.com/drinks/french-connection/","drink_category":"Simple Cocktails","drink_description":"This is hands down the best cocktail for the least effort – you don’t even really have to measure it, if you’re lazy, and you can build it right in the glass.","primary_ingredients":[{"name":"Cognac","id":"cognac","quantity":"3 parts"},{"name":"Amaretto","id":"amaretto","quantity":"1 part"}]},"french_martini":{"drink_url":"https://cocktailpartyapp.com/drinks/french-martini/","drink_category":"Sour Cocktails","drink_description":"The French Martini is far-and-away the cocktail we’ve received the most requests to add. Trouble is, there are at least a half-dozen reputable recipes for the French Martini; all contain the same ingredients (vodka, raspberry liqueur, and pineapple juice), but at different ratios.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"1½ parts"},{"name":"Raspberry liqueur","id":"raspberry_liqueur","quantity":"½ part"},{"name":"Pineapple","id":"pineapple","quantity":"1½ parts"}]},"garibaldi":{"drink_url":"https://cocktailpartyapp.com/drinks/garibaldi/","drink_category":"Highball Cocktails","drink_description":"The Garibaldi is an Italian classic that was little-known elsewhere, until NYC bar Dante added it to their menu. Dante’s version is served with a special technique: the oranges are juiced immediately before serving in a juicer that whips and aerates the fruit as it is juiced, lending a wonderfully “fluffy” texture.","primary_ingredients":[{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif","quantity":"1½ parts"},{"name":"Orange","id":"orange","quantity":"4½ parts"}]},"gibson":{"drink_url":"https://cocktailpartyapp.com/drinks/gibson/","drink_category":"Savory Cocktails","drink_description":"This is just a Martini with a different garnish, so why come up with a whole new name for it? We think it should stand as a testament to Charlie Connolly’s dedication to not working too hard. In the 1930s, a customer asked Connolly for “something different,” and this is what he made: a Martini with a cocktail onion, named after the customer (perhaps as an ironic scolding, for daring to order off the standard menu?) The cocktail onion really does add a certain something, though, so if you like Martinis you oughta give the Gibson a shot.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"3 part"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"½ part"},{"name":"Cocktail onions","id":"cocktail_onions","quantity":"2 whole"}]},"gimlet":{"drink_url":"https://cocktailpartyapp.com/drinks/gimlet/","drink_category":"Sour Cocktails","drink_description":"This drink should really have kept the name “Gimlette,” for the man who invented it: the Royal Navy’s Surgeon General Sir Thomas D. Gimlette. He came up with this concoction as a way to convince his fellow sailors to drink lime juice to ward off scurvy. If only we could take all of our medications in such a fashion! A commercial lime cordial like Rose’s will do alright, but it’s not too hard to make your own infinitely superior cordial – just search online for a recipe.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2½ parts"},{"name":"Lime cordial","id":"lime_cordial","quantity":"¾ parts"}]},"gin_fizz":{"drink_url":"https://cocktailpartyapp.com/drinks/gin-fizz/","drink_category":"Creamy Cocktails","drink_description":"The Gin Fizz is the grandaddy of all fizz cocktails. We don’t know who first had the idea of shaking around an egg white with a bunch of gin and sugar, but we salute them!","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"¾ part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¾ part"},{"name":"Egg","id":"egg","quantity":"½ part Egg white"},{"name":"Sparkling water","id":"sparkling_water","quantity":"3 parts"}]},"godfather":{"drink_url":"https://cocktailpartyapp.com/drinks/godfather/","drink_category":"Simple Cocktails","drink_description":"The Godfather is a classic 70s drink, supposedly named because it was a favorite of actor Marlon Brando who starred as Don Corleone in the Godfather movies.","primary_ingredients":[{"name":"Scotch","id":"scotch","quantity":"2 parts"},{"name":"Amaretto","id":"amaretto","quantity":"1 part"}]},"golden_cadillac":{"drink_url":"https://cocktailpartyapp.com/drinks/golden-cadillac/","drink_category":"Creamy Cocktails","drink_description":"The Golden Cadillac gets its name from the golden color of Galliano, a vanilla-anise-flavored liqueur. You could also use Sambuca, but you might want to call it a “Silver Cadillac.”","primary_ingredients":[{"name":"Crème de cacao","id":"creme_de_cacao","quantity":"2 parts Light"},{"name":"Vanilla anise liqueur","id":"vanilla_anise_liqueur","quantity":"¾ part"},{"name":"Sweet cream","id":"sweet_cream","quantity":"1 parts"}]},"golden_dream":{"drink_url":"https://cocktailpartyapp.com/drinks/golden-dream/","drink_category":"Creamy Cocktails","drink_description":"The Golden Dream is a creamy cocktail popular in the 1970s, attributed to Raimundo Alvarez at the Old King Bar in Miami. The ’70s were admittedly dark time for cocktail culture, and we were hesitant to try the Golden Dream for fear it’d be just as acrid and cloying as similar drinks of its time.","primary_ingredients":[{"name":"Vanilla anise liqueur","id":"vanilla_anise_liqueur","quantity":"1 part"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"Orange","id":"orange","quantity":"1 part"},{"name":"Sweet cream","id":"sweet_cream","quantity":"½ part"}]},"grasshopper":{"drink_url":"https://cocktailpartyapp.com/drinks/grasshopper/","drink_category":"Creamy Cocktails","drink_description":"This is basically a giant, boozy version of an after-dinner mint. There’s a lot of room to play around with the ratios if you want to put your own spin on it.","primary_ingredients":[{"name":"Mint liqueur","id":"mint_liqueur","quantity":"1½ part Green"},{"name":"Crème de cacao","id":"creme_de_cacao","quantity":"1½ part Light"},{"name":"Sweet cream","id":"sweet_cream","quantity":"1 part"}]},"hanky_panky":{"drink_url":"https://cocktailpartyapp.com/drinks/hanky-panky/","drink_category":"Spirit-Forward Cocktails","drink_description":"The Hanky Panky has the unmistakable character of the early 20th century, but its bold flavor and simple preparation keep it relevant over a hundred years on.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1½ part"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1½ part"},{"name":"Fernet","id":"fernet","quantity":"1 tsp"}]},"harvey_wallbanger":{"drink_url":"https://cocktailpartyapp.com/drinks/harvey-wallbanger/","drink_category":"Highball Cocktails","drink_description":"This is one of our favorite “origin stories.” A party host in the 1960s found that he only had a few ingredients on hand: vodka, frozen orange juice, and Galliano (a vanilla anise liqueur), which he mixed together and served his guests. By early morning the host found one of his guests, by the name of Harvey, miserably banging his head on the wall and blaming the host’s new drink. Our version shown here is a little more nuanced; your walls are safe with us.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"2 parts"},{"name":"Orange","id":"orange","quantity":"3 parts"},{"name":"Vanilla anise liqueur","id":"vanilla_anise_liqueur","quantity":"½ part"}]},"horses_neck":{"drink_url":"https://cocktailpartyapp.com/drinks/horses-neck/","drink_category":"Highball Cocktails","drink_description":"The Horse’s Neck is a classic American cooler, originating in Atlantic city sometime in the early 20th century. It’s distinguished by its garnish: a long, loopy twist of lemon filling the glass, with the end draped over the edge of the glass like a horse poking his head over the stable wall.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"2 parts"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"3 dashes"},{"name":"Ginger ale","id":"ginger_ale","quantity":"4 parts"}]},"irish_coffee":{"drink_url":"https://cocktailpartyapp.com/drinks/irish-coffee/","drink_category":"Hot Cocktails","drink_description":"A bartender at Ireland’s Shannon Airport created this drink in the 40s to appeal to American tourists, and boy, it stuck.","primary_ingredients":[{"name":"Irish whiskey","id":"irish_whiskey","quantity":"2 parts"},{"name":"Coffee","id":"coffee","quantity":"4 parts"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"},{"name":"Heavy whipping cream","id":"heavy_whipping_cream","quantity":"4 tbsp"}]},"japanese_slipper":{"drink_url":"https://cocktailpartyapp.com/drinks/japanese-slipper/","drink_category":"Low-Proof Cocktails","drink_description":"This is a great cocktail for people who like fruity drinks or who just aren’t into the taste of alcohol (yet!) For a stronger kick, try swapping vodka for the triple sec.","primary_ingredients":[{"name":"Melon liqueur","id":"melon_liqueur","quantity":"1 part"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"Lemon","id":"lemon","quantity":"1 parts"}]},"john_collins":{"drink_url":"https://cocktailpartyapp.com/drinks/john-collins/","drink_category":"Highball Cocktails","drink_description":"The John Collins is a 19th-century cocktail named for the man about whom this poem was written: My name is John Collins, head waiter at Limmer’s, Corner of Conduit Street, Hanover Square, My chief occupation is filling brimmers For all the young gentlemen frequenters there. Mr. Frank always drinks my gin punch when he smokes.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"2½ parts"},{"name":"Lemon","id":"lemon","quantity":"1 part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¾ part"},{"name":"Sparkling water","id":"sparkling_water","quantity":"2 parts"}]},"jungle_bird":{"drink_url":"https://cocktailpartyapp.com/drinks/jungle-bird/","drink_category":"Tropical Cocktails","drink_description":"The Jungle Bird is a late-70s tiki cocktail, often attributed to the Aviary bar at the Kuala Lumpur Hilton. It languished in obscurity until tiki-revivalist Jeff “Beachbum” Berry dug it up and published it in his 2009 book, Beachbum Berry Remixed .","primary_ingredients":[{"name":"Black rum","id":"black_rum","quantity":"2 part"},{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif","quantity":"¾ part"},{"name":"Pineapple","id":"pineapple","quantity":"2 parts"},{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"}]},"kamikaze":{"drink_url":"https://cocktailpartyapp.com/drinks/kamikaze/","drink_category":"Sour Cocktails","drink_description":"This throwback from the 70s used to be served as a shooter, but these days you’re just as likely to see it in cocktail format.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"1½ parts"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"½ part"}]},"kir_royal":{"drink_url":"https://cocktailpartyapp.com/drinks/kir-royale/","drink_category":"Simple Cocktails","drink_description":"Some time after the original Kir was popularized, clever bartenders began to replace the white wine with Champagne or sparkling wine. Try it with créme de cassis, raspberry liqueur, or blackberry liqueur.","primary_ingredients":[{"name":"Crème de cassis","id":"creme_de_cassis","quantity":"½ part"},{"name":"Sparkling white wine","id":"sparkling_white_wine","quantity":"5 parts"}]},"last_word":{"drink_url":"https://cocktailpartyapp.com/drinks/last-word/","drink_category":"Sour Cocktails","drink_description":"This trendy little jewel is actually a relic of the Roaring 20s, originating at the Detroit Athletic Club. It languished in obscurity until Seattle bartender Murray Stenson re-discovered it in the mid-00s, and these days it’s a rare cocktail menu that doesn’t include it.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"¾ part"},{"name":"Green herbal liqueur","id":"green_herbal_liqueur","quantity":"¾ part"},{"name":"Maraschino","id":"maraschino","quantity":"¾ part"},{"name":"Lime","id":"lime","quantity":"¾ part"}]},"long_island_iced_tea":{"drink_url":"https://cocktailpartyapp.com/drinks/long-island-iced-tea/","drink_category":"Highball Cocktails","drink_description":"We really hemmed and hawed about including this drink in the app. On the one hand, this drink is awful. It’s just a ton of different near-flavorless boozes mixed up and downed almost purely for drunkenness’ sake. On the other hand… well, we’ll let the master, gaz regan say it (from his seminal tome, The Joy of Mixology ): “This is not a well-thought drink, and the notion of mixing all these spirits together is horrifying. Nevertheless, it’s undeniable that the Long Island Iced Tea works. It’s pleasant, refreshing, and somewhat lethal.”","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"1 part"},{"name":"Gin","id":"gin","quantity":"1 part"},{"name":"Light rum","id":"light_rum","quantity":"1 part"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"Lemon","id":"lemon","quantity":"1 part"},{"name":"Cola","id":"cola","quantity":"1 part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¾ part"}]},"mai_tai":{"drink_url":"https://cocktailpartyapp.com/drinks/mai-tai/","drink_category":"Tropical Cocktails","drink_description":"The Mai Tai – like countless other “tiki” drinks – was the brainchild of restauranteur Victor Bergeron, better known as “Trader Vic” (although Donn Beach, aka “Don the Beachcomber”, would contest this). His original recipe called for a seventeen-year-old Wray & Nephew Jamaican rum that is all but extinct nowadays. To achieve a similar flavor, many recipes split the rum base between a dark rum (usually Jamaican) and an aged rum (usually Cuban or Martinique, but not an agricole).","primary_ingredients":[{"name":"Jamaican rum","id":"jamaican_rum","quantity":"2 parts"},{"name":"Orange curaçao","id":"orange_curacao","quantity":"½ part"},{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Brown sugar syrup","id":"brown_sugar_syrup","quantity":"½ part"},{"name":"Orgeat","id":"orgeat","quantity":"¼ part"}]},"manhattan":{"drink_url":"https://cocktailpartyapp.com/drinks/manhattan/","drink_category":"Spirit-Forward Cocktails","drink_description":"The venerable Manhattan is the grandfather of so many cocktails we know as classics today. It was the very first cocktail (as far as we know) to use vermouth, and spawned a legion of children – including the Martini. This is the kind of drink you could spend your whole life mastering; we say it’s a worthy investment of your time.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"2 parts"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1 part"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"2 dashes"}]},"margarita":{"drink_url":"https://cocktailpartyapp.com/drinks/margarita/","drink_category":"Sour Cocktails","drink_description":"There are at least a dozen different recipes for this classic cocktail, but we think the 2-1-1-.25 ratio is ideal. The extra bit of agave or simple syrup isn’t traditional, but we find it helps when limes are out-of-season and not as sweet, or when you’re serving drinkers with a sweeter palate. Feel free to omit it.","primary_ingredients":[{"name":"Blanco tequila","id":"blanco_tequila","quantity":"2 parts"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"1 part"},{"name":"Agave nectar","id":"agave_nectar","quantity":"¼ part"}]},"martinez":{"drink_url":"https://cocktailpartyapp.com/drinks/martinez/","drink_category":"Spirit-Forward Cocktails","drink_description":"Why doesn’t anyone order this fancy classic anymore? We think it’s because maraschino liqueur went out of favor for a few decades, leaving almost a century of cocktails to flounder.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1 part"},{"name":"Maraschino","id":"maraschino","quantity":"¼ part"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"1 dash"}]},"dry_martini":{"drink_url":"https://cocktailpartyapp.com/drinks/martini/","drink_category":"Spirit-Forward Cocktails","drink_description":"The classic Martini recipe has seen a lot of abuse over the years, from James Bond’s “shaken, not stirred” to the 90s-era cavalcade of drinks named “something-tini” just because they were served in the same type of glass. We’d like to set the record straight: a Martini is a stirred drink made with gin, dry vermouth, and either a lemon twist or an olive garnish. That’s it!","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2½ parts"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"½ part"}]},"mary_pickford":{"drink_url":"https://cocktailpartyapp.com/drinks/mary-pickford/","drink_category":"Tropical Cocktails","drink_description":"Mixologist gaz regan dug up this old recipe from the The Savoy Cocktail book, dusted it off, made a few adjustments, and ended up with this lovely little concoction.","primary_ingredients":[{"name":"Light rum","id":"light_rum","quantity":"2 parts"},{"name":"Pineapple","id":"pineapple","quantity":"1 part"},{"name":"Maraschino","id":"maraschino","quantity":"¼ part"},{"name":"Grenadine","id":"grenadine","quantity":"1 dash"}]},"mimosa":{"drink_url":"https://cocktailpartyapp.com/drinks/mimosa/","drink_category":"Sparkling Cocktails","drink_description":"We’d been making what we thought were Mimosas by putting some orange juice in a glass and pouring champagne on top, but they were never as good as the ones we had at our favorite brunch joints. We figured that maybe everything just tastes better when you’re hung over – but then we found gaz regan’s recipe and realized we’d been leaving out the triple sec the whole time! Big mistake. It’s the element that ties the whole drink together.","primary_ingredients":[{"name":"Triple sec","id":"triple_sec","quantity":"½ part"},{"name":"Orange","id":"orange","quantity":"1½ parts"},{"name":"Sparkling white wine","id":"sparkling_white_wine","quantity":"3 parts"}]},"mint_julep":{"drink_url":"https://cocktailpartyapp.com/drinks/mint-julep/","drink_category":"Fruit & Herb Cocktails","drink_description":"Picture yourself in the summer of ’38, watching your lucky horse in the sweltering heat of another Kentucky Summer. What could be more refreshing than a cool pewter tumbler of fresh mint, simple syrup, and bourbon?","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"2 part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"},{"name":"Mint","id":"mint","quantity":"6 leaves"}]},"mojito":{"drink_url":"https://cocktailpartyapp.com/drinks/mojito/","drink_category":"Highball Cocktails","drink_description":"We didn’t think we liked the Mojito the first few times we had it. It was watery, little smashed-up mint bits got stuck in our teeth – overall, a sad affair. It wasn’t until we had a properly-made Mojito that we understood the true magic of it.","primary_ingredients":[{"name":"Lime","id":"lime","quantity":"4 wedges"},{"name":"Granulated sugar","id":"granulated_sugar","quantity":"1 tbsp"},{"name":"Mint","id":"mint","quantity":"10 leaves"},{"name":"Light rum","id":"light_rum","quantity":"2 parts"},{"name":"Sparkling water","id":"sparkling_water","quantity":"3 parts"}]},"moscow_mule":{"drink_url":"https://cocktailpartyapp.com/drinks/moscow-mule/","drink_category":"Highball Cocktails","drink_description":"This simple drink was a huge craze among the celebrities and hipsters of the 50s. It’s refreshing, simple, and perfect for a summer drink. It’s traditionally served in a copper mug, but any glass will do.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"2 parts"},{"name":"Ginger beer","id":"ginger_beer","quantity":"3 parts"},{"name":"Lime","id":"lime","quantity":"1 wedge"}]},"naked_and_famous":{"drink_url":"https://cocktailpartyapp.com/drinks/naked-famous/","drink_category":"Sour Cocktails","drink_description":"Death & Co mixologist Joaquín Simó is the mastermind behind the Naked & Famous, one of our absolute favorite twists on the venerated Last Word template. It’s got four ingredients, but a hundred different flavors: sweet, smoky, tart, and herbal are just the beginning.","primary_ingredients":[{"name":"Mezcal","id":"mezcal","quantity":"¾ part"},{"name":"Yellow herbal liqueur","id":"yellow_herbal_liqueur","quantity":"¾ part"},{"name":"Sweet orange apéritif","id":"sweet_orange_aperitif","quantity":"¾ part"},{"name":"Lime","id":"lime","quantity":"¾ part"}]},"negroni":{"drink_url":"https://cocktailpartyapp.com/drinks/negroni/","drink_category":"Simple Cocktails","drink_description":"Cocktail snobs have a bad habit of using the Negroni as the threshold through which all drinkers must pass before they can be considered true connoisseurs. There’s an element of truth to this view; the balance of flavors requires an experienced tongue to appreciate. But make no mistake – it is a very bitter drink, and it’s not for everyone.","primary_ingredients":[{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif","quantity":"1½ parts"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1½ parts"},{"name":"Gin","id":"gin","quantity":"1½ parts"}]},"new_york_sour":{"drink_url":"https://cocktailpartyapp.com/drinks/new-york-sour/","drink_category":"Creamy Cocktails","drink_description":"With its trendy gradient coloring and clever combination of red wine and rye whiskey, you’d be forgiven for thinking the New York Sour is some newfangled hipster creation.","primary_ingredients":[{"name":"Rye whiskey","id":"rye_whiskey","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"1 part"},{"name":"Egg","id":"egg","quantity":"1 part Egg white"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¾ part"},{"name":"Red wine","id":"red_wine","quantity":"1 part"}]},"old_cuban":{"drink_url":"https://cocktailpartyapp.com/drinks/old-cuban/","drink_category":"Fruit & Herb Cocktails","drink_description":"This recipe from Audrey “Libation Goddess” Saunders originally called for 8-year añejo rum, but also we’ve tried it with a fancy spiced rum and a white Flor de Caña, and every time we’ve gotten wonderful results. Of all of Saunders’ many fine mojito riffs, this is one we always keep coming back to.","primary_ingredients":[{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"1 part"},{"name":"Mint","id":"mint","quantity":"6 leaves"},{"name":"Aged rum","id":"aged_rum","quantity":"1½ parts"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"2 dashes"},{"name":"Sparkling white wine","id":"sparkling_white_wine","quantity":"2 parts"}]},"old_fashioned":{"drink_url":"https://cocktailpartyapp.com/drinks/old-fashioned/","drink_category":"Simple Cocktails","drink_description":"It’s called an “Old Fashioned” because it’s the literal definition of what a cocktail used to be: a healthy pour of spirit, a bit of syrup, and couple dashes of bitters. No mushed-up fruit, no soda: just Platonic perfection in a glass.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"2 parts"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"3 dashes"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¼ part"}]},"old_pal":{"drink_url":"https://cocktailpartyapp.com/drinks/old-pal/","drink_category":"Spirit-Forward Cocktails","drink_description":"The Old Pal is an antique, tracing its roots back at least to to 1930, when it was published in Harry’s ABC of Mixing Cocktails , by Harry MacElhone, proprietor of Harry’s New York Bar in Paris. It bears a striking resemblance to the Boulevardier, another famous MacElhone classic.","primary_ingredients":[{"name":"Rye whiskey","id":"rye_whiskey","quantity":"1½ parts"},{"name":"Dry vermouth","id":"dry_vermouth","quantity":"¾ part"},{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif","quantity":"¾ part"},{"name":"Lemon","id":"lemon","quantity":"1 piece"}]},"oriental":{"drink_url":"https://cocktailpartyapp.com/drinks/oriental/","drink_category":"Sour Cocktails","drink_description":"A funny name for this old drink – there’s nothing even faintly “oriental” about it.The original recipe from The Savoy Cocktail Book calls for orange curaçao (like Grand Marnier), but mixology legend gaz regan advocates for triple sec instead, to cut down on the sweetness. We’ve included both variants.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"1½ parts"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"¾ part"},{"name":"Triple sec","id":"triple_sec","quantity":"¾ part"},{"name":"Lime","id":"lime","quantity":"½ part"}]},"paloma":{"drink_url":"https://cocktailpartyapp.com/drinks/paloma/","drink_category":"Highball Cocktails","drink_description":"You’d be forgiven for assuming the famous Margarita is Mexico’s most popular cocktail – but in fact it’s the humble Paloma that takes the prize. The Paloma is one of our favorite all-time drinks – it’s easy to make, delicious, and wonderfully refreshing.","primary_ingredients":[{"name":"Blanco tequila","id":"blanco_tequila","quantity":"2 parts"},{"name":"Lime","id":"lime","quantity":"½ part"},{"name":"Grapefruit soda","id":"grapefruit_soda","quantity":"4 parts"}]},"paper_plane":{"drink_url":"https://cocktailpartyapp.com/drinks/paper-plane/","drink_category":"Sour Cocktails","drink_description":"The Paper Plane is the creation of Sam Ross, who was listening to the M.I.A. song of the same name as he tinkered with the recipe. It’s a delicious equal-parts sour, with bourbon and Aperol laying down a solid foundation for the magic flavors of Amaro Nonino.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"¾ part"},{"name":"Sweet amaro","id":"sweet_amaro","quantity":"¾ part"},{"name":"Sweet orange apéritif","id":"sweet_orange_aperitif","quantity":"¾ part"},{"name":"Lemon","id":"lemon","quantity":"¾ part"}]},"paradise":{"drink_url":"https://cocktailpartyapp.com/drinks/paradise/","drink_category":"Sour Cocktails","drink_description":"The original recipe comes from Harry Craddock’s 1930 tome The Savoy Cocktail Book . Mixologist gaz regan polished it up a bit with improved ratios, and suggests trying it as highball too, by adding a half-part more gin and serving in an ice-filled tall glass with extra orange juice.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1½ parts"},{"name":"Apricot liqueur","id":"apricot_liqueur","quantity":"¾ parts"},{"name":"Orange","id":"orange","quantity":"½ part"},{"name":"Lemon","id":"lemon","quantity":"½ parts"}]},"penicillin":{"drink_url":"https://cocktailpartyapp.com/drinks/penicillin/","drink_category":"Sour Cocktails","drink_description":"The Penicillin is a wonderful Scotch drink that tastes like a vintage classic – but it’s really a 2011 invention, from genius bartender Sam Ross.","primary_ingredients":[{"name":"Scotch","id":"scotch","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"¾ part"},{"name":"Honey syrup","id":"honey_syrup","quantity":"2 tsp"},{"name":"Ginger syrup","id":"ginger_syrup","quantity":"2 tsp"},{"name":"Peaty scotch","id":"peaty_scotch","quantity":"¼ part"}]},"pimms_cup_no_1":{"drink_url":"https://cocktailpartyapp.com/drinks/pimms-cup/","drink_category":"Fruit & Herb Cocktails","drink_description":"This drink is de rigueur at hoity-toity British summer festivities: Wimbledon, opera festivals, cricket matches, and other pinkie-erecting affairs. It’s usually heavily garnished with fruits like apples, strawberries, lemons and oranges, although some take it only with a thin slice of cucumber. You could also substitute whole berries like blueberries or blackberries for the sliced strawberries in the recipe below.","primary_ingredients":[{"name":"Gin apéritif","id":"gin_aperitif","quantity":"2 parts"},{"name":"Lemon soda","id":"lemon_soda","quantity":"6 parts"},{"name":"Cucumber","id":"cucumber","quantity":"4 slices"},{"name":"Lemon","id":"lemon","quantity":"4 slices"},{"name":"Strawberry","id":"strawberry","quantity":"4 slices"}]},"pina_colada":{"drink_url":"https://cocktailpartyapp.com/drinks/pina-colada/","drink_category":"Tropical Cocktails","drink_description":"The national drink of Puerto Rico, the Piña Colada is easy to make no matter where you are – as long as you have access to cream of coconut. Make sure it’s not coconut milk or coconut cream, as those are both unsweetened.","primary_ingredients":[{"name":"Dark rum","id":"dark_rum","quantity":"2 parts"},{"name":"Pineapple","id":"pineapple","quantity":"2½ parts"},{"name":"Cream of coconut","id":"cream_of_coconut","quantity":"1 part"}]},"pisco_sour":{"drink_url":"https://cocktailpartyapp.com/drinks/pisco-sour/","drink_category":"Creamy Cocktails","drink_description":"This drink goes at least as far back as the early twentieth century, when it was detailed in a book with the charmingly old-fashioned title of The South American Gentleman’s Companion .","primary_ingredients":[{"name":"Pisco","id":"pisco","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"1 part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"},{"name":"Egg","id":"egg","quantity":"¼ part Egg white"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"1 dash"}]},"planters_punch":{"drink_url":"https://cocktailpartyapp.com/drinks/planters-punch/","drink_category":"Tropical Cocktails","drink_description":"If you ask ten bartenders about Planter’s Punch, you’ll get eleven different recipes. We’ll stick with venerable mixologist gaz regan’s take on it. gaz always knows best, after all.","primary_ingredients":[{"name":"Dark rum","id":"dark_rum","quantity":"2 parts"},{"name":"Grapefruit","id":"grapefruit","quantity":"2 parts"},{"name":"Orange","id":"orange","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"½ part"},{"name":"Lemon","id":"lemon","quantity":"½ part"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"1 dash"},{"name":"Creole bitters","id":"creole_bitters","quantity":"1 dash"}]},"porn_star_martini":{"drink_url":"https://cocktailpartyapp.com/drinks/porn-star-martini/","drink_category":"Sour Cocktails","drink_description":"The Porn Star Martini, from Douglas Ankrah of the famed London Academy of Bartending, is truly the epitome of early 2000s cocktail culture. It’s over-the-top, totally ostentatious, and of course it follows the obnoxious “something-something-Martini” naming convention of the era. But it deserves to be forgiven for the sins of its era, because underneath all that glitz and hype is a genuinely solid drink.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"2 parts"},{"name":"Passion fruit puree","id":"passion_fruit_puree","quantity":"1 part"},{"name":"Vanilla syrup","id":"vanilla_syrup","quantity":"½ part"},{"name":"Lime","id":"lime","quantity":"½ part"},{"name":"Sparkling rosé wine","id":"sparkling_rose_wine","quantity":"2 parts"}]},"ramble":{"drink_url":"https://cocktailpartyapp.com/drinks/ramble/","drink_category":"Fruit & Herb Cocktails","drink_description":"The Ramble, from Phil Ward of Death & Co, is essentially just a gin sour with some extra berry goop on top – but oh! What a difference the goop makes!","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"1 part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"1¼ parts"},{"name":"Raspberry","id":"raspberry","quantity":"3 whole"}]},"ramos_gin_fizz":{"drink_url":"https://cocktailpartyapp.com/drinks/ramos-gin-fizz/","drink_category":"Creamy Cocktails","drink_description":"If you’d ordered this peculiarly lovely drink in the early twentieth century when it was invented, you’d likely have been treated to a display of a half-dozen strapping busboys all lined up to shake the buhjeezus out of it in turn. Sadly, we have blenders nowadays, so those of us who would have liked the show must instead recreate it in our minds. Shame, that.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 part"},{"name":"Sweet cream","id":"sweet_cream","quantity":"1 part"},{"name":"Egg","id":"egg","quantity":"1 part Egg white"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"},{"name":"Lemon","id":"lemon","quantity":"½ part"},{"name":"Lime","id":"lime","quantity":"½ part"},{"name":"Orange flower water","id":"orange_flower_water","quantity":"3 dashes"},{"name":"Sparkling water","id":"sparkling_water","quantity":"1 splash"}]},"remember_the_maine":{"drink_url":"https://cocktailpartyapp.com/drinks/remember-the-maine/","drink_category":"Spirit-Forward Cocktails","drink_description":"In his book The Gentleman’s Companion , author Charles H. Baker Jr. insists that this drink be stirred in a clockwise direction, that it may be “sea-worthy.” Whichever way you stir it, it’s delicious.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"2 parts"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"¾ part"},{"name":"Cherry brandy","id":"cherry_brandy","quantity":"¼ part"},{"name":"Absinthe","id":"absinthe","quantity":"1 dash"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"1 dash"}]},"rob_roy":{"drink_url":"https://cocktailpartyapp.com/drinks/rob-roy/","drink_category":"Spirit-Forward Cocktails","drink_description":"Rob Roy was a sort of Scottish Robin Hood who stole from the rich and gave to the poor. The only difference between this and a Manhattan is that the Rob Roy takes scotch while the Manhattan calls for bourbon or rye. We also think Peychaud’s bitters work better in a Rob Roy than Angostura.","primary_ingredients":[{"name":"Scotch","id":"scotch","quantity":"2 parts"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1 part"},{"name":"Creole bitters","id":"creole_bitters","quantity":"2 dashes"}]},"rusty_nail":{"drink_url":"https://cocktailpartyapp.com/drinks/rusty-nail/","drink_category":"Simple Cocktails","drink_description":"This old standby is one of our favorite after-work refreshments. It’s best stirred with ice and strained into a glass, but when we’re feeling lazy, we build it right in the glass.","primary_ingredients":[{"name":"Scotch","id":"scotch","quantity":"2½ parts"},{"name":"Scotch whisky liqueur","id":"scotch_whisky_liqueur","quantity":"½ parts"}]},"salty_dog":{"drink_url":"https://cocktailpartyapp.com/drinks/salty-dog/","drink_category":"Highball Cocktails","drink_description":"This drink is merely a Greyhound with salt, but oh, what a difference it makes! Try it with some fancy culinary salts for a neat twist.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"2 parts"},{"name":"Grapefruit","id":"grapefruit","quantity":"3 parts"},{"name":"Salt","id":"salt","quantity":"1 pinch"}]},"sazerac":{"drink_url":"https://cocktailpartyapp.com/drinks/sazerac/","drink_category":"Simple Cocktails","drink_description":"This drink represents everything we love about New Orleans: the Southern heritage, the spicy flavors, the alluring hint of licorice. The technique is complicated, but the result is worth the labor.","primary_ingredients":[{"name":"Absinthe","id":"absinthe","quantity":"1 tbsp"},{"name":"Rye whiskey","id":"rye_whiskey","quantity":"3 parts"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¾ part"},{"name":"Creole bitters","id":"creole_bitters","quantity":"4 dashes"}]},"screwdriver":{"drink_url":"https://cocktailpartyapp.com/drinks/screwdriver/","drink_category":"Highball Cocktails","drink_description":"The earliest written reference made of this drink appeared in an issue of Time magazine from 1949, and casts the Screwdriver in a cooler light than we thought possible: “In the dimly lighted bar of the sleek Park Hotel, Turkish intelligence agents mingle with American engineers and Balkan refugees, drinking the latest Yankee concoction of vodka and orange juice, called a ‘screwdriver’.”","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"2 parts"},{"name":"Orange","id":"orange","quantity":"3 parts"}]},"sex_on_the_beach":{"drink_url":"https://cocktailpartyapp.com/drinks/sex-on-the-beach/","drink_category":"Highball Cocktails","drink_description":"Be careful not to get any sand in your… drink.","primary_ingredients":[{"name":"Vodka","id":"vodka","quantity":"1½ parts"},{"name":"Peach liqueur","id":"peach_liqueur","quantity":"½ part"},{"name":"Cranberry juice","id":"cranberry_juice","quantity":"1½ part"},{"name":"Orange","id":"orange","quantity":"1½ parts"}]},"sherry_cobbler":{"drink_url":"https://cocktailpartyapp.com/drinks/sherry-cobbler/","drink_category":"Low-Proof Cocktails","drink_description":"The Sherry Cobbler is a classic 19th century cocktail that still feels fresh and modern today.","primary_ingredients":[{"name":"Dry sherry","id":"dry_sherry","quantity":"3½ parts"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ tbsp"},{"name":"Orange","id":"orange","quantity":"3 slices"}]},"sidecar":{"drink_url":"https://cocktailpartyapp.com/drinks/sidecar/","drink_category":"Sour Cocktails","drink_description":"If enough of you fine folk buy our software, we’ll have enough to pay a man to drive us up and down the beach in a motorcycle sidecar, sipping this wonderfully sour cocktail from an iced CamelBak and throwing Frisbees to strange dogs. Ah, that’s the life.","primary_ingredients":[{"name":"Cognac","id":"cognac","quantity":"1½ parts"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"Lemon","id":"lemon","quantity":"½ parts"}]},"singapore_sling":{"drink_url":"https://cocktailpartyapp.com/drinks/singapore-sling/","drink_category":"Tropical Cocktails","drink_description":"With a provenance going all the way back to at least 1915, the Singapore Sling is older than it seems; the combination of gin, Bénédictine, and fruits feels as timely as ever over a hundred years on. This recipe was preserved by veteran mixologist Dale DeGroff, who was given notes on the recipe invented by Ngiam Tong Boon at the Raffles Hotel in Singapore.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1½ parts"},{"name":"Cherry brandy","id":"cherry_brandy","quantity":"½ part"},{"name":"Sweet herbal liqueur","id":"sweet_herbal_liqueur","quantity":"¼ part"},{"name":"Triple sec","id":"triple_sec","quantity":"¼ part"},{"name":"Pineapple","id":"pineapple","quantity":"1½ parts"},{"name":"Lime","id":"lime","quantity":"½ part"},{"name":"Grenadine","id":"grenadine","quantity":"½ tsp"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"1 dash"}]},"south_side":{"drink_url":"https://cocktailpartyapp.com/drinks/southside/","drink_category":"Fruit & Herb Cocktails","drink_description":"The Southside is a gorgeous pre-Prohibition cocktail that gained many followers among the well-heeled denizens of various East Coast social clubs. It was very likely meant to be a Julep riff, but it’s got enough style to stand on its own.","primary_ingredients":[{"name":"Mint","id":"mint","quantity":"5 leaves"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"},{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"¾ part"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"1 dash"}]},"spritzer":{"drink_url":"https://cocktailpartyapp.com/drinks/spritzer/","drink_category":"Low-Proof Cocktails","drink_description":"Barely a cocktail, and yet too important to overlook, the Spritzer is the grandmother of wine cocktails from the Tinto de Verano to the Aperol Spritz.","primary_ingredients":[{"name":"White wine","id":"white_wine","quantity":"3 parts"},{"name":"Sparkling water","id":"sparkling_water","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"1 piece"}]},"stinger":{"drink_url":"https://cocktailpartyapp.com/drinks/stinger/","drink_category":"Simple Cocktails","drink_description":"The secret to this flavor combination is cold, and plenty of it. Shake as long as you can manage, and then shake some more – it’s the water and the chill that tie it all together.","primary_ingredients":[{"name":"Cognac","id":"cognac","quantity":"3 parts"},{"name":"Mint liqueur","id":"mint_liqueur","quantity":"½ part Clear"}]},"strawberry_daiquiri":{"drink_url":"https://cocktailpartyapp.com/drinks/strawberry-daiquiri/","drink_category":"Fruit & Herb Cocktails","drink_description":"When a user let us know we were missing the Strawberry Daiquiri, we committed an evening and several pounds of fruit to finding the very best recipe for this oft-maligned classic. We wanted a true daiquiri, not a blended-up sugar-bomb, and at first we gravitated towards recipes that called for lots of berries, thinking that we’d need more in the shaker to compensate for not using the full mass of the berry as we would in a blended drink.","primary_ingredients":[{"name":"Strawberry","id":"strawberry","quantity":"1 whole"},{"name":"Simple syrup","id":"simple_syrup","quantity":"½ part"},{"name":"Light rum","id":"light_rum","quantity":"2 parts"},{"name":"Lime","id":"lime","quantity":"¾ part"}]},"suffering_bastard":{"drink_url":"https://cocktailpartyapp.com/drinks/suffering-bastard/","drink_category":"Highball Cocktails","drink_description":"The Suffering Bastard is the first in a trilogy of lime-and-ginger-beer cocktails invented by Joe Scialom. Scialom was a legendary barman, polyglot, and ur-mixologist who served drinks to the British Army at the Shepheard Hotel in Cairo as they defended the city again Rommel’s tank assault in 1942.","primary_ingredients":[{"name":"Brandy","id":"brandy","quantity":"1 part"},{"name":"Gin","id":"gin","quantity":"1 part"},{"name":"Lime","id":"lime","quantity":"½ part"},{"name":"Brown sugar syrup","id":"brown_sugar_syrup","quantity":"¼ part"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"2 dashes"},{"name":"Ginger beer","id":"ginger_beer","quantity":"4 parts"}]},"tequila_sunrise":{"drink_url":"https://cocktailpartyapp.com/drinks/tequila-sunrise/","drink_category":"Highball Cocktails","drink_description":"We like ours with raspberry liqueur instead of grenadine, but we’ve included both versions.","primary_ingredients":[{"name":"Aged tequila","id":"aged_tequila","quantity":"2½ parts"},{"name":"Orange","id":"orange","quantity":"3 parts"},{"name":"Grenadine","id":"grenadine","quantity":"1 dash"}]},"three_dots_and_a_dash":{"drink_url":"https://cocktailpartyapp.com/drinks/three-dots-and-a-dash/","drink_category":"Tropical Cocktails","drink_description":"Three Dots and a Dash is a tropical classic from none other than tiki legend Don the Beachcomber. It’s a spicy, assertive melange of rums (Martinique and Guyanese, preferably), citrus, clove, allspice, and honey.","primary_ingredients":[{"name":"Aged rhum agricole","id":"aged_rhum_agricole","quantity":"1 part"},{"name":"Demerara rum","id":"demerara_rum","quantity":"1 part"},{"name":"Orange curaçao","id":"orange_curacao","quantity":"½ part"},{"name":"Falernum liqueur","id":"falernum_liqueur","quantity":"½ part"},{"name":"Allspice dram","id":"allspice_dram","quantity":"¼ part"},{"name":"Lime","id":"lime","quantity":"1 part"},{"name":"Honey syrup","id":"honey_syrup","quantity":"½ part"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"3 dashes"}]},"tom_collins":{"drink_url":"https://cocktailpartyapp.com/drinks/tom-collins/","drink_category":"Highball Cocktails","drink_description":"The Tom Collins harkens at least to 1882’s Harry Johnson’s New and Improved Bartender’s Manual, or How to Mix Drinks of the Present Style, in English and German. It’s the child of an even older drink, the John Collins.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2½ parts"},{"name":"Lemon","id":"lemon","quantity":"1 part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¾ part"},{"name":"Sparkling water","id":"sparkling_water","quantity":"4 parts"}]},"tommys_margarita":{"drink_url":"https://cocktailpartyapp.com/drinks/tommys-margarita/","drink_category":"Sour Cocktails","drink_description":"Tommy’s Margarita is an elegant on the classic Margarita recipe. It was invented in the early ’90s by Julio Bermejo at Tommy’s Mexican Restaurant in San Francisco, where you can still order one today. It’s a little bit sweet, a little bit tart, and ultra-smooth; we might almost prefer this to the classic recipe!","primary_ingredients":[{"name":"Blanco tequila","id":"blanco_tequila","quantity":"2 parts"},{"name":"Lime","id":"lime","quantity":"1 part"},{"name":"Agave nectar","id":"agave_nectar","quantity":"½ part"}]},"trinidad_sour":{"drink_url":"https://cocktailpartyapp.com/drinks/trinidad-sour/","drink_category":"Sour Cocktails","drink_description":"We’re certain there’s no drink on Earth with a greater proportion of Angostura bitters that the Trinidad Sour. When we first saw the recipe written down, we thought that there must have been a mistake!","primary_ingredients":[{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"1½ parts"},{"name":"Rye whiskey","id":"rye_whiskey","quantity":"½ part"},{"name":"Orgeat","id":"orgeat","quantity":"1½ parts"},{"name":"Lemon","id":"lemon","quantity":"1 part"}]},"tuxedo":{"drink_url":"https://cocktailpartyapp.com/drinks/tuxedo/","drink_category":"Simple Cocktails","drink_description":"The Tuxedo is one of our favorite 19th-century sherry cocktails. It’s crisp, bright, fragrant, and eminently sippable.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"2 parts"},{"name":"Dry sherry","id":"dry_sherry","quantity":"1 part"},{"name":"Orange bitters","id":"orange_bitters","quantity":"2 dashes"}]},"vieux_carre":{"drink_url":"https://cocktailpartyapp.com/drinks/vieux-carre/","drink_category":"Spirit-Forward Cocktails","drink_description":"We like to offer pronunciations in this app, so you don’t sound like a tool ordering one of these drinks at a bar. The shame of trying to order a Caipirinha when we’d only ever read about it – well, we’d save you from such a fate. With that said, we admit it: we don’t know how to say it and we can’t find any kind of consensus about it online or in our books. “Voo Cah-REH” is probably your safest bet. However you say it, this New Orleans classic (it’s named for the French Quarter) is smooth and mysterious, with the character of a lost age. The original recipes all call for equal parts of Angostura and Peychaud’s bitters, but honestly you’ll be fine if you only have one or the other.","primary_ingredients":[{"name":"Rye whiskey","id":"rye_whiskey","quantity":"1 part"},{"name":"Cognac","id":"cognac","quantity":"1 part"},{"name":"Sweet vermouth","id":"sweet_vermouth","quantity":"1 part"},{"name":"Sweet herbal liqueur","id":"sweet_herbal_liqueur","quantity":"4 dashes"},{"name":"Aromatic bitters","id":"aromatic_bitters","quantity":"4 dashes"}]},"whiskey_sour":{"drink_url":"https://cocktailpartyapp.com/drinks/whiskey-sour/","drink_category":"Sour Cocktails","drink_description":"This classic cocktail is best made with bourbon, though any whiskey will do in a pinch. For a nuanced take, try using Meyer lemons, a thin-skinned lemon-orange hybrid that adds a sweet herbal note that really brings out the flavors of a good bourbon.","primary_ingredients":[{"name":"Bourbon","id":"bourbon","quantity":"2 parts"},{"name":"Lemon","id":"lemon","quantity":"¾ part"},{"name":"Simple syrup","id":"simple_syrup","quantity":"¾ part"}]},"white_lady":{"drink_url":"https://cocktailpartyapp.com/drinks/white-lady/","drink_category":"Sour Cocktails","drink_description":"This holdover from the 20s has a pretty funny-sounding name today (hint: word emphasis seems to play a big role), but it’s got a great, classy flavor that’s easy to get into.","primary_ingredients":[{"name":"Gin","id":"gin","quantity":"1½ parts"},{"name":"Triple sec","id":"triple_sec","quantity":"1 part"},{"name":"Lemon","id":"lemon","quantity":"1 part"}]},"white_russian":{"drink_url":"https://cocktailpartyapp.com/drinks/white-russian/","drink_category":"Creamy Cocktails","drink_description":"Most versions of this recipe call for the drink to be shaken with ice. That’s all well and good, but we make ours like the Dude does: built in the glass while wearing our favorite bathrobe.","primary_ingredients":[{"name":"Coffee liqueur","id":"coffee_liqueur","quantity":"1 part"},{"name":"Vodka","id":"vodka","quantity":"2 parts"},{"name":"Sweet cream","id":"sweet_cream","quantity":"1 part"}]},"yellow_bird":{"drink_url":"https://cocktailpartyapp.com/drinks/yellow-bird/","drink_category":"Tropical Cocktails","drink_description":"The Yellow Bird is a nice beach cocktail that hasn’t gotten a lot of attention outside of the Carribean. It usually takes light and dark rum, but you can mix and match rums to suit your fancy. If nothing else, it’s a nice way to get rid of the last drops of a dust-covered bottle of Galliano.","primary_ingredients":[{"name":"Light rum","id":"light_rum","quantity":"1 part"},{"name":"Dark rum","id":"dark_rum","quantity":"1 part"},{"name":"Vanilla anise liqueur","id":"vanilla_anise_liqueur","quantity":"¼ part"},{"name":"Orange","id":"orange","quantity":"1½ parts"},{"name":"Lime","id":"lime","quantity":"½ part"}]},"zombie":{"drink_url":"https://cocktailpartyapp.com/drinks/zombie/","drink_category":"Tropical Cocktails","drink_description":"The meaning behind the name of this classic 1934 Don the Beachcomber recipe becomes apparent once you examine the ingredient list.","primary_ingredients":[{"name":"Aged rum","id":"aged_rum","quantity":"3 parts"},{"name":"Overproof aged rum","id":"overproof_aged_rum","quantity":"1 part"},{"name":"Falernum liqueur","id":"falernum_liqueur","quantity":"½ part"},{"name":"Anise liqueur","id":"anise_liqueur","quantity":"2 dashes"},{"name":"Lime","id":"lime","quantity":"¾ part"},{"name":"Grapefruit","id":"grapefruit","quantity":"¼ part"},{"name":"Cinnamon syrup","id":"cinnamon_syrup","quantity":"¼ part"},{"name":"Grenadine","id":"grenadine","quantity":"1 tsp"}]}},"ingredient_cards":{"jamaican_rum":{"name":"Jamaican rum","category":"Base Spirits","alternative_names":"","see_also":[{"name":"Aged rum","id":"aged_rum"},{"name":"Black rum","id":"black_rum"},{"name":"Dark rum","id":"dark_rum"},{"name":"Demerara rum","id":"demerara_rum"},{"name":"Overproof aged rum","id":"overproof_aged_rum"}]},"peaty_scotch":{"name":"Peaty scotch","category":"Base Spirits","alternative_names":"Ardbeg, Bowmore, Caol Ila, Lagavulin, Laphroaig, Talisker","see_also":[{"name":"Mezcal","id":"mezcal"},{"name":"Scotch","id":"scotch"}]},"fernet":{"name":"Fernet","category":"Herbal & Floral Liqueurs","alternative_names":"Fernet Branca, Letherbee Fernet, Fernet Vallet, R. Jelinek Fernet","see_also":[{"name":"Amaro","id":"amaro"}]},"sweet_orange_aperitif":{"name":"Sweet orange apéritif","category":"Fruit Liqueurs","alternative_names":"Aperol, Cappelletti Aperitivo Americano","see_also":[{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif"},{"name":"Sweet amaro","id":"sweet_amaro"}]},"old_tom_gin":{"name":"Old Tom gin","category":"Base Spirits","alternative_names":"Ransom, Haymans","see_also":[{"name":"Gin","id":"gin"}]},"sweet_amaro":{"name":"Sweet amaro","category":"Herbal & Floral Liqueurs","alternative_names":"Amaro Nonino, Amaro di Angostura, Amaro Tosolini, Elisir dello Speziale, Meletti Amaro, Never Bitter Amaro, Lorenzo Inga Amaro Mio, Lorenzo Inga My Amaro, Lucana Anniversario Amaro","see_also":[{"name":"Amaro","id":"amaro"},{"name":"Sweet herbal liqueur","id":"sweet_herbal_liqueur"},{"name":"Sweet orange apéritif","id":"sweet_orange_aperitif"}]},"black_rum":{"name":"Black rum","category":"Base Spirits","alternative_names":"Blackstrap rum","see_also":[{"name":"Dark rum","id":"dark_rum"},{"name":"Demerara rum","id":"demerara_rum"},{"name":"Jamaican rum","id":"jamaican_rum"}]},"aged_rhum_agricole":{"name":"Aged rhum agricole","category":"Base Spirits","alternative_names":"Rhum agricole ambré, Rhum agricole vieux, Martinique rhum","see_also":[{"name":"Aged rum","id":"aged_rum"},{"name":"Demerara rum","id":"demerara_rum"}]},"sparkling_rose_wine":{"name":"Sparkling rosé wine","category":"Fermented Spirits","alternative_names":"","see_also":[{"name":"Sparkling white wine","id":"sparkling_white_wine"}]},"vanilla_extract":{"name":"Vanilla extract","category":"Pantry","alternative_names":"","see_also":[{"name":"Vanilla anise liqueur","id":"vanilla_anise_liqueur"},{"name":"Vanilla syrup","id":"vanilla_syrup"}]},"pineapple_syrup":{"name":"Pineapple syrup","category":"Syrups & Sweeteners","alternative_names":"Pineapple gum syrup, Pineapple gomme syrup","see_also":[{"name":"Brown sugar syrup","id":"brown_sugar_syrup"},{"name":"Pineapple","id":"pineapple"},{"name":"Simple syrup","id":"simple_syrup"}]},"passion_fruit_puree":{"name":"Passion fruit puree","category":"Produce & Juice","alternative_names":"","see_also":[]},"lemon_soda":{"name":"Lemon soda","category":"Soft Drinks","alternative_names":"Gassosa, Limonata, Lemonade, Bitter lemon soda, San Pellegrino, Sanpellegrino, Sparkling lemonade, Cedrata","see_also":[{"name":"Grapefruit soda","id":"grapefruit_soda"},{"name":"Lemon","id":"lemon"}]},"peach":{"name":"Peach","category":"Produce & Juice","alternative_names":"Nectarine, Clingstone, Freestone, Peacherine","see_also":[{"name":"Amaretto","id":"amaretto"},{"name":"Apricot liqueur","id":"apricot_liqueur"},{"name":"Peach liqueur","id":"peach_liqueur"}]},"amaro":{"name":"Amaro","category":"Herbal & Floral Liqueurs","alternative_names":"","see_also":[{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif"},{"name":"Sweet amaro","id":"sweet_amaro"},{"name":"Sweet herbal liqueur","id":"sweet_herbal_liqueur"}]},"mezcal":{"name":"Mezcal","category":"Base Spirits","alternative_names":"Mescal, Komil","see_also":[{"name":"Agave nectar","id":"agave_nectar"},{"name":"Aged tequila","id":"aged_tequila"},{"name":"Blanco tequila","id":"blanco_tequila"}]},"red_wine":{"name":"Red wine","category":"Fermented Spirits","alternative_names":"Claret, Syrah, Shiraz, Merlot, Cabernet sauvignon, Malbec, Pinot noir, Zinfandel, Sangiovese, Barbera","see_also":[{"name":"Sparkling white wine","id":"sparkling_white_wine"},{"name":"Sweet vermouth","id":"sweet_vermouth"},{"name":"White wine","id":"white_wine"}]},"raspberry":{"name":"Raspberry","category":"Produce & Juice","alternative_names":"","see_also":[{"name":"Raspberry liqueur","id":"raspberry_liqueur"},{"name":"Raspberry syrup","id":"raspberry_syrup"},{"name":"Strawberry","id":"strawberry"}]},"brown_sugar_syrup":{"name":"Brown sugar syrup","category":"Syrups & Sweeteners","alternative_names":"Demerara syrup, Turbinado syrup","see_also":[{"name":"Agave nectar","id":"agave_nectar"},{"name":"Honey syrup","id":"honey_syrup"},{"name":"Simple syrup","id":"simple_syrup"}]},"dry_sherry":{"name":"Dry sherry","category":"Fermented Spirits","alternative_names":"Fino, Manzanilla, Oloroso, Amontillado","see_also":[{"name":"Sweet sherry","id":"sweet_sherry"}]},"demerara_rum":{"name":"Demerara rum","category":"Base Spirits","alternative_names":"Lemon Hart, El Dorado","see_also":[{"name":"Black rum","id":"black_rum"},{"name":"Brown sugar syrup","id":"brown_sugar_syrup"},{"name":"Dark rum","id":"dark_rum"},{"name":"Jamaican rum","id":"jamaican_rum"},{"name":"Overproof aged rum","id":"overproof_aged_rum"}]},"vanilla_syrup":{"name":"Vanilla syrup","category":"Syrups & Sweeteners","alternative_names":"French vanilla syrup, Vanilla bean syrup","see_also":[{"name":"Brown sugar syrup","id":"brown_sugar_syrup"},{"name":"Cinnamon syrup","id":"cinnamon_syrup"}]},"ginger_syrup":{"name":"Ginger syrup","category":"Syrups & Sweeteners","alternative_names":"","see_also":[{"name":"Cinnamon syrup","id":"cinnamon_syrup"},{"name":"Ginger ale","id":"ginger_ale"},{"name":"Ginger beer","id":"ginger_beer"}]},"allspice_dram":{"name":"Allspice dram","category":"Spice & Nut Liqueurs","alternative_names":"Pimento dram, Allspice liqueur","see_also":[{"name":"Falernum liqueur","id":"falernum_liqueur"}]},"honey_syrup":{"name":"Honey syrup","category":"Syrups & Sweeteners","alternative_names":"","see_also":[{"name":"Agave nectar","id":"agave_nectar"},{"name":"Simple syrup","id":"simple_syrup"}]},"cinnamon_syrup":{"name":"Cinnamon syrup","category":"Syrups & Sweeteners","alternative_names":"Don's Mix, Dolce, Cinnamon dolce","see_also":[{"name":"Ginger syrup","id":"ginger_syrup"}]},"mint_liqueur":{"name":"Mint liqueur","category":"Herbal & Floral Liqueurs","alternative_names":"White crème de menthe, Green crème de menthe, Rumple Minze, Peppermint schnapps, Minttu, Menthe Pastille, Izarra Green, Aftershock Green, Get 27","see_also":[{"name":"Mint","id":"mint"}]},"olive":{"name":"Olive","category":"Pantry","alternative_names":"Olive brine, Dirty Sue","see_also":[]},"aged_rum":{"name":"Aged rum","category":"Base Spirits","alternative_names":"Anejo rum, Amber rum, Gold rum, Pyrat","see_also":[{"name":"Aged rhum agricole","id":"aged_rhum_agricole"},{"name":"Dark rum","id":"dark_rum"},{"name":"Demerara rum","id":"demerara_rum"},{"name":"Jamaican rum","id":"jamaican_rum"},{"name":"Overproof aged rum","id":"overproof_aged_rum"},{"name":"Spiced rum","id":"spiced_rum"}]},"strawberry":{"name":"Strawberry","category":"Produce & Juice","alternative_names":"","see_also":[{"name":"Raspberry","id":"raspberry"}]},"agave_nectar":{"name":"Agave nectar","category":"Syrups & Sweeteners","alternative_names":"Agave syrup","see_also":[{"name":"Aged tequila","id":"aged_tequila"},{"name":"Blanco tequila","id":"blanco_tequila"},{"name":"Mezcal","id":"mezcal"}]},"cucumber":{"name":"Cucumber","category":"Produce & Juice","alternative_names":"","see_also":[]},"pisco":{"name":"Pisco","category":"Base Spirits","alternative_names":"Singani","see_also":[{"name":"Light rum","id":"light_rum"},{"name":"Unaged cachaça","id":"unaged_cachaca"}]},"raspberry_syrup":{"name":"Raspberry syrup","category":"Syrups & Sweeteners","alternative_names":"Raspberry sauce","see_also":[{"name":"Raspberry","id":"raspberry"},{"name":"Raspberry liqueur","id":"raspberry_liqueur"}]},"absinthe":{"name":"Absinthe","category":"Herbal & Floral Liqueurs","alternative_names":"Absente, Versinthe","see_also":[{"name":"Anise liqueur","id":"anise_liqueur"},{"name":"Vanilla anise liqueur","id":"vanilla_anise_liqueur"}]},"creme_de_violette":{"name":"Crème de violette","category":"Herbal & Floral Liqueurs","alternative_names":"Rothman and Winter, Rothman & Winter, Crème de violet, Violet liqueur","see_also":[]},"sweet_vermouth":{"name":"Sweet vermouth","category":"Fermented Spirits","alternative_names":"Italian vermouth, Red vermouth, Punt e Mes, Noilly Prat, Cinzano, Antica Formula, Rosso, Dolin, Ambre, Cocchi di Torino","see_also":[{"name":"Dry vermouth","id":"dry_vermouth"}]},"simple_syrup":{"name":"Simple syrup","category":"Syrups & Sweeteners","alternative_names":"Gum syrup, Gomme syrup, Sirope, Sorghum syrup","see_also":[{"name":"Brown sugar syrup","id":"brown_sugar_syrup"},{"name":"Cinnamon syrup","id":"cinnamon_syrup"},{"name":"Ginger syrup","id":"ginger_syrup"},{"name":"Granulated sugar","id":"granulated_sugar"},{"name":"Sugar cube","id":"sugar_cube"}]},"sugar_cube":{"name":"Sugar cube","category":"Syrups & Sweeteners","alternative_names":"Sugar","see_also":[{"name":"Granulated sugar","id":"granulated_sugar"},{"name":"Simple syrup","id":"simple_syrup"}]},"heavy_whipping_cream":{"name":"Heavy whipping cream","category":"Dairy","alternative_names":"Heavy cream, Whipping cream, Chantilly cream, Crème Chantilly","see_also":[{"name":"Milk","id":"milk"},{"name":"Sweet cream","id":"sweet_cream"}]},"lime_cordial":{"name":"Lime cordial","category":"Syrups & Sweeteners","alternative_names":"Rose's Lime","see_also":[{"name":"Lime","id":"lime"}]},"cocktail_onions":{"name":"Cocktail onions","category":"Pantry","alternative_names":"","see_also":[{"name":"Olive","id":"olive"}]},"vanilla_anise_liqueur":{"name":"Vanilla anise liqueur","category":"Herbal & Floral Liqueurs","alternative_names":"Galliano, Sambuca","see_also":[{"name":"Absinthe","id":"absinthe"},{"name":"Anise liqueur","id":"anise_liqueur"}]},"apricot_liqueur":{"name":"Apricot liqueur","category":"Fruit Liqueurs","alternative_names":"Apricot schnapps, Crème de abricot, Bitter Truth Apricot Liqueur, DeKuyper Apricot Brandy, Bols Apricot Brandy, Rothman & Winter Orchard Apricot, Luxardo Apricot, Merlet Lune d'Abricot, Marie Brizard Apry","see_also":[{"name":"Amaretto","id":"amaretto"},{"name":"Peach liqueur","id":"peach_liqueur"}]},"creme_de_cassis":{"name":"Crème de cassis","category":"Fruit Liqueurs","alternative_names":"","see_also":[{"name":"Raspberry liqueur","id":"raspberry_liqueur"}]},"overproof_aged_rum":{"name":"Overproof aged rum","category":"Base Spirits","alternative_names":"151 proof, Lemon Hart 151, Hamilton 151","see_also":[{"name":"Aged rum","id":"aged_rum"},{"name":"Dark rum","id":"dark_rum"},{"name":"Demerara rum","id":"demerara_rum"},{"name":"Jamaican rum","id":"jamaican_rum"},{"name":"Overproof light rum","id":"overproof_light_rum"}]},"granulated_sugar":{"name":"Granulated sugar","category":"Syrups & Sweeteners","alternative_names":"Sugar, Table sugar, Raw sugar, Turbinado sugar","see_also":[{"name":"Simple syrup","id":"simple_syrup"}]},"unaged_cachaca":{"name":"Unaged cachaça","category":"Base Spirits","alternative_names":"Aguardiente, Pinga, Caninha","see_also":[{"name":"Light rum","id":"light_rum"},{"name":"Pisco","id":"pisco"}]},"banana_liqueur":{"name":"Banana liqueur","category":"Fruit Liqueurs","alternative_names":"Crème de banane, Banana Schnapps, 99 Bananas, Banane du Brésil, Pisang Ambon,","see_also":[]},"hot_sauce":{"name":"Hot sauce","category":"Pantry","alternative_names":"Tabasco, Frank's RedHot, Texas Pete, Cholula, Cock Sauce, Sriracha","see_also":[]},"worcestershire_sauce":{"name":"Worcestershire sauce","category":"Pantry","alternative_names":"","see_also":[{"name":"Beef broth","id":"beef_broth"}]},"prepared_horseradish":{"name":"Prepared horseradish","category":"Pantry","alternative_names":"Tewkesbury mustard, Krensenf, Meerrettichsenf, Tafelmeerrettich, Wasabi","see_also":[{"name":"Cocktail onions","id":"cocktail_onions"},{"name":"Hot sauce","id":"hot_sauce"}]},"black_pepper":{"name":"Black pepper","category":"Herbs & Spices","alternative_names":"Pepper","see_also":[{"name":"Salt","id":"salt"}]},"celery_salt":{"name":"Celery salt","category":"Herbs & Spices","alternative_names":"Salt","see_also":[{"name":"Salt","id":"salt"}]},"salt":{"name":"Salt","category":"Herbs & Spices","alternative_names":"","see_also":[{"name":"Black pepper","id":"black_pepper"}]},"beef_broth":{"name":"Beef broth","category":"Pantry","alternative_names":"","see_also":[{"name":"Tomato","id":"tomato"}]},"tomato":{"name":"Tomato","category":"Produce & Juice","alternative_names":"V-8","see_also":[{"name":"Beef broth","id":"beef_broth"},{"name":"Cucumber","id":"cucumber"}]},"irish_whiskey":{"name":"Irish whiskey","category":"Base Spirits","alternative_names":"Whiskey","see_also":[{"name":"Bourbon","id":"bourbon"},{"name":"Rye whiskey","id":"rye_whiskey"},{"name":"Scotch","id":"scotch"}]},"orange_curacao":{"name":"Orange curaçao","category":"Fruit Liqueurs","alternative_names":"Orange liqueur, Grand Marnier, Gran Gala","see_also":[{"name":"Blue curaçao","id":"blue_curacao"},{"name":"Triple sec","id":"triple_sec"}]},"overproof_light_rum":{"name":"Overproof light rum","category":"Base Spirits","alternative_names":"150, 151, 155, Sunset Very Strong, Wray And Nephew","see_also":[{"name":"Aged rum","id":"aged_rum"},{"name":"Light rum","id":"light_rum"},{"name":"Overproof aged rum","id":"overproof_aged_rum"}]},"white_wine":{"name":"White wine","category":"Fermented Spirits","alternative_names":"Chardonnay, Pinot Grigio, Pinot Gris, Sauvignon Blanc, Viognier, Riesling, Gewurztraminer, Marsanne, Roussanne, Semillon, Muscat","see_also":[{"name":"Red wine","id":"red_wine"},{"name":"Sparkling white wine","id":"sparkling_white_wine"},{"name":"White wine apéritif","id":"white_wine_aperitif"}]},"grapefruit_soda":{"name":"Grapefruit soda","category":"Soft Drinks","alternative_names":"Squirt, Jarritos Toronja, Fresca, Pompelmo, Kiss, Ting, Pelmosoda","see_also":[{"name":"Grapefruit","id":"grapefruit"},{"name":"Lemon soda","id":"lemon_soda"}]},"creme_de_cacao":{"name":"Crème de cacao","category":"Dessert Liqueurs","alternative_names":"Chocolate liqueur, Light crème de cacao, Dark crème de cacao","see_also":[]},"blanco_tequila":{"name":"Blanco tequila","category":"Base Spirits","alternative_names":"Jose Cuervo, Patron, White tequila, Joven, Plata, Silver tequila, Unaged tequila","see_also":[{"name":"Agave nectar","id":"agave_nectar"},{"name":"Aged tequila","id":"aged_tequila"},{"name":"Light rum","id":"light_rum"},{"name":"Mezcal","id":"mezcal"}]},"white_wine_aperitif":{"name":"White wine apéritif","category":"Fermented Spirits","alternative_names":"Lillet, Lillet Blanc, Tonic wine, Kina Lillet, Apertif wine, Cocchi Americano, Bonal, Kina L'Avion","see_also":[{"name":"Dry vermouth","id":"dry_vermouth"},{"name":"White wine","id":"white_wine"}]},"sparkling_white_wine":{"name":"Sparkling white wine","category":"Fermented Spirits","alternative_names":"Champagne, Prosecco, Metodo Classico, Cava, Espumoso, Sekt, Cap Classique, Espumante, Traditional Method, Méthode Champenoise","see_also":[{"name":"Sparkling rosé wine","id":"sparkling_rose_wine"},{"name":"White wine","id":"white_wine"}]},"citrus_vodka":{"name":"Citrus vodka","category":"Fruit Liqueurs","alternative_names":"Orange vodka, Lemon vodka, Bergamot vodka, Citron vodka, Citroen, Tangerine vodka","see_also":[{"name":"Vodka","id":"vodka"}]},"orange_flower_water":{"name":"Orange flower water","category":"Bitters & Waters","alternative_names":"Orange blossom water, Orange water","see_also":[{"name":"Orange bitters","id":"orange_bitters"}]},"coffee":{"name":"Coffee","category":"Soft Drinks","alternative_names":"Espresso","see_also":[{"name":"Coffee liqueur","id":"coffee_liqueur"}]},"sparkling_water":{"name":"Sparkling water","category":"Soft Drinks","alternative_names":"Club soda, Soda water, Sparkling water, Seltzer water, Fizzy water, Mineral water","see_also":[{"name":"Sparkling white wine","id":"sparkling_white_wine"}]},"cola":{"name":"Cola","category":"Soft Drinks","alternative_names":"Pepsi, Coke, Coca-Cola, RC Cola","see_also":[{"name":"Ginger ale","id":"ginger_ale"},{"name":"Grapefruit soda","id":"grapefruit_soda"}]},"sweet_sherry":{"name":"Sweet sherry","category":"Fermented Spirits","alternative_names":"Sherry, Harveys Bristol Cream, Oloroso, Palo Cortado, Jerez Dulce, Sweet Sherry, Apera, Pedro Ximénez","see_also":[{"name":"Dry sherry","id":"dry_sherry"}]},"gin_aperitif":{"name":"Gin apéritif","category":"Herbal & Floral Liqueurs","alternative_names":"Pimm's Cup, Pimm's No. 1, Austin's, Jeeves, Pitchers","see_also":[{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif"},{"name":"White wine apéritif","id":"white_wine_aperitif"}]},"yellow_herbal_liqueur":{"name":"Yellow herbal liqueur","category":"Herbal & Floral Liqueurs","alternative_names":"Chartreuse, Herbal liqueur, Suze, Strega, Bonal","see_also":[{"name":"Amaro","id":"amaro"},{"name":"Green herbal liqueur","id":"green_herbal_liqueur"},{"name":"Sweet herbal liqueur","id":"sweet_herbal_liqueur"}]},"green_herbal_liqueur":{"name":"Green herbal liqueur","category":"Herbal & Floral Liqueurs","alternative_names":"Green Chartreuse, Chartreuse, Vicario's Monk's Secret Liqueur","see_also":[{"name":"Amaro","id":"amaro"},{"name":"Sweet herbal liqueur","id":"sweet_herbal_liqueur"},{"name":"Yellow herbal liqueur","id":"yellow_herbal_liqueur"}]},"apple_brandy":{"name":"Apple brandy","category":"Fruit Liqueurs","alternative_names":"Applejack, Calvados, Lairds","see_also":[]},"aromatic_bitters":{"name":"Aromatic bitters","category":"Bitters & Waters","alternative_names":"Bitters, Angostura Bitters, Old Fashioned Bitters, Whiskey Barrel Bitters","see_also":[{"name":"Amaro","id":"amaro"},{"name":"Creole bitters","id":"creole_bitters"},{"name":"Orange bitters","id":"orange_bitters"}]},"bitter_orange_aperitif":{"name":"Bitter orange apéritif","category":"Fruit Liqueurs","alternative_names":"Campari, Gran Classico Bitter, Luxardo Bitter, Ibisco Bitter Liqueur, Contratto Bitter, Luna Amara, Leopold Bros. Aperitivo, Martini & Rossi Riserva Speciale Bitter, Aperitivo Select","see_also":[{"name":"Amaro","id":"amaro"},{"name":"Sweet orange apéritif","id":"sweet_orange_aperitif"}]},"falernum_liqueur":{"name":"Falernum liqueur","category":"Spice & Nut Liqueurs","alternative_names":"Velvet falernum","see_also":[]},"peach_liqueur":{"name":"Peach liqueur","category":"Fruit Liqueurs","alternative_names":"Peach brandy, Peach schnapps, Peachtree, Crème de pêche","see_also":[{"name":"Amaretto","id":"amaretto"},{"name":"Apricot liqueur","id":"apricot_liqueur"},{"name":"Peach","id":"peach"}]},"scotch_whisky_liqueur":{"name":"Scotch whisky liqueur","category":"Spice & Nut Liqueurs","alternative_names":"Drambuie, Glayva, Lochan Ora","see_also":[{"name":"Scotch","id":"scotch"}]},"blue_curacao":{"name":"Blue curaçao","category":"Fruit Liqueurs","alternative_names":"Hypnotiq","see_also":[{"name":"Orange curaçao","id":"orange_curacao"},{"name":"Triple sec","id":"triple_sec"}]},"orgeat":{"name":"Orgeat","category":"Syrups & Sweeteners","alternative_names":"Almond syrup","see_also":[{"name":"Amaretto","id":"amaretto"}]},"sweet_herbal_liqueur":{"name":"Sweet herbal liqueur","category":"Herbal & Floral Liqueurs","alternative_names":"Bénédictine, Jägermeister, Becherovka","see_also":[{"name":"Amaro","id":"amaro"},{"name":"Green herbal liqueur","id":"green_herbal_liqueur"},{"name":"Scotch whisky liqueur","id":"scotch_whisky_liqueur"},{"name":"Sweet amaro","id":"sweet_amaro"},{"name":"Yellow herbal liqueur","id":"yellow_herbal_liqueur"}]},"creole_bitters":{"name":"Creole bitters","category":"Bitters & Waters","alternative_names":"Peychaud's bitters, Cajun bitters","see_also":[{"name":"Aromatic bitters","id":"aromatic_bitters"}]},"ginger_ale":{"name":"Ginger ale","category":"Soft Drinks","alternative_names":"","see_also":[{"name":"Ginger beer","id":"ginger_beer"},{"name":"Ginger syrup","id":"ginger_syrup"}]},"orange_bitters":{"name":"Orange bitters","category":"Bitters & Waters","alternative_names":"Bitters, Citrus Bitters","see_also":[{"name":"Bitter orange apéritif","id":"bitter_orange_aperitif"},{"name":"Orange flower water","id":"orange_flower_water"}]},"lime":{"name":"Lime","category":"Produce & Juice","alternative_names":"","see_also":[{"name":"Grapefruit","id":"grapefruit"},{"name":"Lemon","id":"lemon"},{"name":"Lime cordial","id":"lime_cordial"},{"name":"Orange","id":"orange"}]},"egg":{"name":"Egg","category":"Dairy","alternative_names":"Egg whites, Egg Beaters, Egg yolks","see_also":[{"name":"Milk","id":"milk"},{"name":"Sweet cream","id":"sweet_cream"}]},"coffee_liqueur":{"name":"Coffee liqueur","category":"Dessert Liqueurs","alternative_names":"Kahlúa, Tia Maria, Arakú, Patron XO CAFE, Kamora, Café Rica, St. George NOLA, Firelight","see_also":[{"name":"Coffee","id":"coffee"}]},"grenadine":{"name":"Grenadine","category":"Syrups & Sweeteners","alternative_names":"Pomegranate syrup","see_also":[]},"irish_cream":{"name":"Irish cream","category":"Dessert Liqueurs","alternative_names":"Baileys, Carolans","see_also":[{"name":"Coffee liqueur","id":"coffee_liqueur"},{"name":"Irish whiskey","id":"irish_whiskey"}]},"spiced_rum":{"name":"Spiced rum","category":"Base Spirits","alternative_names":"Captain Morgan, Sailor Jerry, Kraken, Bacardi Spice, Bacardi Oakheart","see_also":[{"name":"Aged rum","id":"aged_rum"},{"name":"Dark rum","id":"dark_rum"},{"name":"Light rum","id":"light_rum"}]},"blackberry_liqueur":{"name":"Blackberry liqueur","category":"Fruit Liqueurs","alternative_names":"Blackberry schnapps, Blackberry brandy, Crème de mûre, Echte Kroatzbeere","see_also":[{"name":"Crème de cassis","id":"creme_de_cassis"},{"name":"Raspberry liqueur","id":"raspberry_liqueur"}]},"melon_liqueur":{"name":"Melon liqueur","category":"Fruit Liqueurs","alternative_names":"Midori, Crème de Melone, Artic, Honeydew, Cantaloupe","see_also":[]},"vodka":{"name":"Vodka","category":"Base Spirits","alternative_names":"Finlandia, Stolichnaya, Stoli, Skyy, Grey Goose, Zoladkowa, Pyat Ozer, Belenkaya, Absolut, Smirnoff, Belvedere","see_also":[{"name":"Citrus vodka","id":"citrus_vodka"},{"name":"Gin","id":"gin"}]},"triple_sec":{"name":"Triple sec","category":"Fruit Liqueurs","alternative_names":"Cointreau","see_also":[{"name":"Blue curaçao","id":"blue_curacao"},{"name":"Orange curaçao","id":"orange_curacao"}]},"scotch":{"name":"Scotch","category":"Base Spirits","alternative_names":"Whiskey, Single-malt, Malt, Blended, Whisky, Japanese whisky, Japanese whiskey","see_also":[{"name":"Irish whiskey","id":"irish_whiskey"},{"name":"Mezcal","id":"mezcal"},{"name":"Scotch whisky liqueur","id":"scotch_whisky_liqueur"}]},"rye_whiskey":{"name":"Rye whiskey","category":"Base Spirits","alternative_names":"","see_also":[{"name":"Bourbon","id":"bourbon"},{"name":"Irish whiskey","id":"irish_whiskey"},{"name":"Scotch","id":"scotch"}]},"raspberry_liqueur":{"name":"Raspberry liqueur","category":"Fruit Liqueurs","alternative_names":"Chambord, Crème de framboise","see_also":[{"name":"Blackberry liqueur","id":"blackberry_liqueur"},{"name":"Raspberry","id":"raspberry"},{"name":"Raspberry syrup","id":"raspberry_syrup"}]},"pineapple":{"name":"Pineapple","category":"Produce & Juice","alternative_names":"Pina","see_also":[{"name":"Pineapple syrup","id":"pineapple_syrup"}]},"orange":{"name":"Orange","category":"Produce & Juice","alternative_names":"Orange juice, Tangerine, Clementine, Mandarin","see_also":[{"name":"Blue curaçao","id":"blue_curacao"},{"name":"Grapefruit","id":"grapefruit"},{"name":"Lemon","id":"lemon"},{"name":"Lime","id":"lime"},{"name":"Orange bitters","id":"orange_bitters"},{"name":"Orange curaçao","id":"orange_curacao"},{"name":"Orange flower water","id":"orange_flower_water"},{"name":"Triple sec","id":"triple_sec"}]},"mint":{"name":"Mint","category":"Herbs & Spices","alternative_names":"Spearmint, Peppermint, Wintermint","see_also":[{"name":"Mint liqueur","id":"mint_liqueur"}]},"milk":{"name":"Milk","category":"Dairy","alternative_names":"Almond milk, Soy milk","see_also":[{"name":"Heavy whipping cream","id":"heavy_whipping_cream"},{"name":"Sweet cream","id":"sweet_cream"}]},"maraschino":{"name":"Maraschino","category":"Fruit Liqueurs","alternative_names":"Marasca, Luxardo","see_also":[{"name":"Cherry brandy","id":"cherry_brandy"}]},"light_rum":{"name":"Light rum","category":"Base Spirits","alternative_names":"White Rum, Silver Rum, Rhum agricole","see_also":[{"name":"Aged rum","id":"aged_rum"},{"name":"Overproof light rum","id":"overproof_light_rum"},{"name":"Unaged cachaça","id":"unaged_cachaca"}]},"lemon":{"name":"Lemon","category":"Produce & Juice","alternative_names":"Lemon juice","see_also":[{"name":"Grapefruit","id":"grapefruit"},{"name":"Lemon soda","id":"lemon_soda"},{"name":"Lime","id":"lime"},{"name":"Orange","id":"orange"}]},"grapefruit":{"name":"Grapefruit","category":"Produce & Juice","alternative_names":"Grapefruit juice, Pomelo","see_also":[{"name":"Grapefruit soda","id":"grapefruit_soda"},{"name":"Lemon","id":"lemon"},{"name":"Lime","id":"lime"},{"name":"Orange","id":"orange"}]},"aged_tequila":{"name":"Aged tequila","category":"Base Spirits","alternative_names":"Oro, Reposado, Añejo, Jose Cuervo, Patron, Rested, Joven","see_also":[{"name":"Agave nectar","id":"agave_nectar"},{"name":"Blanco tequila","id":"blanco_tequila"},{"name":"Mezcal","id":"mezcal"}]},"ginger_beer":{"name":"Ginger beer","category":"Soft Drinks","alternative_names":"","see_also":[{"name":"Ginger ale","id":"ginger_ale"},{"name":"Ginger syrup","id":"ginger_syrup"}]},"gin":{"name":"Gin","category":"Base Spirits","alternative_names":"Dry gin, Plymouth gin, London gin","see_also":[{"name":"Old Tom gin","id":"old_tom_gin"},{"name":"Vodka","id":"vodka"}]},"dry_vermouth":{"name":"Dry vermouth","category":"Fermented Spirits","alternative_names":"French vermouth, Bianco, Noilly Prat, White vermouth","see_also":[{"name":"Sweet vermouth","id":"sweet_vermouth"},{"name":"White wine apéritif","id":"white_wine_aperitif"}]},"dark_rum":{"name":"Dark rum","category":"Base Spirits","alternative_names":"Bacardi, Rhum Barbancourt, Myer's Original Dark Rum, Gosling's Black Seal, Blackstrap rum, Pusser's Navy Rum","see_also":[{"name":"Black rum","id":"black_rum"},{"name":"Demerara rum","id":"demerara_rum"},{"name":"Jamaican rum","id":"jamaican_rum"},{"name":"Spiced rum","id":"spiced_rum"}]},"cream_of_coconut":{"name":"Cream of coconut","category":"Syrups & Sweeteners","alternative_names":"","see_also":[]},"sweet_cream":{"name":"Sweet cream","category":"Dairy","alternative_names":"Half and half, half n half, sweet cream","see_also":[{"name":"Heavy whipping cream","id":"heavy_whipping_cream"},{"name":"Milk","id":"milk"}]},"cranberry_juice":{"name":"Cranberry juice","category":"Produce & Juice","alternative_names":"Cranberry juice cocktail","see_also":[]},"cognac":{"name":"Cognac","category":"Base Spirits","alternative_names":"Dutch brandy, Vieux, Armagnac, Metaxa, Kanyak","see_also":[{"name":"Brandy","id":"brandy"}]},"cherry_brandy":{"name":"Cherry brandy","category":"Fruit Liqueurs","alternative_names":"Cherry Heering, Cherry liqueur, Wishniak, Luxardo Sangue Morlacco Cherry Liqueur","see_also":[{"name":"Maraschino","id":"maraschino"}]},"brandy":{"name":"Brandy","category":"Base Spirits","alternative_names":"Brandywine, Armagnac, Metaxa, Kanyac","see_also":[{"name":"Apple brandy","id":"apple_brandy"},{"name":"Cherry brandy","id":"cherry_brandy"},{"name":"Cognac","id":"cognac"}]},"bourbon":{"name":"Bourbon","category":"Base Spirits","alternative_names":"Whiskey, Maker's Mark, Knob Hill, Jim Beam, Bulleit, Jack Daniel's, Tennessee whiskey","see_also":[{"name":"Irish whiskey","id":"irish_whiskey"},{"name":"Rye whiskey","id":"rye_whiskey"},{"name":"Scotch","id":"scotch"}]},"anise_liqueur":{"name":"Anise liqueur","category":"Herbal & Floral Liqueurs","alternative_names":"Herbsaint, Pernod, Ricard, Absente, Pastis, Finocchio, Hierbas, Sambuca","see_also":[{"name":"Absinthe","id":"absinthe"},{"name":"Vanilla anise liqueur","id":"vanilla_anise_liqueur"}]},"amaretto":{"name":"Amaretto","category":"Spice & Nut Liqueurs","alternative_names":"Disaronno, Lazzaroni, Amaretto Di Amore, Belton, E Dolce, Gozio, Noyau de Poissy","see_also":[{"name":"Apricot liqueur","id":"apricot_liqueur"},{"name":"Peach liqueur","id":"peach_liqueur"}]}}};
 
 // ── TheCocktailDB image fetcher ──
 const COCKTAILDB_CACHE = {};
@@ -3440,6 +4002,93 @@ function closeDetail() {
 // ── IPAD LOGIC ──
 const isIPad = () => window.innerWidth >= 900;
 
+// ── TRIED BOARD (right pane, iPad) ──
+const BOARD_GROUPS = [
+  { label: 'Gin',       subtypes: ['gin'] },
+  { label: 'Whiskey',   subtypes: ['whiskey'] },
+  { label: 'Rum',       subtypes: ['rum'] },
+  { label: 'Vodka',     subtypes: ['vodka'] },
+  { label: 'Brandy',    subtypes: ['brandy'] },
+  { label: 'Agave',     subtypes: ['tequila/mezcal'] },
+  { label: 'Other',     subtypes: ['campari','cachaça','fernet','liqueur','mixed','port','sherry','chartreuse','wine','non-alcoholic','vermouth'] },
+  { label: 'Sparkling', subtypes: ['sparkling'] },
+  { label: 'Pisco',     subtypes: ['pisco'] },
+];
+
+function buildTriedBoard(openFn) {
+  const right = document.getElementById('ipadRight');
+  if (!right) return;
+
+  // Remove existing board + detail pane
+  right.querySelectorAll('.tried-board-pane, .ipad-detail-pane').forEach(e => e.remove());
+  const empty = document.getElementById('ipadEmpty');
+  if (empty) empty.style.display = 'none';
+
+  const board = document.createElement('div');
+  board.className = 'tried-board-pane';
+
+  // Group current cocktails by subtype
+  const bySubtype = {};
+  COCKTAILS.filter(c => c.current !== false).forEach(c => {
+    const sub = (c.subtype || '').toLowerCase();
+    if (!bySubtype[sub]) bySubtype[sub] = [];
+    bySubtype[sub].push(c);
+  });
+
+  const rows = [BOARD_GROUPS.slice(0, 4), BOARD_GROUPS.slice(4)];
+
+  rows.forEach(groups => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'tried-board-row';
+
+    groups.forEach(group => {
+      const cocktails = [];
+      group.subtypes.forEach(sub => (bySubtype[sub] || []).forEach(c => cocktails.push(c)));
+      cocktails.sort((a,b) => a.name.localeCompare(b.name));
+      const triedCount = cocktails.filter(c => state.tried.has(c.id)).length;
+
+      const groupEl = document.createElement('div');
+      groupEl.className = 'tried-board-group';
+      groupEl.innerHTML = `
+        <div class="tried-board-group-title">${group.label}</div>
+        <div class="tried-board-group-progress">${triedCount} / ${cocktails.length}</div>
+        <div class="tried-board-grid"></div>
+      `;
+
+      const grid = groupEl.querySelector('.tried-board-grid');
+      cocktails.forEach(c => {
+        const isTried = state.tried.has(c.id);
+        const img = (SCRAPED_DATA[c.id] || {}).img_url || '';
+        const card = document.createElement('div');
+        card.className = 'tried-polaroid ' + (isTried ? 'is-tried' : 'not-tried');
+        card.innerHTML = `
+          <div class="tried-polaroid-img">
+            <div class="tried-polaroid-fallback">${c.name.charAt(0)}</div>
+            ${img ? `<img src="${img}" loading="lazy" onerror="this.style.display='none'">` : ''}
+            ${isTried ? '<div class="tried-polaroid-tick">✓</div>' : ''}
+          </div>
+          <div class="tried-polaroid-caption">${c.name}</div>
+        `;
+        card.addEventListener('click', () => openFn(c.id));
+        grid.appendChild(card);
+      });
+
+      rowEl.appendChild(groupEl);
+    });
+    board.appendChild(rowEl);
+  });
+
+  right.appendChild(board);
+}
+
+function clearTriedBoard() {
+  const right = document.getElementById('ipadRight');
+  if (!right) return;
+  right.querySelectorAll('.tried-board-pane').forEach(e => e.remove());
+  const empty = document.getElementById('ipadEmpty');
+  if (empty) empty.style.display = '';
+}
+
 function ipadOpenDetail(id) {
   if (!SCRAPED_DATA[id] && !META_DATA[id]) return;
   currentDetailId = id;
@@ -3449,9 +4098,10 @@ function ipadOpenDetail(id) {
   document.querySelectorAll('.card,.ipad-list-scroll .card').forEach(c=>c.classList.remove('selected-card'));
   document.querySelectorAll('[data-id="'+id+'"]').forEach(c=>c.classList.add('selected-card'));
 
-  // Hide empty state
+  // Hide empty state and board
   const empty = document.getElementById('ipadEmpty');
   if (empty) empty.style.display='none';
+  right.querySelectorAll('.tried-board-pane').forEach(e => e.style.display = 'none');
   const old = right.querySelector('.ipad-detail-pane');
   if (old) old.remove();
 
@@ -3465,6 +4115,14 @@ function ipadOpenDetail(id) {
 
   const pane = document.createElement('div');
   pane.className = 'ipad-detail-pane';
+
+  // Back button — only shown on tried tab
+  if (state.tab === 'tried') {
+    const backBtn = document.createElement('button');
+    backBtn.className = 'ipad-back-btn detail-back';
+    backBtn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>';
+    pane.appendChild(backBtn);
+  }
 
   // Hero
   const hero = document.createElement('div');
@@ -3499,6 +4157,23 @@ applyFilters();
 
 document.getElementById('detailBack').addEventListener('click', closeDetail);
 
+// iPad tried tab: override back button on ipad detail pane to restore board
+document.getElementById('ipadRight').addEventListener('click', e => {
+  const btn = e.target.closest('.ipad-back-btn');
+  if (!btn) return;
+  // Remove detail pane
+  const right = document.getElementById('ipadRight');
+  right.querySelectorAll('.ipad-detail-pane').forEach(el => el.remove());
+  right.classList.remove('detail-tinted');
+  right.style.background = '';
+  // Restore board
+  const board = right.querySelector('.tried-board-pane');
+  if (board) board.style.display = '';
+  else buildTriedBoard(ipadOpenDetail);
+  currentDetailId = null;
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected-card'));
+});
+
 // Family tag tooltip — tap to toggle, tap outside to close
 document.addEventListener('click', e => {
   const famWrap = e.target.closest('.family-tag-wrap');
@@ -3525,6 +4200,362 @@ document.addEventListener('click', e => {
   }, {passive:true});
 })();
 
+// ══════════════════════════════════════════════════════════
+//  WHEEL OF FORTUNE — strip wheels, card-style results
+// ══════════════════════════════════════════════════════════
+
+// Grouping of META_DATA subtypes → single wheel-1 slice
+const WHEEL_SPIRIT_GROUPS = [
+  { name: 'Gin',              subtypes: ['gin'],                                                color:'#E8EEF0', text:'#3A5A66', rgb:'58 90 102'   },
+  { name: 'Whiskey',          subtypes: ['whiskey', 'whisky'],                                  color:'#F5E6D3', text:'#6B4A20', rgb:'107 74 32'   },
+  { name: 'Vodka',            subtypes: ['vodka'],                                              color:'#E8EEF0', text:'#3A5A66', rgb:'58 90 102'   },
+  { name: 'Rum',              subtypes: ['rum', 'cachaça'],                                     color:'#F5E6D3', text:'#6B4A20', rgb:'107 74 32'   },
+  { name: 'Agave',            subtypes: ['tequila', 'mezcal'],                                  color:'#E8D9C4', text:'#6A4A28', rgb:'106 74 40'   },
+  { name: 'Brandy',           subtypes: ['brandy', 'calvados', 'pisco', 'cognac'],              color:'#EADFD0', text:'#6B4A28', rgb:'107 74 40'   },
+  { name: 'Fortified & Wine', subtypes: ['sherry','vermouth','port','wine','champagne','prosecco'], color:'#F2D5D0', text:'#7A2A28', rgb:'122 42 40'   },
+  { name: 'Liqueur-forward',  subtypes: ['campari','fernet','chartreuse','galliano','coffee liqueur','crème de menthe','melon liqueur','pimms','advocaat','mixed'], color:'#DEE6D0', text:'#4A6028', rgb:'74 96 40' },
+  { name: 'Non-alcoholic',    subtypes: ['non-alcoholic'],                                      color:'#D4E2E8', text:'#1F4A5A', rgb:'31 74 90'    },
+];
+
+// All 11 families shown on wheel 2 (11 because "Other" catches Prairie Oyster)
+const WHEEL_ALL_FAMILIES = ['Sour','Highball','Lowball','Martini','Sling','Collins','Punch','Flip','Spritz','Tiki','Other'];
+
+// Family colors reuse the existing FAMILY_COLORS map where available, plus a few
+// RGB values we need for the pulse halo.
+const WHEEL_FAMILY_RGB = {
+  Sour:'74 96 40', Highball:'31 74 90', Lowball:'120 83 32', Martini:'74 58 106',
+  Sling:'90 62 90', Collins:'90 80 24', Punch:'139 90 40', Flip:'85 85 85',
+  Spritz:'42 96 96', Tiki:'122 74 32', Other:'102 102 102',
+};
+// Fallback bg/text for families not in FAMILY_COLORS ("Other" if present).
+const WHEEL_FAMILY_DEFAULTS = {
+  Other: { bg:'#EEE', text:'#666' },
+};
+
+// Pre-compute: { spiritGroupName → { family → [cocktailIds] } }
+const WHEEL_INDEX = (function buildIndex() {
+  const idx = {};
+  WHEEL_SPIRIT_GROUPS.forEach(g => { idx[g.name] = {}; });
+  const subToGroup = {};
+  WHEEL_SPIRIT_GROUPS.forEach(g => g.subtypes.forEach(s => { subToGroup[s] = g.name; }));
+  Object.entries(META_DATA).forEach(([id, d]) => {
+    const group = subToGroup[d.subtype || ''];
+    if (!group) return;
+    const fam = d.family || 'Other';
+    if (!idx[group][fam]) idx[group][fam] = [];
+    idx[group][fam].push(id);
+  });
+  return idx;
+})();
+
+const SLICE_H = 56;
+const CENTER_Y = 140;
+const REPEATS = 50;
+const SPIN_DURATION_1 = 1000;   // wheel 1 spin duration
+const SPIN_DURATION_2 = 1700;   // wheel 2 spin duration — finishes LAST for suspense
+const EXTRA_LAPS_1 = 15;
+const EXTRA_LAPS_2 = 20;
+
+let wheelInitialized = false;
+let wheelSpinning    = false;
+const wheelInner1 = () => document.getElementById('wheelInner1');
+const wheelInner2 = () => document.getElementById('wheelInner2');
+
+function initWheelIfNeeded() {
+  if (wheelInitialized) return;
+  wheelInitialized = true;
+  wheelSetupStrip1();
+  wheelSetupStrip2();
+  document.getElementById('wheelSpinBtn').addEventListener('click', wheelSpinBoth);
+}
+
+function wheelBuildStrip(innerEl, items, kind) {
+  innerEl.innerHTML = '';
+  const total = items.length * REPEATS;
+  for (let i = 0; i < total; i++) {
+    const item = items[i % items.length];
+    const div = document.createElement('div');
+    div.className = 'wheel-slice';
+    div.textContent = item.name;
+    div.style.background = item.color || '#EFEFED';
+    div.style.color      = item.text  || '#333';
+    div.dataset.kind     = kind;
+    div.dataset.linearIdx = String(i);
+    div.addEventListener('click', () => onWheelSliceClick(innerEl, i));
+    innerEl.appendChild(div);
+  }
+  innerEl._items = items;
+  return total;
+}
+function wheelUpdateDistances(innerEl, linearIdx) {
+  innerEl.querySelectorAll('.wheel-slice').forEach((s, i) => {
+    s.dataset.dist = String(Math.min(5, Math.abs(i - linearIdx)));
+  });
+}
+function wheelSnapTo(innerEl, linearIdx, animated) {
+  if (!animated) {
+    innerEl.style.transition = 'none';
+    innerEl.style.transform = `translateY(${CENTER_Y - (linearIdx * SLICE_H + SLICE_H / 2)}px)`;
+    void innerEl.offsetHeight;
+  } else {
+    innerEl.style.transition = 'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)';
+    innerEl.style.transform = `translateY(${CENTER_Y - (linearIdx * SLICE_H + SLICE_H / 2)}px)`;
+  }
+  wheelUpdateDistances(innerEl, linearIdx);
+  innerEl._currentIdx = linearIdx;
+}
+
+function wheelSetupStrip1() {
+  const inner = wheelInner1();
+  const items = WHEEL_SPIRIT_GROUPS.map(g => ({ name: g.name, color: g.color, text: g.text, rgb: g.rgb }));
+  const total = wheelBuildStrip(inner, items, 'spirit');
+  const startIdx = Math.floor(total / 2 / items.length) * items.length;
+  wheelSnapTo(inner, startIdx, false);
+}
+function wheelSetupStrip2() {
+  const inner = wheelInner2();
+  const items = WHEEL_ALL_FAMILIES.map(f => {
+    const fc = FAMILY_COLORS[f] || WHEEL_FAMILY_DEFAULTS[f] || { bg:'#EFEFED', text:'#666' };
+    return { name: f, color: fc.bg, text: fc.text, rgb: WHEEL_FAMILY_RGB[f] || '102 102 102' };
+  });
+  const total = wheelBuildStrip(inner, items, 'family');
+  const startIdx = Math.floor(total / 2 / items.length) * items.length;
+  wheelSnapTo(inner, startIdx, false);
+}
+
+function wheelPulse(innerEl, linearIdx, rgb) {
+  const slice = innerEl.children[linearIdx];
+  if (!slice) return;
+  innerEl.querySelectorAll('.wheel-slice.landed').forEach(s => {
+    s.classList.remove('landed');
+    s.style.removeProperty('--pulse-rgb');
+  });
+  slice.style.setProperty('--pulse-rgb', rgb);
+  void slice.offsetHeight;
+  slice.classList.add('landed');
+}
+
+function wheelSpin(innerEl, targetBaseIdx, durationMs, extraLaps) {
+  return new Promise(resolve => {
+    const n = innerEl._items.length;
+    const currentIdx = innerEl._currentIdx;
+    const currentBase = currentIdx % n;
+    let delta = (targetBaseIdx - currentBase + n) % n;
+    delta += n * extraLaps;
+    const finalIdx = currentIdx + delta;
+    if (finalIdx >= innerEl.children.length) { return resolve(currentIdx); }
+    innerEl.style.transition = `transform ${durationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+    innerEl.style.transform = `translateY(${CENTER_Y - (finalIdx * SLICE_H + SLICE_H / 2)}px)`;
+    const startTime = performance.now();
+    function stepDist() {
+      const t = performance.now() - startTime;
+      if (t >= durationMs) {
+        wheelUpdateDistances(innerEl, finalIdx);
+        innerEl._currentIdx = finalIdx;
+        innerEl.style.transition = '';
+        resolve(finalIdx); return;
+      }
+      const progress = 1 - Math.pow(1 - t / durationMs, 3);
+      wheelUpdateDistances(innerEl, Math.round(currentIdx + delta * progress));
+      setTimeout(stepDist, 50);
+    }
+    stepDist();
+  });
+}
+
+function wheelCurrentChoice() {
+  const s1 = wheelInner1()._currentIdx % wheelInner1()._items.length;
+  const s2 = wheelInner2()._currentIdx % wheelInner2()._items.length;
+  return { spirit: wheelInner1()._items[s1], family: wheelInner2()._items[s2] };
+}
+
+function onWheelSliceClick(innerEl, linearIdx) {
+  if (wheelSpinning) return;
+  if (linearIdx === innerEl._currentIdx) return;
+  wheelSnapTo(innerEl, linearIdx, true);
+  setTimeout(() => {
+    const kind = innerEl.children[linearIdx].dataset.kind;
+    const items = innerEl._items;
+    const item = items[linearIdx % items.length];
+    wheelPulse(innerEl, innerEl._currentIdx, item.rgb);
+    wheelShowCurrentResults();
+  }, 360);
+}
+
+// Programmatic pick by name (used by "suggest" tags in empty state)
+function wheelPickByName(kind, name) {
+  const innerEl = kind === 'spirit' ? wheelInner1() : wheelInner2();
+  const items = innerEl._items;
+  const baseIdx = items.findIndex(it => it.name === name);
+  if (baseIdx < 0) return;
+  const currentIdx = innerEl._currentIdx;
+  const currentBase = currentIdx % items.length;
+  let delta = baseIdx - currentBase;
+  if (delta > items.length / 2) delta -= items.length;
+  else if (delta < -items.length / 2) delta += items.length;
+  const targetIdx = currentIdx + delta;
+  if (targetIdx < 0 || targetIdx >= innerEl.children.length) {
+    const startIdx = Math.floor(innerEl.children.length / 2 / items.length) * items.length + baseIdx;
+    wheelSnapTo(innerEl, startIdx, true);
+  } else {
+    wheelSnapTo(innerEl, targetIdx, true);
+  }
+  setTimeout(() => {
+    const item = items[baseIdx];
+    wheelPulse(innerEl, innerEl._currentIdx, item.rgb);
+    wheelShowCurrentResults();
+  }, 360);
+}
+
+function wheelShowCurrentResults() {
+  const { spirit, family } = wheelCurrentChoice();
+  wheelShowResults(spirit.name, family.name);
+}
+
+// Render one card matching main-list style
+function wheelRenderCard(id) {
+  const m = META_DATA[id] || {};
+  const s = SCRAPED_DATA[id] || {};
+  const name = m.name || id.replace(/_/g, ' ');
+  const cat = CAT_SHORT[m.category] || m.category || s.category || '';
+  const glassware = m.glassware || '';
+  const glassPaths = GLASS_SVGS[glassware] || '<path d="M6 3h12l-5 9v6h2v2H9v-2h2v-6Z"/>';
+  const strength = STRENGTH_DATA[id] || '';
+  const strengthBg = STRENGTH_COLORS[strength];
+  const strengthText = STRENGTH_TEXT_COLORS[strength] || '#2A5A80';
+  const isTried = state.tried && state.tried.has(id);
+  return `<div class="card${isTried ? ' tried' : ''}" data-id="${id}" data-wheel-card="1">
+    <div class="monogram glass-thumb">
+      <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${glassPaths}</svg>
+    </div>
+    <div class="item-body">
+      <div class="item-name">${escapeHtml(name)}</div>
+      <div class="item-cat">${escapeHtml(cat)}</div>
+    </div>
+    <div class="item-right">
+      ${strength ? `<span class="strength-badge" style="background:${strengthBg};color:${strengthText}">${escapeHtml(strength)}</span>` : ''}
+    </div>
+  </div>`;
+}
+
+function wheelShowResults(spiritGroup, family) {
+  const ids = ((WHEEL_INDEX[spiritGroup] || {})[family]) || [];
+  const content = document.getElementById('wheelResultsContent');
+
+  if (ids.length > 0) {
+    // Sort by popularity (views), first stays first
+    const sortByViews = (a, b) =>
+      (((SCRAPED_DATA[b] || {}).views) || 0) - (((SCRAPED_DATA[a] || {}).views) || 0);
+
+    // Split into 7th edition (current) vs past editions
+    const currentIds = ids.filter(id => (META_DATA[id] || {}).current !== false).sort(sortByViews);
+    const pastIds    = ids.filter(id => (META_DATA[id] || {}).current === false).sort(sortByViews);
+
+    const allTried = ids.every(id => state.tried && state.tried.has(id));
+
+    let html =
+      `<div class="wheel-results-header">${escapeHtml(spiritGroup)} × ${escapeHtml(family)}` +
+      `<span class="wheel-results-count">${ids.length} cocktail${ids.length === 1 ? '' : 's'}</span></div>`;
+
+    if (allTried) {
+      html += `<div class="wheel-celebrate">
+        <div class="wheel-celebrate-emoji">🎉</div>
+        <div class="wheel-celebrate-text"><strong>You've tried them all — good job.</strong> Time to revisit a favourite?</div>
+      </div>`;
+    }
+
+    if (currentIds.length > 0) {
+      html += `<div class="wheel-ed-section">
+        <div class="wheel-ed-header current"><span class="wheel-ed-dot"></span>7th Edition <span class="wheel-ed-count">· ${currentIds.length}</span></div>
+        <div class="wheel-results-list">${currentIds.map(id => wheelRenderCard(id)).join('')}</div>
+      </div>`;
+    }
+    if (pastIds.length > 0) {
+      html += `<div class="wheel-ed-section">
+        <div class="wheel-ed-header"><span class="wheel-ed-dot"></span>Past Editions <span class="wheel-ed-count">· ${pastIds.length}</span></div>
+        <div class="wheel-results-list">${pastIds.map(id => wheelRenderCard(id)).join('')}</div>
+      </div>`;
+    }
+
+    content.innerHTML = html;
+
+    // Post-step: call updateCardLeftIcon on each card so heart / counter / crown appear
+    content.querySelectorAll('.card[data-wheel-card="1"]').forEach(card => {
+      const id = card.dataset.id;
+      updateCardLeftIcon(card, id);
+      card.addEventListener('click', () => openDetail(id));
+    });
+  } else {
+    // Empty state (impossible combo)
+    const otherFams = WHEEL_ALL_FAMILIES.filter(f => ((WHEEL_INDEX[spiritGroup] || {})[f] || []).length > 0);
+    const otherSpirits = WHEEL_SPIRIT_GROUPS.filter(g => ((WHEEL_INDEX[g.name] || {})[family] || []).length > 0).map(g => g.name);
+
+    let html =
+      `<div class="wheel-results-header">${escapeHtml(spiritGroup)} × ${escapeHtml(family)}<span class="wheel-results-count">0 cocktails</span></div>` +
+      `<div class="wheel-empty">
+        <div class="wheel-empty-title">${escapeHtml(spiritGroup)} ${escapeHtml(family)} isn't in the IBA lists</div>
+        <div class="wheel-empty-msg">It may well exist out there — but the International Bartenders Association hasn't canonized it.</div>
+      </div>`;
+
+    if (otherFams.length > 0) {
+      html += `<div class="wheel-suggest-section">
+        <div class="wheel-suggest-label">Try another family with ${escapeHtml(spiritGroup)}</div>
+        <div class="wheel-suggest-row">` +
+        otherFams.map(f => {
+          const fc = FAMILY_COLORS[f] || WHEEL_FAMILY_DEFAULTS[f] || { bg:'#EFEFED', text:'#666' };
+          return `<span class="wheel-suggest-tag" data-kind="family" data-value="${escapeHtml(f)}"
+                   style="background:${fc.bg};color:${fc.text};border-color:${fc.bg}">${escapeHtml(f)}</span>`;
+        }).join('') +
+        `</div></div>`;
+    }
+    if (otherSpirits.length > 0) {
+      html += `<div class="wheel-suggest-section">
+        <div class="wheel-suggest-label">Or try ${escapeHtml(family)} with another spirit</div>
+        <div class="wheel-suggest-row">` +
+        otherSpirits.map(sName => {
+          const g = WHEEL_SPIRIT_GROUPS.find(x => x.name === sName);
+          return `<span class="wheel-suggest-tag" data-kind="spirit" data-value="${escapeHtml(sName)}"
+                   style="background:${g.color};color:${g.text};border-color:${g.color}">${escapeHtml(sName)}</span>`;
+        }).join('') +
+        `</div></div>`;
+    }
+    content.innerHTML = html;
+    content.querySelectorAll('.wheel-suggest-tag').forEach(tag => {
+      tag.addEventListener('click', () => wheelPickByName(tag.dataset.kind, tag.dataset.value));
+    });
+  }
+  document.getElementById('wheelResults').classList.add('visible');
+}
+
+async function wheelSpinBoth() {
+  if (wheelSpinning) return;
+  wheelSpinning = true;
+  const btn = document.getElementById('wheelSpinBtn');
+  btn.disabled = true; btn.textContent = 'Spinning…';
+  document.getElementById('wheelResults').classList.remove('visible');
+
+  const pick1 = Math.floor(Math.random() * WHEEL_SPIRIT_GROUPS.length);
+  const spirit = wheelInner1()._items[pick1];
+  // Reset both wheels to a fresh centered position so every spin gets full laps
+  wheelSetupStrip1();
+  wheelSetupStrip2();
+  const pick2 = Math.floor(Math.random() * WHEEL_ALL_FAMILIES.length);
+  const family = wheelInner2()._items[pick2];
+
+  const p1 = wheelSpin(wheelInner1(), pick1, SPIN_DURATION_1, EXTRA_LAPS_1)
+    .then(idx => wheelPulse(wheelInner1(), idx, spirit.rgb));
+  const p2 = wheelSpin(wheelInner2(), pick2, SPIN_DURATION_2, EXTRA_LAPS_2)
+    .then(idx => wheelPulse(wheelInner2(), idx, family.rgb));
+  await Promise.all([p1, p2]);
+
+  btn.disabled = false; btn.textContent = 'Spin again';
+  wheelShowResults(spirit.name, family.name);
+  wheelSpinning = false;
+}
 </script>
+<!-- Ingredient popover -->
+<div class="ing-popover-backdrop" id="ingPopoverBackdrop">
+  <div class="ing-popover" id="ingPopover"></div>
+</div>
 </body>
 </html>
